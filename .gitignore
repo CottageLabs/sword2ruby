@@ -2,3 +2,6 @@
 .bundle
 Gemfile.lock
 pkg/*
+.DS_Store
+lib/sword2ruby/_old_connection.rb
+lib/sword2ruby/_old_service_document.rb
