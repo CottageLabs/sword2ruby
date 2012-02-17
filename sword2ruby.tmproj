@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>lib/sword2ruby/collection.rb</string>
+	<string>spec/test_spec.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -68,7 +68,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>4</integer>
 				<key>line</key>
 				<integer>31</integer>
 			</dict>
@@ -177,10 +177,25 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>spec/test_spec.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>21</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>lib/sword2ruby/collection.rb</string>
+		<string>spec/test_spec.rb</string>
 		<string>lib/sword2ruby/utility.rb</string>
 		<string>lib/sword2ruby.rb</string>
 		<string>lib/sword2ruby/version.rb</string>
@@ -192,6 +207,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{122, 572}, {1121, 837}}</string>
+	<string>{{324, 63}, {1106, 815}}</string>
 </dict>
 </plist>

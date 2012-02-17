@@ -19,6 +19,7 @@ describe Sword2Ruby::Service do
     
     puts service.collections
     puts "This is another test!!"
+    puts "And one more bit here"
   end
   
 end
