@@ -1,0 +1,6 @@
+Questions for Richard:
+
+1. Bug in line 311 webpy.py (sss. --> ss. )
+
+2. Should <sword:mediation> also be a child of <service> as well as <collection> ??
+
