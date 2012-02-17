@@ -18,6 +18,7 @@ describe Sword2Ruby::Service do
     puts "service.sword_max_upload_size: #{service.sword_max_upload_size}"
     
     puts service.collections
+    puts "This is another test!!"
   end
   
 end
