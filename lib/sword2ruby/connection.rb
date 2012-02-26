@@ -9,6 +9,9 @@ module Sword2Ruby
     attr_reader :user
   
     def initialize(user = nil)
+      unless user.is_a? User
+        raise ArgumentError.new("user '#{user}' must be of type User (and not of type '#{user.class}')")
+      end
       @user = user
     end #initialize
   

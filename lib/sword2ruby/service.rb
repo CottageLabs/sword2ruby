@@ -18,12 +18,16 @@ module Sword2Ruby
 
 
     def initialize(service_document_uri_string, connection)
+      Utility.check_argument_class('service_document_uri_string', service_document_uri_string, String)
+      Utility.check_argument_class('connection', connection, Connection)
       @service_document_uri = URI.parse(service_document_uri_string)
       reload_service_document(connection)
     end #initialize
     
     
     def reload_service_document(connection)
+      Utility.check_argument_class('connection', connection, Connection)
+      
       parser = ServiceDocumentParser.new()
       
       # use SAX Parsing with REXML

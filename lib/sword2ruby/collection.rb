@@ -26,8 +26,6 @@ module Sword2Ruby
       @sword_accept_packagings = collection_properties[:sword_accept_packagings]
       @sword_services = collection_properties[:sword_services]
       
-      puts collection_properties
-      
     end #initialize
     
     def to_s
