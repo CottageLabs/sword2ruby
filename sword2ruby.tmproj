@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>321</integer>
+	<integer>275</integer>
 	<key>metaData</key>
 	<dict>
 		<key>Gemfile</key>
@@ -68,9 +68,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>31</integer>
+				<integer>2</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -96,28 +96,44 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>42</integer>
+				<integer>51</integer>
 				<key>line</key>
-				<integer>27</integer>
+				<integer>29</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>88</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>51</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
 		</dict>
 		<key>lib/sword2ruby/service_document_parser.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>75</integer>
 				<key>line</key>
-				<integer>112</integer>
+				<integer>136</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>20</integer>
+			<integer>115</integer>
 		</dict>
 		<key>lib/sword2ruby/user.rb</key>
 		<dict>
@@ -182,9 +198,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>21</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -195,18 +211,13 @@
 	<key>openDocuments</key>
 	<array>
 		<string>lib/sword2ruby/collection.rb</string>
-		<string>spec/test_spec.rb</string>
-		<string>lib/sword2ruby/utility.rb</string>
-		<string>lib/sword2ruby.rb</string>
-		<string>lib/sword2ruby/version.rb</string>
-		<string>lib/sword2ruby/user.rb</string>
 		<string>lib/sword2ruby/service.rb</string>
-		<string>lib/sword2ruby/connection.rb</string>
 		<string>lib/sword2ruby/service_document_parser.rb</string>
+		<string>spec/test_spec.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{324, 63}, {1106, 815}}</string>
+	<string>{{307, 567}, {1105, 837}}</string>
 </dict>
 </plist>
