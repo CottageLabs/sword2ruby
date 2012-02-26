@@ -17,6 +17,12 @@ module Sword2Ruby
       end
     end 
     
+    def self.check_argument_class(name, argument, expected_class)
+      unless argument.is_a? expected_class
+        raise ArgumentError.new("Argument '#{name}=#{argument}' must be of type '#{expected_class}' (and not of type '#{argument.class}')")
+      end
+    end
+    
 private 
     def initialize()
       super

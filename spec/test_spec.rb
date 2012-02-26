@@ -3,23 +3,17 @@
 require 'sword2ruby';
 
 describe Sword2Ruby::Service do
+
+#  user = Sword2Ruby::User.new(USERNAME_VALID, PASSWORD_VALID)
+#  connection = Sword2Ruby::Connection.new(user)
   
-  it "tst1" do
-    
-    user = Sword2Ruby::User.new('sword', 'sword')
-    connection = Sword2Ruby::Connection.new(user)
-    
-    
-    service = Sword2Ruby::Service.new('http://localhost:8080/sd-uri', connection)
-    
-    service.collections.count.should eq 10;
-    puts "service.repository_name: #{service.repository_name}"
-    puts "service.sword_version: #{service.sword_version}"
-    puts "service.sword_max_upload_size: #{service.sword_max_upload_size}"
-    
-    puts service.collections
-    puts "This is another test!!"
-    puts "And one more bit here"
+  
+  it "Testing Service" do
+    service = Sword2Ruby::Service.new(SERVICE_DOCUMENT_URI, connection);
+    service.service_document_uri.to_s.should eq SERVICE_DOCUMENT_URI;
+    service.repository_name.should eq REPOSITORY_NAME;
+    service.sword_version.should eq SWORD_VERSION;
+    service.collections.count.should eq COLLECTION_COUNT;
   end
   
 end
