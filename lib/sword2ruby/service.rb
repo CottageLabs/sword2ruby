@@ -3,29 +3,55 @@ require 'uri'
 require 'rexml/document'
 
 module Sword2Ruby
-  class Service
-  
+  class Service < Refresh
+    
     attr_reader :service_document_uri
-    attr_reader :service_document_source
+    
+    def service_document_source
+      check_refreshed
+      @service_document_source
+    end
 
-    attr_reader :collections
-    attr_reader :repository_name    
-    attr_reader :sword_version, :sword_max_upload_size
+    def collections
+      check_refreshed
+      @collections
+    end
+    
+    def repository_name
+      check_refreshed
+      @repository_name
+    end
+    
+    def sword_version
+      check_refreshed
+      @sword_version
+    end
 
-#   :sword_verbose, :, :sword_no_op ?? not defined in sword spec
-#, :sword_mediation
+    def sword_max_upload_size
+      check_refreshed
+      @sword_max_upload_size
+    end
 
+   
+    
 
-
-    def initialize(service_document_uri_string, connection)
-      Utility.check_argument_class('service_document_uri_string', service_document_uri_string, String)
-      Utility.check_argument_class('connection', connection, Connection)
-      @service_document_uri = URI.parse(service_document_uri_string)
-      reload_service_document(connection)
+    def initialize(service_document_uri)
+      if service_document_uri.is_a? URI
+        @service_document_uri = service_document_uri
+      else
+        Utility.check_argument_class('service_document_uri', service_document_uri, String)        
+        @service_document_uri = URI.parse(service_document_uri)
+      end
+      Utility.check_uri(@service_document_uri)
+      
+      super() #call Refresh.initialize()
     end #initialize
     
+    def load(connection)
+      refresh(connection)
+    end
     
-    def reload_service_document(connection)
+    def refresh(connection)
       Utility.check_argument_class('connection', connection, Connection)
       
       parser = ServiceDocumentParser.new()
@@ -41,6 +67,8 @@ module Sword2Ruby
       @repository_name = parser.service_properties[:atom_title]
       
       @collections = parser.service_collections
+      
+      super() #call Refresh.refresh()
             
       #@sword_mediation = to_boolean(parser.service_properties[:sword_mediation])
       #@sword_verbose = parser.service_properties[:sword_verbose]

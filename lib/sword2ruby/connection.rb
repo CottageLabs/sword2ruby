@@ -7,6 +7,7 @@ module Sword2Ruby
   class Connection
     
     attr_reader :user
+    
   
     def initialize(user = nil)
       unless user.is_a? User

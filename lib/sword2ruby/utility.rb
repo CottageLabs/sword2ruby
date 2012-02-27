@@ -1,7 +1,10 @@
-#user.rb
+#utility.rb
+
+require 'uri'
 
 module Sword2Ruby
   class Utility
+
     
     def self.to_boolean(value, nil_value = false)
       value.downcase! if value.class == String
@@ -20,6 +23,13 @@ module Sword2Ruby
     def self.check_argument_class(name, argument, expected_class)
       unless argument.is_a? expected_class
         raise ArgumentError.new("Argument '#{name}=#{argument}' must be of type '#{expected_class}' (and not of type '#{argument.class}')")
+      end
+    end
+    
+    def self.check_uri(uri)
+      self.check_argument_class("uri", uri, URI)
+      unless VALID_URI_SCHEMES.include? uri.scheme.downcase.to_sym
+        raise URI::InvalidURIError, "Invalid URI, it must start with either [#{VALID_URI_SCHEMES.join(',')}] (current value: #{uri})"
       end
     end
     

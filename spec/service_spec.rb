@@ -1,7 +1,6 @@
-#test_sepc.rb
+#service_spec.rb
 
 require 'test_constants'
-#require 'uri'
 
 describe Sword2Ruby::Service do
 
@@ -9,27 +8,63 @@ describe Sword2Ruby::Service do
     expect{Sword2Ruby::Service.new()}.to raise_error(ArgumentError);
   end
   
-  it "initialise with wrong URI type" do
-    expect{Sword2Ruby::Service.new(nil, TEST_CONNECTION_VALID)}.to raise_error(ArgumentError);
+  it "initialise with invalid URI type" do
+    expect{Sword2Ruby::Service.new(123456)}.to raise_error(ArgumentError);
+  end
+
+  it "initialise with invalid URI protocol" do
+    expect{Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_INVALID_PROTOCOL)}.to raise_error(URI::InvalidURIError);
   end
   
-  it "initialise with wrong connection type" do
-    expect{Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID, nil)}.to raise_error(ArgumentError);
+  it "initialise with malformed URI" do
+    expect{Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_MALFORMED)}.to raise_error(URI::InvalidURIError);
   end
   
-  it "initialise with invalid protocol URI" do
-    expect{Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_INVALID_PROTOCOL, TEST_CONNECTION_VALID)}.to raise_error(URI::InvalidURIError);
+  it "initialise with valid URI" do
+    service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
+    service.service_document_uri.to_s.should eq(TEST_SERVICE_DOCUMENT_URI_VALID)
   end
+
+  it "initialise with valid URI, refresh with invalid username/password" do
+    service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
+    expect {service.refresh(TEST_CONNECTION_INVALID)}.to raise_error(OpenURI::HTTPError)
+  end
+
+  it "initialise with valid URI, but fail to refresh" do
+    service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
+    expect {service.repository_name}.to raise_error(Sword2Ruby::Exception)
+  end
+  
+  it "initialise with valid URI, refresh with valid username/password" do
+    service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
+    service.refresh(TEST_CONNECTION_VALID)
+    service.last_refreshed.should be_within(30).of(Time.now) # check the last_refreshed time is within 30 seconds of now
+  end
+  
+  it "get collection items" do
+    service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
+    service.refresh(TEST_CONNECTION_VALID)
+    collection = service.collections[0]
+    puts collection
+    collection.refresh(TEST_CONNECTION_VALID)
+    
+    resource = collection.resources[0]
+#    puts resource.title
+    resource.refresh(TEST_CONNECTION_VALID)
+    puts resource.authors
+  end
+  
+  
+  
+  
+  
+#  it "initialise with wrong connection type" do
+#    expect{Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)}.to raise_error(ArgumentError);
+#  end
+  
   
 =begin
-#  it "initialise with malformed URI" do
-#    expect{Sword2Ruby::Connection.new(TEST_URI_MALFORMED)}.to raise_error(URI::InvalidURIError);
-#  end
-  
-#  it "initialise with valid URI" do
-#    connection = Sword2Ruby::Connection.new(TEST_URI_VALID)
-#    connection.service_document_uri.to_s.should eq(TEST_URI_VALID)
-#  end
+
   
  # it "initialise with valid URI and invalid Username/Password" 
   #do
