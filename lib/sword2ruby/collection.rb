@@ -56,6 +56,16 @@ module Sword2Ruby
       super() #call Refresh.refresh()
     end
   
+    def create_resource(connection, properties)
+      entry = Atom::Entry.new()
+    end
+    
+    def create_resource(connection, properties, file)
+      
+    end
+    
+  
+  
     def to_s
       "#{@title}: #{@description} #{@collection_uri}"
     end
