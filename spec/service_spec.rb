@@ -45,13 +45,15 @@ describe Sword2Ruby::Service do
     service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
     service.refresh(TEST_CONNECTION_VALID)
     collection = service.collections[0]
-    puts collection
+    puts collection.to_s
     collection.refresh(TEST_CONNECTION_VALID)
     
     resource = collection.resources[0]
-#    puts resource.title
+    
     resource.refresh(TEST_CONNECTION_VALID)
-    puts resource.authors
+    puts resource.title
+    puts resource.authors[0].name
+    
   end
   
   
