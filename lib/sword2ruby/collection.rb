@@ -26,7 +26,7 @@ module Sword2Ruby
     end
     
     def initialize(collection_properties)
-      @collection_uri = URI.parse(collection_properties[:href])
+      @collection_uri = collection_properties[:href]
       @title = collection_properties[:atom_title]
       @description = collection_properties[:dcterms_abstract]
       @accept = collection_properties[:accept]
@@ -56,13 +56,18 @@ module Sword2Ruby
       super() #call Refresh.refresh()
     end
   
-    def create_resource(connection, properties)
+    def create_resource(connection, properties, file=nil)
       entry = Atom::Entry.new()
+      entry.title = properties[:title]
+      entry.content = properties[:content]
+      entry.content.type = "html"
+      
+      headers = {}
+      
+      connection.post(@collection_uri, headers, entry)
     end
     
-    def create_resource(connection, properties, file)
-      
-    end
+   
     
   
   

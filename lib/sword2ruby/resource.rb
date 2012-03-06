@@ -14,7 +14,7 @@ module Sword2Ruby
     end
     
     def initialize(properties)
-      @edit_uri = URI.parse(properties[:edit_uri])
+      @edit_uri = properties[:edit_uri]
       @atom_entry = nil
       super()
     end

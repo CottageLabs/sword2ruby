@@ -1,7 +1,7 @@
 #connection.rb
 
 require 'uri'
-require 'open-uri'
+require 'rest_client'
 
 module Sword2Ruby
   class Connection
@@ -10,27 +10,32 @@ module Sword2Ruby
     
   
     def initialize(user = nil)
-      unless user.is_a? User
-        raise ArgumentError.new("user '#{user}' must be of type User (and not of type '#{user.class}')")
-      end
+      Utility.check_argument_class('user', user, User)
       @user = user
     end #initialize
   
    def get(uri)
-     unless uri.is_a? URI
-       raise ArgumentError.new("uri '#{uri}' must be of type 'URI' (and not of type '#{uri.class}')")
+     Utility.check_argument_class('uri', uri, String)     
+     if (@user && @user.username && @user.password)       
+       resource = RestClient::Resource.new uri, :user => @user.username, :password => @user.password
+       resource.get
+     else
+       RestClient.get(uri)       
      end
-    
-     uri.read(request_options)
    end #get
+   
+   def post(uri, headers, content)
+     Utility.check_argument_class('uri', uri, String)
+#     uri.post
+   end #post
 
 
-private
-    def request_options
-       options = {}
-       options[:http_basic_authentication] = [@user.username, @user.password] if (@user && @user.username && @user.password)
-       return options
-     end
+#private
+#    def request_options
+#       options = {}
+#       options[:http_basic_authentication] = [@user.username, @user.password] if (@user && @user.username && @user.password)
+#       return options
+#     end
 
   end  #class
 end #module

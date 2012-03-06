@@ -32,18 +32,11 @@ module Sword2Ruby
       @sword_max_upload_size
     end
 
-   
-    
 
     def initialize(service_document_uri)
-      if service_document_uri.is_a? URI
-        @service_document_uri = service_document_uri
-      else
-        Utility.check_argument_class('service_document_uri', service_document_uri, String)        
-        @service_document_uri = URI.parse(service_document_uri)
-      end
+      Utility.check_argument_class('service_document_uri', service_document_uri, String)
+      @service_document_uri = service_document_uri
       Utility.check_uri(@service_document_uri)
-      
       super() #call Refresh.initialize()
     end #initialize
     

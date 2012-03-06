@@ -22,12 +22,12 @@ describe Sword2Ruby::Service do
   
   it "initialise with valid URI" do
     service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
-    service.service_document_uri.to_s.should eq(TEST_SERVICE_DOCUMENT_URI_VALID)
+    service.service_document_uri.should eq(TEST_SERVICE_DOCUMENT_URI_VALID)
   end
 
   it "initialise with valid URI, refresh with invalid username/password" do
     service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
-    expect {service.refresh(TEST_CONNECTION_INVALID)}.to raise_error(OpenURI::HTTPError)
+    expect {service.refresh(TEST_CONNECTION_INVALID)}.to raise_error(RestClient::Unauthorized)
   end
 
   it "initialise with valid URI, but fail to refresh" do
@@ -39,6 +39,7 @@ describe Sword2Ruby::Service do
     service = Sword2Ruby::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID)
     service.refresh(TEST_CONNECTION_VALID)
     service.last_refreshed.should be_within(30).of(Time.now) # check the last_refreshed time is within 30 seconds of now
+    service.collections.count.should >= 1 #Test that the service has at least 1 collection 
   end
   
   it "get collection items" do

@@ -27,8 +27,8 @@ module Sword2Ruby
     end
     
     def self.check_uri(uri)
-      self.check_argument_class("uri", uri, URI)
-      unless VALID_URI_SCHEMES.include? uri.scheme.downcase.to_sym
+      self.check_argument_class("uri", uri, String)
+      unless VALID_URI_SCHEMES.include? URI.parse(uri).scheme.downcase.to_sym
         raise URI::InvalidURIError, "Invalid URI, it must start with either [#{VALID_URI_SCHEMES.join(',')}] (current value: #{uri})"
       end
     end
