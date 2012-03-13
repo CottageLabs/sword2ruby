@@ -1,85 +1,73 @@
 #collection.rb
 
-require 'atom/feed'
+require 'atom/collection'
+require 'digest/md5'
 
 module Sword2Ruby
-  class Collection < Refresh
   
-    attr_reader :collection_uri
-    attr_reader :title, :description #don't use the feed version, as it is not provided
+  #Special class to override the usual <accept>s class
+  class Atom::SwordAccept < Atom::Text
+    is_element PP_NS, :accept
+    attrb PP_NS, :alternate
+  end
+  
+  class Atom::Collection < Atom::Element
+    
+    #Special sword_accepts to override usual accept
+    elements ['app', PP_NS], :accept, :sword_accepts, Atom::SwordAccept
 
-    attr_reader :accept, :accept_alternate_multipart_related
-    attr_reader :sword_collection_policy, :sword_mediation, :sword_treatment
-
-    attr_reader :sword_accept_packagings #[]
-    attr_reader :sword_services #[]
-    
-
-    def atom_feed
-      check_refreshed
-      @atom_feed
+    def sword_collection_policy
+      Utility.find_extension_string(extensions, "sword:collectionPolicy")
     end
     
-    def resources
-      check_refreshed
-      @resources
+    def sword_mediation
+      #Sword spec requires assumption of False if sword:mediation is not returned
+      Utility.find_extension_boolean(extensions, "sword:mediation") || false
     end
     
-    def initialize(collection_properties)
-      @collection_uri = collection_properties[:href]
-      @title = collection_properties[:atom_title]
-      @description = collection_properties[:dcterms_abstract]
-      @accept = collection_properties[:accept]
-      @accept_alternate_multipart_related = collection_properties[:accept_alternate_multipart_related]
-      @sword_collection_policy = collection_properties[:sword_collection_policy]
-      @sword_mediation = collection_properties[:sword_mediation]
-      @sword_treatment = collection_properties[:sword_treatment]
-      @sword_accept_packagings = collection_properties[:sword_accept_packagings]
-      @sword_services = collection_properties[:sword_services]
-      
-      @atom_feed = nil
-      super() #call Refresh.initialize()
-    end #initialize
-    
-    
-    def load(connection)
-      refresh(connection)
+    def sword_treatment
+      Utility.find_extension_string(extensions, "sword:treatment")
     end
     
-    def refresh(connection)
-      Utility.check_argument_class('connection', connection, Connection)
-      @atom_feed = Atom::Feed.parse(connection.get(@collection_uri))
-      @resources = []
-      @atom_feed.entries.each do |entry|
-        @resources << Resource.new({:edit_uri=>entry.edit_url})
-      end
-      super() #call Refresh.refresh()
-    end
-  
-    def create_resource(connection, properties, file=nil)
-      entry = Atom::Entry.new()
-      entry.title = properties[:title]
-      entry.content = properties[:content]
-      entry.content.type = "html"
-      
-      headers = {}
-      
-      connection.post(@collection_uri, headers, entry)
-    end
-    
-   
-    
-  
-  
-    def to_s
-      "#{@title}: #{@description} #{@collection_uri}"
-    end
-  
-    #If accessing an unknown property of this resource, send it on to the @atom_feed instead
-    def method_missing(name, *args, &block)
-      atom_feed.send(name, *args, &block)
+    def sword_accept_packagings
+      Utility.find_extensions_string(extensions, "sword:acceptPackaging")
     end
 
-  end  #class
+    def sword_services
+      Utility.find_extensions_string(extensions, "sword:service")
+    end
+
+    def accept
+      sword_accepts.find{|a| a.alternate.nil? }
+    end    
+    
+    def accept_alternate_multipart_related
+      sword_accepts.find{|a| a.alternate == "multipart-related" }
+    end
+    
+   # POST an entry to the collection, with an optional slug
+    def post!(entry, slug = nil, in_progress = nil, on_behalf_of = nil)
+      Utility.check_argument_class('entry', entry, Atom::Entry)
+      headers = {"Content-Type" => "application/atom+xml;type=entry" }
+      headers["Slug"] = slug if slug
+      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
+      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+
+      @http.post(@href, entry.to_s, headers)
+    end
+    
+    def post_media!(data, filename, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+      headers = {"Content-Type" => content_type}
+      headers["Content-Disposition"] = "attachment; filename=#{filename}"
+      headers["Content-MD5"] = Digest::MD5.hexdigest(data)
+      headers["Packaging"] = packaging
+      headers["Slug"] = slug if slug
+      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
+      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+
+      @http.post(@href, data, headers)
+    end
+
+  end #class
+  
 end #module
-

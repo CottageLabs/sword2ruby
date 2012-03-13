@@ -1,73 +1,64 @@
 #service.rb
-require 'uri'
-require 'rexml/document'
+
+require 'atom/service'
 
 module Sword2Ruby
-  class Service < Refresh
+  
+  #Extend existing Atom::Service with Sword methods
+  class Atom::Service < Atom::Element
     
-    attr_reader :service_document_uri
-    
-    def service_document_source
-      check_refreshed
-      @service_document_source
-    end
-
-    def collections
-      check_refreshed
-      @collections
-    end
-    
-    def repository_name
-      check_refreshed
-      @repository_name
+    def service_document_uri
+      base
     end
     
     def sword_version
-      check_refreshed
-      @sword_version
+      Utility.find_extension_string(extensions, "sword:version")
     end
-
+     
     def sword_max_upload_size
-      check_refreshed
-      @sword_max_upload_size
-    end
-
-
-    def initialize(service_document_uri)
-      Utility.check_argument_class('service_document_uri', service_document_uri, String)
-      @service_document_uri = service_document_uri
-      Utility.check_uri(@service_document_uri)
-      super() #call Refresh.initialize()
-    end #initialize
-    
-    def load(connection)
-      refresh(connection)
+      Utility.find_extension_integer(extensions, "sword:maxUploadSize")
     end
     
-    def refresh(connection)
-      Utility.check_argument_class('connection', connection, Connection)
-      
-      parser = ServiceDocumentParser.new()
-      
-      # use SAX Parsing with REXML
-      @service_document_source = REXML::Source.new(connection.get(@service_document_uri))
+    # retrieves and parses an Atom service document.
+    def initialize(service_url = "", http = Atom::HTTP.new)
+      super()
 
-      #parse Source Doc XML using custom parser
-      REXML::Document.parse_stream(@service_document_source, parser)
+      @http = http
 
-      @sword_version = parser.service_properties[:sword_version]
-      @sword_max_upload_size = parser.service_properties[:sword_maxUploadSize] ? parser.service_properties[:sword_maxUploadSize].to_i : nil
-      @repository_name = parser.service_properties[:atom_title]
-      
-      @collections = parser.service_collections
-      
-      super() #call Refresh.refresh()
-            
-      #@sword_mediation = to_boolean(parser.service_properties[:sword_mediation])
-      #@sword_verbose = parser.service_properties[:sword_verbose]
-      #@sword_no_op = parser.service_properties[:sword_noOp]
+      return if service_url.empty?
+
+      base = URI.parse(service_url)
+
+      rxml = nil
+
+      res = @http.get(base, "Accept" => "application/atomsvc+xml")
+      res.validate_content_type(["application/atomsvc+xml"])
+
+      unless res.code == "200"
+        raise Atom::HTTPException, "Unexpected HTTP response code: #{res.code}"
+      end
+
+      service = self.class.parse(res.body, base, self)
+
+      #Update workspaces, collections and their feeds to use the Service's http connection
+      #Unfortunately this is necessary because the atom-tools library does not propagate the
+      #http connection object from Service to Workspace
+      set_http(http)
+
+      service
     end
-
-
-  end  #class
+    
+    
+    private
+    def set_http(http)
+      workspaces.each do |w|
+        w.http = http
+        w.collections.each do |c|
+          c.http = http
+          c.feed.http = http
+        end
+      end
+    end 
+   
+  end #class
 end #module

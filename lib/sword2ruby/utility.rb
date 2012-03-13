@@ -33,6 +33,29 @@ module Sword2Ruby
       end
     end
     
+    def self.find_extension_string(extensions, name)
+      extensions.find(LAMBDA_NIL_TEXT) {|e| e.fully_expanded_name==name}.text
+    end
+    
+    def self.find_extension_integer(extensions, name)
+      find_extension_string(extensions, name).to_i
+    end
+    
+    def self.find_extension_boolean(extensions, name)
+       value = find_extension_string(extensions, name).downcase.chomp
+       if value=="true"
+         true
+       elsif value=="false"
+         false
+       else
+         nil
+       end
+     end
+    
+    def self.find_extensions_string(extensions, name)
+      extensions.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.text}
+    end
+    
 private 
     def initialize()
       super

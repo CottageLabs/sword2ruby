@@ -54,7 +54,6 @@ describe Sword2Ruby::Service do
     resource.refresh(TEST_CONNECTION_VALID)
     puts resource.title
     puts resource.authors[0].name
-    
   end
   
   

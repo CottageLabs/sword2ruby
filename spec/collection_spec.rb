@@ -1,6 +1,6 @@
-#collection_sepc.rb
+#collection_spec.rb
 
-require 'sword2ruby';
+require 'test_constants'
 
 describe Sword2Ruby::Collection do
   
