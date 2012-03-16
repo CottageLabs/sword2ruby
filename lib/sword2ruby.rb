@@ -8,8 +8,9 @@ require "sword2ruby/service"
 require "sword2ruby/user"
 require "sword2ruby/connection"
 require "sword2ruby/exception"
-require "sword2ruby/service_document_parser"
+#require "sword2ruby/service_document_parser"
 require "sword2ruby/utility"
+require "sword2ruby/entry"
 
 
 module Sword2ruby

@@ -47,20 +47,53 @@ describe Atom::Service do
     entry.title = "Martyns new entry created on #{Time.now}"
     entry.summary = "This is a test"
     entry.updated = Time.now    
-    receipt = collection.post!(entry)
-    puts "receipt: #{receipt}"
+    deposit_receipt = collection.post!(entry)
 
-
-    puts "creating a new entry (post binary file)"
-    receipt = collection.post_media!(File.read("questions_for_richard.txt"), "questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    puts "\n"  
     
-    puts "receipt: #{receipt}"
+    puts "deposit_receipt.alternate_uri:\t #{deposit_receipt.alternate_uri}"    
+    puts "deposit_receipt.media_entry_uri:\t #{deposit_receipt.media_entry_uri}"
+    puts "deposit_receipt.media_resource_links:\t #{deposit_receipt.media_resource_links}"
+    puts "deposit_receipt.sword_edit_uri:\t #{deposit_receipt.sword_edit_uri}"
+    puts "deposit_receipt.sword_original_deposit_uri:\t #{deposit_receipt.sword_original_deposit_uri}"
+    puts "deposit_receipt.sword_derived_resource_links:\t #{deposit_receipt.sword_derived_resource_links}"
+    puts "deposit_receipt.sword_statement_links:\t #{deposit_receipt.sword_statement_links}"
+    puts "deposit_receipt.sword_accept_packagings:\t #{deposit_receipt.sword_accept_packagings}"
+    puts "deposit_receipt.sword_treatment:\t #{deposit_receipt.sword_treatment}"
+    puts "deposit_receipt.sword_verbose_description:\t #{deposit_receipt.sword_verbose_description}"
+    puts "deposit_receipt.dublin_core_extensions:\t #{deposit_receipt.dublin_core_extensions}"
+    puts "\n"
+
+#    puts "deposit_receipt.extensions: #{deposit_receipt.extensions}"
+    puts" \n"
+#    puts "deposit_receipt.extensions.first.class: #{deposit_receipt.extensions[2].class}"
+#    puts "deposit_receipt.extensions.first.namespace: #{deposit_receipt.extensions[2].namespace}"
+#    puts "deposit_receipt.extensions.first: #{deposit_receipt.extensions[2]}"
+    
+#    puts "deposit_receipt.extensions.dcterms: #{deposit_receipt.extensions.find_all {|e| e.namespace == 'http://purl.org/dc/terms/'} }"
+        
+    puts "deposit_receipt.class: #{deposit_receipt.class}"
+    puts "deposit_receipt.links #{deposit_receipt.links}"
+    puts "deposit_receipt #{deposit_receipt}"
+    
+    
+#    puts "deposit_receipt: #{deposit_receipt}"
+
+  
 
 
-    puts "receipt.code: #{receipt.code}"
-    puts "receipt.message: #{receipt.message}"
+
+#    puts "creating a new entry (post binary file)"
+ #   receipt = collection.post_media!(File.read("questions_for_richard.txt"), "questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    
+#    puts "receipt: #{receipt}"
+
+#    puts "receipt.methods: #{receipt.methods}"
+
+#    puts "receipt.code: #{receipt.code}"
+#    puts "receipt.message: #{receipt.message}"
 #    receipt.each {|key, value| puts "#{key}\t=\t#{value}"}
-    puts "receipt.body: #{receipt.body}"
+#    puts "receipt.body: #{receipt.body}"
     
 
 

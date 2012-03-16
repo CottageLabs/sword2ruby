@@ -53,7 +53,12 @@ module Sword2Ruby
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
 
-      @http.post(@href, entry.to_s, headers)
+      response = @http.post(@href, entry.to_s, headers)
+      if response.is_a? Net::HTTPSuccess
+        return Atom::Entry.parse(response.body)
+      else
+        raise Sword2Ruby::Exception.new("Failed to do post!(): server returned code #{response.code} #{response.message}")
+      end
     end
     
     def post_media!(data, filename, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
@@ -65,7 +70,13 @@ module Sword2Ruby
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
 
-      @http.post(@href, data, headers)
+      response = @http.post(@href, data, headers)
+      
+      if response.is_a? Net::HTTPSuccess
+        return Atom::Entry.parse(response.body)
+      else
+        raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
+      end
     end
 
   end #class

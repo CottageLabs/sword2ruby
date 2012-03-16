@@ -5,10 +5,15 @@ module Sword2Ruby
   
   VALID_URI_SCHEMES = [:http, :https, :file]
   
-  LAMBDA_NIL_TEXT = lambda {
-    def text
+  NIL_LAMBDA = lambda {
+    result = nil;
+    def result.text
       nil
     end
+    def result.href
+      nil
+    end
+    result;
   }
   
 end

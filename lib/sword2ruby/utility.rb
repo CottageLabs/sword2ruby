@@ -5,6 +5,7 @@ require 'uri'
 module Sword2Ruby
   class Utility
 
+   
     
     def self.to_boolean(value, nil_value = false)
       value.downcase! if value.class == String
@@ -33,8 +34,20 @@ module Sword2Ruby
       end
     end
     
+    def self.find_link_uri(links, rel, type = nil)
+      links.find(NIL_LAMBDA) {|link| link.rel == rel && link.type == type}.href
+    end
+
+    def self.find_links(links, rel, type = nil)
+      links.find_all{|link| link.rel == rel && link.type == type}
+    end
+    
+    def self.find_links_all_types(links, rel)
+      links.find_all{|link| link.rel == rel}
+    end
+    
     def self.find_extension_string(extensions, name)
-      extensions.find(LAMBDA_NIL_TEXT) {|e| e.fully_expanded_name==name}.text
+      extensions.find(NIL_LAMBDA) {|e| e.fully_expanded_name==name}.text
     end
     
     def self.find_extension_integer(extensions, name)
@@ -54,6 +67,10 @@ module Sword2Ruby
     
     def self.find_extensions_string(extensions, name)
       extensions.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.text}
+    end
+    
+    def self.find_extensions_by_namespace(extensions, namespace)
+      extensions.find_all {|e| e.namespace == namespace}
     end
     
 private 

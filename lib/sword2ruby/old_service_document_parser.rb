@@ -32,7 +32,7 @@ require 'rexml/streamlistener'
 # :no_op => <No operation mode supported?>
 #
 module Sword2Ruby
-class ServiceDocumentParser
+class OldServiceDocumentParser
   #based of the REXML StreamListener
   include REXML::StreamListener
   
