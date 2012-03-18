@@ -4,7 +4,7 @@
 require "atom/entry" 
 
 module Sword2Ruby
-  class Resource < Refresh
+  class OldResource < Refresh
     
     attr_reader :edit_uri
     

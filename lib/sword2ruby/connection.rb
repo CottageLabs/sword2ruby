@@ -3,8 +3,6 @@
 require 'uri'
 require 'atom/http'
 
-
-
 module Sword2Ruby
   class Connection < Atom::HTTP
     
@@ -29,40 +27,6 @@ module Sword2Ruby
       end
       
     end #initialize
-    
-  
-#   def get(uri)
-#     Utility.check_argument_class('uri', uri, String)
-     
-
-#     if (@user && @user.username && @user.password)       
-#       resource = RestClient::Resource.new uri, :user => @user.username, :password => @user.password
-#       resource.get
-#     else
-#       RestClient.get(uri)       
-#     end
-#   end #get
-   
-#   def post(uri, headers, content)
-#     Utility.check_argument_class('uri', uri, String)
-     
-#     if (@user && @user.username && @user.password)       
-#        resource = RestClient::Resource.new uri, :user => @user.username, :password => @user.password
-#        puts content.class
-#        puts content.methods
-#        resource.put(content)
-#     else
-#        RestClient.post(uri)
-#     end
-#   end #post
-
-
-#private
-#    def request_options
-#       options = {}
-#       options[:http_basic_authentication] = [@user.username, @user.password] if (@user && @user.username && @user.password)
-#       return options
-#     end
 
   end  #class
 end #module

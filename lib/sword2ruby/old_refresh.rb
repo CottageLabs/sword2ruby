@@ -1,7 +1,7 @@
 #refresh.rb
 
 module Sword2Ruby
-  class Refresh
+  class OldRefresh
 
     attr_reader :refreshed, :last_refreshed
     

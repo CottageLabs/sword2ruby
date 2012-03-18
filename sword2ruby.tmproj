@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>spec/test_constants.rb</string>
+	<string>lib/sword2ruby/entry.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,63 +21,47 @@
 	<integer>275</integer>
 	<key>metaData</key>
 	<dict>
-		<key>lib/sword2ruby.rb</key>
+		<key>lib/sword2ruby/constant.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>27</integer>
+				<integer>7</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>11</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>lib/sword2ruby/collection.rb</key>
+		<key>lib/sword2ruby/entry.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>3</integer>
 				<key>line</key>
-				<integer>59</integer>
+				<integer>30</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>25</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>59</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>59</integer>
-			</dict>
+			<integer>7</integer>
 		</dict>
-		<key>lib/sword2ruby/connection.rb</key>
+		<key>lib/sword2ruby/utility.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>56</integer>
 				<key>line</key>
-				<integer>34</integer>
+				<integer>72</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>5</integer>
+			<integer>38</integer>
 		</dict>
 		<key>lib/sword2ruby/version.rb</key>
 		<dict>
@@ -93,61 +77,31 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>spec/test_constants.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>86</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-		</dict>
 		<key>spec/test_spec.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>74</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>18</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>-1</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>spec/test_spec.rb</string>
-		<string>spec/test_constants.rb</string>
-		<string>lib/sword2ruby/collection.rb</string>
-		<string>lib/sword2ruby/connection.rb</string>
+		<string>lib/sword2ruby/utility.rb</string>
+		<string>lib/sword2ruby/constant.rb</string>
+		<string>lib/sword2ruby/entry.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{350, 554}, {1105, 837}}</string>
+	<string>{{296, 575}, {1016, 825}}</string>
 </dict>
 </plist>

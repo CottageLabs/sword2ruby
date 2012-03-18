@@ -2,6 +2,7 @@
 
 require 'atom/collection'
 require 'digest/md5'
+require "base64"
 
 module Sword2Ruby
   
@@ -61,10 +62,13 @@ module Sword2Ruby
       end
     end
     
-    def post_media!(data, filename, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+    def post_media!(filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+      
+      filename, md5, data = read_file(filepath)
+      
       headers = {"Content-Type" => content_type}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"
-      headers["Content-MD5"] = Digest::MD5.hexdigest(data)
+      headers["Content-MD5"] = md5
       headers["Packaging"] = packaging
       headers["Slug"] = slug if slug
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
@@ -78,7 +82,68 @@ module Sword2Ruby
         raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
       end
     end
+    
+    def post_multipart!(entry, filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+      tmp = ""
+      boundary = "========" + Time.now.to_i.to_s + "=="
+      filename, md5, data = read_file(filepath)
 
+      headers = {"Content-Type" => 'multipart/related; boundary="' + boundary + '"; type="application/atom+xml"'}
+      headers["Slug"] = slug if slug
+      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
+      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["MIME-Version"] = "1.0"
+      
+      
+      # write boundary identifer to temp
+      tmp << "--#{boundary}\r\n"
+
+      # write entry relevant headers to temp
+      tmp << "Content-Type: application/atom+xml; charset=\"utf-8\"\r\n"
+      tmp << "Content-Disposition: attachment; name=\"atom\"\r\n"
+      tmp << "MIME-Version: 1.0\r\n\r\n"
+
+      # write entry to temp
+      tmp << entry.to_s + "\r\n"
+      
+      # write boundary identifier to temp
+      tmp << "--#{boundary}\r\n"
+
+      # write media part relevant headers to temp      
+      tmp << "Content-Type: #{content_type}\r\n"
+      tmp << "Content-Disposition: attachment; name=payload; filename=#{filename}\r\n"
+      tmp << "Content-MD5: #{md5}\r\n"
+      tmp << "Packaging: #{packaging}\r\n" if packaging
+      tmp << "MIME-Version: 1.0\r\n\r\n"
+      
+      # write the file base64 encoded to temp
+      tmp << Base64.encode64(data)
+
+      # write boundary identifier to temp
+      tmp << "--#{boundary}--\r\n" #The last two dashes (--) are important!
+      
+      response = @http.post(@href, tmp, headers)
+
+      if response.is_a? Net::HTTPSuccess
+        return Atom::Entry.parse(response.body)
+      else
+        raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
+      end
+    end
+    
+    
+  private
+    #Returns [filename, md5 digest, encoded data]
+    def read_file(filepath) 
+      data = nil
+      File.open(filepath,'r') do |file|
+        data = file.gets(nil) #Read entire file, no Base64.encode64()
+      end #file is closed automatically
+      return [File.basename(filepath), Digest::MD5.hexdigest(data), data]
+    end
+    
+    
+    
+    
   end #class
-  
 end #module
