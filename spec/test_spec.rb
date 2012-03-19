@@ -48,8 +48,9 @@ describe Atom::Service do
     entry = feed.entries.new()
     entry.title = "Martyns new entry created on #{Time.now}"
     entry.summary = "This is a test"
-    entry.updated = Time.now    
-=begin
+    entry.updated = Time.now
+    entry.add_dublin_core_extension!("publisher", "Nature Publishing")
+
     deposit_receipt = collection.post!(entry)
     puts "deposit_receipt.alternate_uri:\t #{deposit_receipt.alternate_uri}"    
     puts "deposit_receipt.media_entry_uri:\t #{deposit_receipt.media_entry_uri}"
@@ -62,7 +63,12 @@ describe Atom::Service do
     puts "deposit_receipt.sword_treatment:\t #{deposit_receipt.sword_treatment}"
     puts "deposit_receipt.sword_verbose_description:\t #{deposit_receipt.sword_verbose_description}"
     puts "deposit_receipt.dublin_core_extensions:\t #{deposit_receipt.dublin_core_extensions}"
+    
+    puts "deposit_receipt.dublin_core_extensions.first:\t #{deposit_receipt.dublin_core_extensions.first}"
+    puts "deposit_receipt.dublin_core_extensions.first.class:\t #{deposit_receipt.dublin_core_extensions.first.class}"
+    
     puts "\n"
+
 
     puts "\n"
     puts "creating a new entry (post binary file)"
@@ -79,7 +85,24 @@ describe Atom::Service do
     puts "deposit_receipt.sword_verbose_description:\t #{deposit_receipt.sword_verbose_description}"
     puts "deposit_receipt.dublin_core_extensions:\t #{deposit_receipt.dublin_core_extensions}"
     puts "\n"
-=end
+    
+
+    puts "\n"
+    puts "replacing an entry on a new deposit (put binary file)"
+    success = deposit_receipt.put_media!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    puts "success: #{success}"
+    puts "\n"    
+  
+    
+
+    puts "\n"
+    puts "replacing meta data"
+    deposit_receipt.title="My New Title"
+    success = deposit_receipt.put!
+    puts "success: #{success}"
+    puts "\n"
+    
+
 
     puts "\n"
     puts "creating a new entry (multipart post)"
@@ -98,6 +121,46 @@ describe Atom::Service do
     puts "\n"
 
 
+    puts "\n"
+    puts "replacing meta data and binary data"
+    deposit_receipt.title="My New Title123456"
+    success = deposit_receipt.put_multipart!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    puts "success: #{success}"
+    puts "\n"
+
+
+
+    puts "\n"
+    puts "deleting binary data"
+    success = deposit_receipt.delete_media!
+    puts "success: #{success}"
+    puts "\n"
+    
+    
+    puts "\n"
+    puts "adding binary data"
+    deposit_receipt2 = deposit_receipt.post_media!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    puts "deposit_receipt2: #{deposit_receipt2}"
+    puts "\n"
+    
+    puts "\n"
+    puts "adding more metadata to SE-URI data"
+    deposit_receipt2 = deposit_receipt.post!(entry)
+    puts "deposit_receipt2: #{deposit_receipt2}"
+    puts "\n"
+    
+      puts "\n"
+      puts "adding more metadata and binary data to SE-URI data"
+      deposit_receipt2 = deposit_receipt.post_multipart!(entry, "questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+      puts "deposit_receipt2: #{deposit_receipt2}"
+      puts "\n"
+    
+    puts "\n"
+    puts "deleting entry"
+    success = deposit_receipt.delete!
+    puts "success: #{success}"
+    puts "\n"
+    
 =begin        
     puts "printing feed attributes"
     puts "feed.entries.count: #{feed.entries.count}"

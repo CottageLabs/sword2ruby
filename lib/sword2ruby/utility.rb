@@ -1,6 +1,7 @@
 #utility.rb
 
 require 'uri'
+require 'digest/md5'
 
 module Sword2Ruby
   class Utility
@@ -71,6 +72,16 @@ module Sword2Ruby
     
     def self.find_extensions_by_namespace(extensions, namespace)
       extensions.find_all {|e| e.namespace == namespace}
+    end
+    
+    
+    #Returns [filename, md5 digest, data]
+    def self.read_file(filepath) 
+      data = nil
+      File.open(filepath,'r') do |file|
+        data = file.gets(nil) #Read entire file, no Base64.encode64()
+      end #file is closed automatically
+      return [File.basename(filepath), Digest::MD5.hexdigest(data), data]
     end
     
 private 

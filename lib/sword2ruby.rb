@@ -8,6 +8,7 @@ require "sword2ruby/connection"
 
 require "sword2ruby/element"
 require "sword2ruby/entry"
+require "sword2ruby/feed"
 require "sword2ruby/collection"
 require "sword2ruby/service"
 

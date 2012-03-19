@@ -4,6 +4,6 @@ require 'atom/element'
 
 module Sword2Ruby
   class Atom::Element
-    attr_writer :http
+    attr_accessor :http
   end
 end

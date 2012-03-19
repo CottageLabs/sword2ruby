@@ -2,3 +2,6 @@ Questions for Richard:
 
 1. Upon multi-part deposit of a zip file, the filename becomes ...unnamed.file
 
+2. 6.5.1: in progress missing from spec?
+
+3. how best to handle deposit receipts? - some requests should return them, some may, some wont, none must

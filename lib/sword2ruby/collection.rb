@@ -1,7 +1,6 @@
 #collection.rb
 
 require 'atom/collection'
-require 'digest/md5'
 require "base64"
 
 module Sword2Ruby
@@ -46,7 +45,7 @@ module Sword2Ruby
       sword_accepts.find{|a| a.alternate == "multipart-related" }
     end
     
-   # POST an entry to the collection, with an optional slug
+    # POST an entry to the collection, with an optional slug
     def post!(entry, slug = nil, in_progress = nil, on_behalf_of = nil)
       Utility.check_argument_class('entry', entry, Atom::Entry)
       headers = {"Content-Type" => "application/atom+xml;type=entry" }
@@ -56,15 +55,17 @@ module Sword2Ruby
 
       response = @http.post(@href, entry.to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        return Atom::Entry.parse(response.body)
+        receipt = Atom::Entry.parse(response.body)
+        receipt.http = @http
+        return receipt
       else
         raise Sword2Ruby::Exception.new("Failed to do post!(): server returned code #{response.code} #{response.message}")
       end
     end
     
+    
     def post_media!(filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
-      
-      filename, md5, data = read_file(filepath)
+      filename, md5, data = Utility.read_file(filepath)
       
       headers = {"Content-Type" => content_type}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"
@@ -77,16 +78,20 @@ module Sword2Ruby
       response = @http.post(@href, data, headers)
       
       if response.is_a? Net::HTTPSuccess
-        return Atom::Entry.parse(response.body)
+        receipt = Atom::Entry.parse(response.body)
+        receipt.http = @http
+        return receipt
       else
         raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
       end
     end
     
+   
+    
     def post_multipart!(entry, filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
       tmp = ""
       boundary = "========" + Time.now.to_i.to_s + "=="
-      filename, md5, data = read_file(filepath)
+      filename, md5, data = Utility.read_file(filepath)
 
       headers = {"Content-Type" => 'multipart/related; boundary="' + boundary + '"; type="application/atom+xml"'}
       headers["Slug"] = slug if slug
@@ -100,7 +105,7 @@ module Sword2Ruby
 
       # write entry relevant headers to temp
       tmp << "Content-Type: application/atom+xml; charset=\"utf-8\"\r\n"
-      tmp << "Content-Disposition: attachment; name=\"atom\"\r\n"
+      tmp << "Content-Disposition: attachment; name=atom\r\n"
       tmp << "MIME-Version: 1.0\r\n\r\n"
 
       # write entry to temp
@@ -125,7 +130,9 @@ module Sword2Ruby
       response = @http.post(@href, tmp, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return Atom::Entry.parse(response.body)
+        receipt = Atom::Entry.parse(response.body)
+        receipt.http = @http
+        return receipt
       else
         raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
       end
@@ -133,14 +140,6 @@ module Sword2Ruby
     
     
   private
-    #Returns [filename, md5 digest, encoded data]
-    def read_file(filepath) 
-      data = nil
-      File.open(filepath,'r') do |file|
-        data = file.gets(nil) #Read entire file, no Base64.encode64()
-      end #file is closed automatically
-      return [File.basename(filepath), Digest::MD5.hexdigest(data), data]
-    end
     
     
     
