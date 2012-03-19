@@ -55,9 +55,7 @@ module Sword2Ruby
 
       response = @http.post(@href, entry.to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        receipt = Atom::Entry.parse(response.body)
-        receipt.http = @http
-        return receipt
+        return DepositReceipt.new(response, @http)
       else
         raise Sword2Ruby::Exception.new("Failed to do post!(): server returned code #{response.code} #{response.message}")
       end
@@ -78,9 +76,7 @@ module Sword2Ruby
       response = @http.post(@href, data, headers)
       
       if response.is_a? Net::HTTPSuccess
-        receipt = Atom::Entry.parse(response.body)
-        receipt.http = @http
-        return receipt
+        return DepositReceipt.new(response, @http)
       else
         raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
       end
@@ -130,19 +126,11 @@ module Sword2Ruby
       response = @http.post(@href, tmp, headers)
 
       if response.is_a? Net::HTTPSuccess
-        receipt = Atom::Entry.parse(response.body)
-        receipt.http = @http
-        return receipt
+        return DepositReceipt.new(response, @http)
       else
         raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
       end
     end
-    
-    
-  private
-    
-    
-    
-    
+        
   end #class
 end #module

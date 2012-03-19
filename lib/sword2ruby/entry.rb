@@ -68,10 +68,7 @@ module Sword2Ruby
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
       response = http.post(alternative_sword_edit_uri, entry.to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        #        does return a DepositReceipt
-        receipt = Atom::Entry.parse(response.body)
-        receipt.http = @http
-        return receipt
+        return DepositReceipt.new(response, http)
       else
         raise Sword2Ruby::Exception.new("Failed to do post!(): server returned code #{response.code} #{response.message}")
       end
@@ -92,7 +89,7 @@ module Sword2Ruby
       response = http.put(alternative_media_resource_uri, data, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return true #post_media!() does not return a DepositReceipt
+        return DepositReceipt.new(response, http)
       else
        raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
       end
@@ -141,10 +138,7 @@ module Sword2Ruby
         response = http.post(alternative_sword_edit_uri, tmp, headers)
 
         if response.is_a? Net::HTTPSuccess
-          #        does return a DepositReceipt
-          receipt = Atom::Entry.parse(response.body)
-          receipt.http = http
-          return receipt
+          return DepositReceipt.new(response, http)
         else
           raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
         end
@@ -158,7 +152,7 @@ module Sword2Ruby
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
       response = http.post(alternative_media_entry_uri, self.to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        return true #Put() does not return a DepositReceipt
+        return DepositReceipt.new(response, http)
       else
         raise Sword2Ruby::Exception.new("Failed to do put!(): server returned code #{response.code} #{response.message}")
       end
@@ -179,7 +173,7 @@ module Sword2Ruby
       response = http.put(alternative_media_resource_uri, data, headers)
 
       if response.is_a? Net::HTTPSuccess
-       return true #Put() does not return a DepositReceipt
+        return DepositReceipt.new(response, http)
       else
        raise Sword2Ruby::Exception.new("Failed to do put_media!(): server returned #{response.code} #{response.message}")
       end
@@ -192,12 +186,10 @@ module Sword2Ruby
         filename, md5, data = Utility.read_file(filepath)
         alternative_media_entry_uri ||= media_entry_uri
         
-
         headers = {"Content-Type" => 'multipart/related; boundary="' + boundary + '"; type="application/atom+xml"'}
         headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
         headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
         headers["MIME-Version"] = "1.0"
-
 
         # write boundary identifer to temp
         tmp << "--#{boundary}\r\n"
@@ -229,7 +221,7 @@ module Sword2Ruby
         response = http.post(alternative_media_entry_uri, tmp, headers)
 
         if response.is_a? Net::HTTPSuccess
-          return true #Put() does not return a DepositReceipt
+          return DepositReceipt.new(response, http)
         else
           raise Sword2Ruby::Exception.new("Failed to do put_multipart!(): server returned #{response.code} #{response.message}")
         end
@@ -245,7 +237,7 @@ module Sword2Ruby
         response = http.delete(alternative_media_entry_uri, nil, headers)
 
         if response.is_a? Net::HTTPSuccess
-         return true #delete() does not return a DepositReceipt
+          return DepositReceipt.new(response, http)
         else
          raise Sword2Ruby::Exception.new("Failed to do delete!(): server returned #{response.code} #{response.message}")
         end
@@ -262,9 +254,9 @@ module Sword2Ruby
         response = http.delete(alternative_media_resource_uri, nil, headers)
 
         if response.is_a? Net::HTTPSuccess
-         return true #delete() does not return a DepositReceipt
+          return DepositReceipt.new(response, http)
         else
-         raise Sword2Ruby::Exception.new("Failed to do delete_media!(): server returned #{response.code} #{response.message}")
+          raise Sword2Ruby::Exception.new("Failed to do delete_media!(): server returned #{response.code} #{response.message}")
         end
       end
       
