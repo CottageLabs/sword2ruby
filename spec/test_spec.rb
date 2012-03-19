@@ -167,11 +167,7 @@ describe Atom::Service do
     puts "\n"
 
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 2703d140c7923c767c534d68b16fd5f3a46971ed
     
 =begin        
     puts "printing feed attributes"
