@@ -44,12 +44,15 @@ describe Atom::Service do
 
     puts "\n"  
 
+
     puts "creating a new entry (post atom)"
     entry = feed.entries.new()
-    entry.title = "Martyns new entry created on #{Time.now}"
+    entry.title = "Richard's new entry created on #{Time.now}"
     entry.summary = "This is a test"
     entry.updated = Time.now
     entry.add_dublin_core_extension!("publisher", "Nature Publishing")
+
+
 
     deposit_receipt = collection.post!(entry)
     puts "deposit_receipt.alternate_uri:\t #{deposit_receipt.alternate_uri}"    
@@ -93,7 +96,7 @@ describe Atom::Service do
     puts "success: #{success}"
     puts "\n"    
   
-    
+
 
     puts "\n"
     puts "replacing meta data"
@@ -101,7 +104,8 @@ describe Atom::Service do
     success = deposit_receipt.put!
     puts "success: #{success}"
     puts "\n"
-    
+
+
 
 
     puts "\n"
@@ -160,6 +164,13 @@ describe Atom::Service do
     success = deposit_receipt.delete!
     puts "success: #{success}"
     puts "\n"
+
+    
+    
+    
+    
+    
+    
     
 =begin        
     puts "printing feed attributes"
