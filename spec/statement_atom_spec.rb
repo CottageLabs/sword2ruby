@@ -7,7 +7,7 @@ describe Atom::Feed do
   
   it "Testing Atom Statement" do
 
-    statement = Atom::Feed.new("http://localhost:8080/state-uri/14661f1f-e625-4145-b477-2b08b757c6d7/02a7bdfa-ca4b-4aa4-88e5-379d22ee5bb1.atom", TEST_CONNECTION_VALID)
+    statement = Atom::Feed.new("http://localhost:8080/state-uri/14661f1f-e625-4145-b477-2b08b757c6d7/b3354f30-3830-4ad5-bf6e-f005d100638b.atom", TEST_CONNECTION_VALID)
     statement.update!
     
     puts statement

@@ -33,7 +33,7 @@ module Sword2Ruby
       Utility.find_links_all_types(links, "http://purl.org/net/sword/terms/statement")
     end
     
-    def sword_accept_packagings
+    def sword_packagings
       Utility.find_extensions_string(extensions, "sword:packaging")
     end
     
@@ -43,6 +43,18 @@ module Sword2Ruby
     
     def sword_verbose_description
       Utility.find_extension_string(extensions, "sword:verboseDescription")
+    end
+    
+    def sword_deposited_on
+      Utility.find_extension_time(extensions, "sword:depositedOn")
+    end
+    
+    def sword_deposited_by
+      Utility.find_extension_string(extensions, "sword:depositedBy")
+    end
+
+    def sword_deposited_on_behalf_of
+      Utility.find_extension_string(extensions, "sword:depositedOnBehalfOf")
     end
     
     def dublin_core_extensions

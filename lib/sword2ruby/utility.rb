@@ -66,6 +66,10 @@ module Sword2Ruby
        end
      end
     
+    def self.find_extension_time(extensions, name)
+      Time.parse(find_extension_string(extensions, name))
+    end
+    
     def self.find_extensions_string(extensions, name)
       extensions.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.text}
     end
