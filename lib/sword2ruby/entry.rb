@@ -34,31 +34,35 @@ module Sword2Ruby
     end
     
     def sword_packagings
-      Utility.find_extensions_string(extensions, "sword:packaging")
+      Utility.find_elements_text(extensions, "sword:packaging")
     end
     
     def sword_treatment
-      Utility.find_extension_string(extensions, "sword:treatment")
+      Utility.find_element_text(extensions, "sword:treatment")
     end
     
     def sword_verbose_description
-      Utility.find_extension_string(extensions, "sword:verboseDescription")
+      Utility.find_element_text(extensions, "sword:verboseDescription")
     end
     
     def sword_deposited_on
-      Utility.find_extension_time(extensions, "sword:depositedOn")
+      Utility.find_element_time(extensions, "sword:depositedOn")
     end
     
     def sword_deposited_by
-      Utility.find_extension_string(extensions, "sword:depositedBy")
+      Utility.find_element_text(extensions, "sword:depositedBy")
     end
 
     def sword_deposited_on_behalf_of
-      Utility.find_extension_string(extensions, "sword:depositedOnBehalfOf")
+      Utility.find_element_text(extensions, "sword:depositedOnBehalfOf")
     end
     
+    def sword_original_deposit_category
+      Utility.find_element_by_scheme_and_term(categories, "http://purl.org/net/sword/terms/", "http://purl.org/net/sword/terms/originalDeposit")
+    end
+      
     def dublin_core_extensions
-      Utility.find_extensions_by_namespace(extensions, "http://purl.org/dc/terms/")
+      Utility.find_elements_by_namespace(extensions, "http://purl.org/dc/terms/")
     end
 
     def add_dublin_core_extension! (name, value)

@@ -28,9 +28,11 @@ describe Atom::Service do
     puts "collection.sword_treatment: #{collection.sword_treatment}"
     puts "collection.sword_accept_packagings: #{collection.sword_accept_packagings}"
     puts "collection.sword_services: #{collection.sword_services}"
-    puts "collection.accepts: #{collection.accepts}"
-    puts "collection.accept: #{collection.accept}"
-    puts "collection.accept_alternate_multipart_related: #{collection.accept_alternate_multipart_related}"
+
+    puts "collection.accepts: #{collection.accepts}"    
+    puts "collection.app_accept: #{collection.app_accept}"
+    puts "collection.app_accept_alternate_multipart_related: #{collection.app_accept_alternate_multipart_related}"
+    
 
     feed = collection.feed
     feed.update!

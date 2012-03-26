@@ -12,11 +12,11 @@ module Sword2Ruby
     end
     
     def sword_version
-      Utility.find_extension_string(extensions, "sword:version")
+      Utility.find_element_text(extensions, "sword:version")
     end
      
     def sword_max_upload_size
-      Utility.find_extension_integer(extensions, "sword:maxUploadSize")
+      Utility.find_element_integer(extensions, "sword:maxUploadSize")
     end
     
     # retrieves and parses an Atom service document.

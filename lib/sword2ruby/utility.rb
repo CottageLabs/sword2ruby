@@ -6,8 +6,6 @@ require 'digest/md5'
 module Sword2Ruby
   class Utility
 
-   
-    
     def self.to_boolean(value, nil_value = false)
       value.downcase! if value.class == String
       case value
@@ -47,37 +45,59 @@ module Sword2Ruby
       links.find_all{|link| link.rel == rel}
     end
     
-    def self.find_extension_string(extensions, name)
-      extensions.find(NIL_LAMBDA) {|e| e.fully_expanded_name==name}.text
+
+
+
+    #Find single element
+    def self.find_element_by_name(elements, name)
+      elements.find(NIL_LAMBDA) {|e| e.fully_expanded_name == name}
     end
     
-    def self.find_extension_integer(extensions, name)
-      find_extension_string(extensions, name).to_i
+    def self.find_element_text(elements, name)
+      find_element_by_name(elements, name).text
     end
     
-    def self.find_extension_boolean(extensions, name)
-       value = find_extension_string(extensions, name).downcase.chomp
-       if value=="true"
-         true
-       elsif value=="false"
-         false
-       else
-         nil
-       end
+    def self.find_element_integer(elements, name)
+      find_element_text(elements, name).to_i
+    end
+    
+    def self.find_element_boolean(elements, name)
+       self.to_boolean(find_element_text(elements, name), nil)
      end
     
-    def self.find_extension_time(extensions, name)
-      Time.parse(find_extension_string(extensions, name))
+    def self.find_element_time(elements, name)
+      value = find_element_text(elements, name)
+      value.nil? ? nil : Time.parse(find_element_text(elements, name))
     end
     
-    def self.find_extensions_string(extensions, name)
-      extensions.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.text}
+    def self.find_element_attribute_value(elements, name, attribute_name)
+      elements.find(NIL_LAMBDA) {|e| e.fully_expanded_name == name}.attribute(attribute_name).value
     end
     
-    def self.find_extensions_by_namespace(extensions, namespace)
-      extensions.find_all {|e| e.namespace == namespace}
+    def self.find_element_by_scheme_and_term(elements, scheme, term)
+      elements.find {|e| e.scheme == scheme && e.term == term}
     end
     
+    
+    
+    #Find multiple elements
+    def self.find_elements_text(elements, name)
+      elements.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.text}
+    end
+    
+    def self.find_elements_attribute_value(elements, name, attribute_name)
+      elements.find_all {|e| e.fully_expanded_name==name}.collect {|e| e.attribute(attribute_name).value}
+    end
+    
+    def self.find_elements_by_namespace(elements, namespace)
+      elements.find_all {|e| e.namespace == namespace}
+    end
+    
+  
+    
+    def self.find_elements_by_scheme(categories, scheme)
+      categories.find_all {|c| c.scheme == scheme}
+    end
     
     #Returns [filename, md5 digest, data]
     def self.read_file(filepath) 

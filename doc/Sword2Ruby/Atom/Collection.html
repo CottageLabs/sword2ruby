@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class Sword2Ruby::Atom::Collection - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="../../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../../index.html">Home</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/sword2ruby/collection.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="Element.html">Sword2Ruby::Atom::Element</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-app_accept">#app_accept</a>
+    
+    <li><a href="#method-i-app_accept_alternate_multipart_related">#app_accept_alternate_multipart_related</a>
+    
+    <li><a href="#method-i-post-21">#post!</a>
+    
+    <li><a href="#method-i-post_media-21">#post_media!</a>
+    
+    <li><a href="#method-i-post_multipart-21">#post_multipart!</a>
+    
+    <li><a href="#method-i-sword_accept_packagings">#sword_accept_packagings</a>
+    
+    <li><a href="#method-i-sword_collection_policy">#sword_collection_policy</a>
+    
+    <li><a href="#method-i-sword_mediation">#sword_mediation</a>
+    
+    <li><a href="#method-i-sword_services">#sword_services</a>
+    
+    <li><a href="#method-i-sword_treatment">#sword_treatment</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="../../Gemfile.html">Gemfile</a>
+  
+    <li class="file"><a href="../../Rakefile.html">Rakefile</a>
+  
+    <li class="file"><a href="../../questions_for_richard_txt.html">questions_for_richard</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../../Sword2Ruby.html">Sword2Ruby</a>
+  
+    <li><a href="../../Sword2Ruby/Atom.html">Sword2Ruby::Atom</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/Collection.html">Sword2Ruby::Atom::Collection</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/Element.html">Sword2Ruby::Atom::Element</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/Entry.html">Sword2Ruby::Atom::Entry</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/Feed.html">Sword2Ruby::Atom::Feed</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/Service.html">Sword2Ruby::Atom::Service</a>
+  
+    <li><a href="../../Sword2Ruby/Atom/SwordAccept.html">Sword2Ruby::Atom::SwordAccept</a>
+  
+    <li><a href="../../Sword2Ruby/AutoDiscover.html">Sword2Ruby::AutoDiscover</a>
+  
+    <li><a href="../../Sword2Ruby/Connection.html">Sword2Ruby::Connection</a>
+  
+    <li><a href="../../Sword2Ruby/DepositReceipt.html">Sword2Ruby::DepositReceipt</a>
+  
+    <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
+  
+    <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+  
+    <li><a href="../../Sword2Ruby/User.html">Sword2Ruby::User</a>
+  
+    <li><a href="../../Sword2Ruby/Utility.html">Sword2Ruby::Utility</a>
+  
+    <li><a href="../../Object.html">Object</a>
+  
+    <li><a href="../../Sword2ruby.html">Sword2ruby</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Sword2Ruby::Atom::Collection</h1>
+
+  <div id="description" class="description">
+    
+<p>Extensions to the <a
+href="https://github.com/bct/atom-tools/wiki">atom-tools</a> <a
+href="Collection.html">Atom::Collection</a> class to support Sword2
+operations. These methods are additive to those supplied by the atom-tools
+gem.</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-app_accept" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app_accept</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the string value of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">app:accept></a>
+tag, or nil if it not defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="app_accept-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 53</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept</span>
+  <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span>.<span class="ruby-identifier">nil?</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app_accept-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app_accept-method -->
+
+    
+      <div id="method-i-app_accept_alternate_multipart_related" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">app_accept_alternate_multipart_related</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the string value of the &lt;app:accept <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">alternate=“multipart-related”></a>
+tag, or nil if it not defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="app_accept_alternate_multipart_related-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 59</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept_alternate_multipart_related</span>
+  <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;multipart-related&quot;</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- app_accept_alternate_multipart_related-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- app_accept_alternate_multipart_related-method -->
+
+    
+      <div id="method-i-post-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">post!</span><span
+            class="method-args">(entry, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method creates a new entry in the collection by posting an <a
+href="../Atom.html">Atom</a> entry to the collection URI.</p>
+<dl class="rdoc-list note-list"><dt>entry
+<dd>
+<p>an <a href="Entry.html">Atom::Entry</a> to be added to the collection</p>
+</dd><dt>slug
+<dd>
+<p>(optional) the suggested identifier of the new entry</p>
+</dd><dt>in_progress
+<dd>
+<p>(optional) boolean value indicating whether the new entry will be completed
+at a later date</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_entry">section
+6.3.3. “Creating a Resource with an Atom Entry”</a>.</p>
+          
+
+          
+          <div class="method-source-code" id="post-21-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'entry'</span>, <span class="ruby-identifier">entry</span>, <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>)
+  <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atom+xml;type=entry&quot;</span> }
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Slug&quot;</span>] = <span class="ruby-identifier">slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-ivar">@href</span>, <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post!(): server returned code #{response.code} #{response.message}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- post-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- post-21-method -->
+
+    
+      <div id="method-i-post_media-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">post_media!</span><span
+            class="method-args">(filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method creates a new entry in the collection by posting a file to the
+collection URI. An MD5-digest will be calculated automatically from the
+file and sent to the server with the request.</p>
+<dl class="rdoc-list note-list"><dt>filepath
+<dd>
+<p>a filepath string indicating the file to be posted. The file must be
+readable by the process.</p>
+</dd><dt>content_type
+<dd>
+<p>the mime content-type string of the file, e.g. “application/zip” or
+“text/plain”</p>
+</dd><dt>packaging
+<dd>
+<p>the Sword packaging string of the file, e.g. “<a
+href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
+</dd><dt>slug
+<dd>
+<p>(optional) the suggested identifier of the new entry</p>
+</dd><dt>in_progress
+<dd>
+<p>(optional) boolean value indicating whether the new entry will be completed
+at a later date</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_binary">section
+6.3.1. “Creating a Resource with a Binary File Deposit”</a>.</p>
+          
+
+          
+          <div class="method-source-code" id="post_media-21-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 97</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
+  
+  <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content_type</span>}
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-Disposition&quot;</span>] = <span class="ruby-node">&quot;attachment; filename=#{filename}&quot;</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-MD5&quot;</span>] = <span class="ruby-identifier">md5</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Packaging&quot;</span>] = <span class="ruby-identifier">packaging</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Slug&quot;</span>] = <span class="ruby-identifier">slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-ivar">@href</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">headers</span>)
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_media!(): server returned #{response.code} #{response.message}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- post_media-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- post_media-21-method -->
+
+    
+      <div id="method-i-post_multipart-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">post_multipart!</span><span
+            class="method-args">(entry, filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method creates a new entry in the collection by posting a file and
+atom-entry to the collection URI. An MD5-digest will be calculated
+automatically from the file and sent to the server with the request.</p>
+<dl class="rdoc-list note-list"><dt>entry
+<dd>
+<p>an <a href="Entry.html">Atom::Entry</a> to be added to the collection</p>
+</dd><dt>filepath
+<dd>
+<p>a filepath string indicating the file to be posted. The file must be
+readable by the process.</p>
+</dd><dt>content_type
+<dd>
+<p>the mime content-type string of the file, e.g. “application/zip” or
+“text/plain”</p>
+</dd><dt>packaging
+<dd>
+<p>the Sword packaging string of the file, e.g. “<a
+href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
+</dd><dt>slug
+<dd>
+<p>(optional) the suggested identifier of the new entry</p>
+</dd><dt>in_progress
+<dd>
+<p>(optional) boolean value indicating whether the new entry will be completed
+at a later date</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_multipart">section
+6.3.2. “Creating a Resource with a Multipart Deposit”</a>.</p>
+          
+
+          
+          <div class="method-source-code" id="post_multipart-21-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 129</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_multipart!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">tmp</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">boundary</span> = <span class="ruby-string">&quot;========&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;==&quot;</span>
+  <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
+
+  <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'multipart/related; boundary=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">boundary</span> <span class="ruby-operator">+</span> <span class="ruby-string">'&quot;; type=&quot;application/atom+xml&quot;'</span>}
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Slug&quot;</span>] = <span class="ruby-identifier">slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;MIME-Version&quot;</span>] = <span class="ruby-string">&quot;1.0&quot;</span>
+  
+  
+  <span class="ruby-comment"># write boundary identifer to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
+
+  <span class="ruby-comment"># write entry relevant headers to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Type: application/atom+xml; charset=\&quot;utf-8\&quot;\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Disposition: attachment; name=atom\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
+
+  <span class="ruby-comment"># write entry to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\r\n&quot;</span>
+  
+  <span class="ruby-comment"># write boundary identifier to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
+
+  <span class="ruby-comment"># write media part relevant headers to temp      </span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Type: #{content_type}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Disposition: attachment; name=payload; filename=#{filename}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-MD5: #{md5}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Packaging: #{packaging}\r\n&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
+  
+  <span class="ruby-comment"># write the file base64 encoded to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">data</span>)
+
+  <span class="ruby-comment"># write boundary identifier to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}--\r\n&quot;</span> <span class="ruby-comment">#The last two dashes (--) are important!</span>
+  
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-ivar">@href</span>, <span class="ruby-identifier">tmp</span>, <span class="ruby-identifier">headers</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_multipart!(): server returned #{response.code} #{response.message}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- post_multipart-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- post_multipart-21-method -->
+
+    
+      <div id="method-i-sword_accept_packagings" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sword_accept_packagings</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns an array of the string values of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">sword:acceptPackaging></a>
+tags, or an empty array [ ] if none are defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="sword_accept_packagings-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_accept_packagings</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:acceptPackaging&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sword_accept_packagings-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sword_accept_packagings-method -->
+
+    
+      <div id="method-i-sword_collection_policy" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sword_collection_policy</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the string value of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">sword:collectionPolicy></a>,
+or nil if it is not defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="sword_collection_policy-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_collection_policy</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:collectionPolicy&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sword_collection_policy-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sword_collection_policy-method -->
+
+    
+      <div id="method-i-sword_mediation" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sword_mediation</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the boolean value of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">sword:mediation></a>
+tag, or false if it is not defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="sword_mediation-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_mediation</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_boolean</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:mediation&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sword_mediation-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sword_mediation-method -->
+
+    
+      <div id="method-i-sword_services" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sword_services</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns an array of the string values of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">sword:service></a>
+tags, or an empty array [ ] if none are defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="sword_services-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_services</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:service&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sword_services-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sword_services-method -->
+
+    
+      <div id="method-i-sword_treatment" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sword_treatment</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method returns the string value of the &lt;<a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument">sword:treatment></a>
+tag, or nil if it is not defined in the service document.</p>
+          
+
+          
+          <div class="method-source-code" id="sword_treatment-source">
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_treatment</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:treatment&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sword_treatment-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sword_treatment-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

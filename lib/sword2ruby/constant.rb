@@ -7,12 +7,23 @@ module Sword2Ruby
   
   NIL_LAMBDA = lambda {
     result = nil;
+
     def result.text
       nil
     end
+
     def result.href
       nil
     end
+
+    def result.value
+      nil
+    end
+
+    def result.attribute(name)
+      nil
+    end
+
     result;
   }
   

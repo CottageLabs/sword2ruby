@@ -14,6 +14,8 @@ require "sword2ruby/feed"
 require "sword2ruby/collection"
 require "sword2ruby/service"
 
+require "sword2ruby/sword_statement"
+
 module Sword2ruby
   # Your code goes here...
 end
