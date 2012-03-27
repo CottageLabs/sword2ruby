@@ -4,9 +4,9 @@ require "sword2ruby/version"
 
 Gem::Specification.new do |s|
   s.name        = "sword2ruby"
-  s.version     = Sword2ruby::VERSION
+  s.version     = Sword2Ruby::VERSION
   s.authors     = ["Mark MacGillivray, Martyn Whitwell"]
-  s.email       = ["martyn.whitwell@gmail.com"]
+  s.email       = ["martyn@cottagelabs.com"]
   s.homepage    = "https://github.com/CottageLabs/sword2ruby"
   s.summary     = %q{TODO: Write a gem summary}
   s.description = %q{TODO: Write a gem description}

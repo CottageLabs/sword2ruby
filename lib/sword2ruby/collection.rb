@@ -4,19 +4,16 @@ require 'atom/collection'
 require "base64"
 
 module Sword2Ruby
-  
-  #Special class to override the usual <accept>s class
-  class Atom::SwordAccept < Atom::Text
-    is_element PP_NS, :accept
-    attrb PP_NS, :alternate
-  end
-  
+
+
   #Extensions to the atom-tools[https://github.com/bct/atom-tools/wiki] Atom::Collection class to support Sword2 operations.
   #These methods are additive to those supplied by the atom-tools gem.
+  #
+  #Please see the atom-tools documentation for a complete list of attributes and methods.
   class Atom::Collection < Atom::Element
     
     #Special sword_accepts to override usual accept
-    elements ['app', PP_NS], :accept, :sword_accepts, Atom::SwordAccept
+    elements ['app', ATOM_PUBLISHING_PROTOCOL_NAMESPACE], :accept, :sword_accepts, Sword2Ruby::SwordAccept
 
     #This method returns the string value of the <sword:collectionPolicy>[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument],
     #or nil if it is not defined in the service document.
@@ -62,6 +59,7 @@ module Sword2Ruby
     
     
     #This method creates a new entry in the collection by posting an Atom entry to the collection URI.
+    #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #entry:: an Atom::Entry to be added to the collection
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
@@ -86,6 +84,7 @@ module Sword2Ruby
 
     #This method creates a new entry in the collection by posting a file to the collection URI.
     #An MD5-digest will be calculated automatically from the file and sent to the server with the request.
+    #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
     #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
     #packaging:: the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
@@ -117,6 +116,7 @@ module Sword2Ruby
    
     #This method creates a new entry in the collection by posting a file and atom-entry to the collection URI.
     #An MD5-digest will be calculated automatically from the file and sent to the server with the request.
+    #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #entry:: an Atom::Entry to be added to the collection
     #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
     #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"

@@ -72,8 +72,6 @@
     
     <li><a href="#method-c-new">::new</a>
     
-    <li><a href="#method-i-get_attribute">#get_attribute</a>
-    
   </ul>
 </nav>
 
@@ -113,8 +111,6 @@
   
     <li><a href="../Sword2Ruby/Atom/Service.html">Sword2Ruby::Atom::Service</a>
   
-    <li><a href="../Sword2Ruby/Atom/SwordAccept.html">Sword2Ruby::Atom::SwordAccept</a>
-  
     <li><a href="../Sword2Ruby/AutoDiscover.html">Sword2Ruby::AutoDiscover</a>
   
     <li><a href="../Sword2Ruby/Connection.html">Sword2Ruby::Connection</a>
@@ -123,6 +119,8 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
+  
     <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
   
     <li><a href="../Sword2Ruby/User.html">Sword2Ruby::User</a>
@@ -130,8 +128,6 @@
     <li><a href="../Sword2Ruby/Utility.html">Sword2Ruby::Utility</a>
   
     <li><a href="../Object.html">Object</a>
-  
-    <li><a href="../Sword2ruby.html">Sword2ruby</a>
   
   </ul>
 </nav>
@@ -144,6 +140,9 @@
 
   <div id="description" class="description">
     
+<p><a href="AutoDiscover.html">AutoDiscover</a> requires the <a
+href="https://github.com/hpricot/hpricot/wiki">hpricot</a> gem.</p>
+
   </div><!-- description -->
 
   
@@ -170,7 +169,12 @@
 
         <div class="method-description">
         
-        
+        <p>The Deposit Endpoint URI string discovered in the HTML document, or nil if
+it could not be discovered.</p>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_deposit">section
+13.2. “For Deposit Endpoints”</a>.</p>
         
         </div>
       </div>
@@ -183,7 +187,12 @@
 
         <div class="method-description">
         
-        
+        <p>An array of <a href="Atom.html">Atom</a> Entry Edit URI strings discovered
+in the HTML document, or an empty array [ ] if none found.</p>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources">section
+13.3. “For Resources”</a>.</p>
         
         </div>
       </div>
@@ -196,7 +205,12 @@
 
         <div class="method-description">
         
-        
+        <p>An array of Sword Statement URI strings discovered in the HTML document, or
+an empty array [ ] if none found.</p>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources">section
+13.3. “For Resources”</a>.</p>
         
         </div>
       </div>
@@ -209,7 +223,12 @@
 
         <div class="method-description">
         
-        
+        <p>The Service Document URI string discovered in the HTML document, or nil if
+it could not be discovered.</p>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_servicedocuments">section
+13.1. “For Service Documents”</a>.</p>
         
         </div>
       </div>
@@ -234,12 +253,19 @@
 
         <div class="method-description">
           
-          
+          <p>Perform an Auto-Discovery on the URI supplied (which should point to an
+html document).  The document will be retreived and parsed using hpricot.
+Service Document, Deposit Endpoint and Resource URIs will be extracted
+where identified.</p>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery">section
+13 “Auto-Discovery”</a>.</p>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/auto_discover.rb, line 12</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/auto_discover.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">discover_uri</span>)
   <span class="ruby-identifier">doc</span> = <span class="ruby-constant">Hpricot</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">discover_uri</span>))
   
@@ -270,46 +296,6 @@
 
     
     </section><!-- public-class-method-details -->
-  
-     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Instance Methods</h3>
-
-    
-      <div id="method-i-get_attribute" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">get_attribute</span><span
-            class="method-args">(item, attribute)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="get_attribute-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/auto_discover.rb, line 33</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">attribute</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-identifier">item</span>[<span class="ruby-identifier">attribute</span>]
-  <span class="ruby-keyword">end</span>  
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- get_attribute-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- get_attribute-method -->
-
-    
-    </section><!-- public-instance-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 

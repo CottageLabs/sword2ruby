@@ -129,8 +129,6 @@
   
     <li><a href="../../Sword2Ruby/Atom/Service.html">Sword2Ruby::Atom::Service</a>
   
-    <li><a href="../../Sword2Ruby/Atom/SwordAccept.html">Sword2Ruby::Atom::SwordAccept</a>
-  
     <li><a href="../../Sword2Ruby/AutoDiscover.html">Sword2Ruby::AutoDiscover</a>
   
     <li><a href="../../Sword2Ruby/Connection.html">Sword2Ruby::Connection</a>
@@ -139,6 +137,8 @@
   
     <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
+  
     <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
   
     <li><a href="../../Sword2Ruby/User.html">Sword2Ruby::User</a>
@@ -146,8 +146,6 @@
     <li><a href="../../Sword2Ruby/Utility.html">Sword2Ruby::Utility</a>
   
     <li><a href="../../Object.html">Object</a>
-  
-    <li><a href="../../Sword2ruby.html">Sword2ruby</a>
   
   </ul>
 </nav>
@@ -165,6 +163,9 @@ href="https://github.com/bct/atom-tools/wiki">atom-tools</a> <a
 href="Collection.html">Atom::Collection</a> class to support Sword2
 operations. These methods are additive to those supplied by the atom-tools
 gem.</p>
+
+<p>Please see the atom-tools documentation for a complete list of attributes
+and methods.</p>
 
   </div><!-- description -->
 
@@ -204,7 +205,7 @@ tag, or nil if it not defined in the service document.</p>
 
           
           <div class="method-source-code" id="app_accept-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 53</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept</span>
   <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span>.<span class="ruby-identifier">nil?</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -236,7 +237,7 @@ tag, or nil if it not defined in the service document.</p>
 
           
           <div class="method-source-code" id="app_accept_alternate_multipart_related-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 59</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept_alternate_multipart_related</span>
   <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;multipart-related&quot;</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -262,7 +263,10 @@ tag, or nil if it not defined in the service document.</p>
         <div class="method-description">
           
           <p>This method creates a new entry in the collection by posting an <a
-href="../Atom.html">Atom</a> entry to the collection URI.</p>
+href="../Atom.html">Atom</a> entry to the collection URI. The method will
+return a <a href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a>
+object, or raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in
+the case of an error.</p>
 <dl class="rdoc-list note-list"><dt>entry
 <dd>
 <p>an <a href="Entry.html">Atom::Entry</a> to be added to the collection</p>
@@ -285,7 +289,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 71</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'entry'</span>, <span class="ruby-identifier">entry</span>, <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>)
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atom+xml;type=entry&quot;</span> }
@@ -323,7 +327,10 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
           
           <p>This method creates a new entry in the collection by posting a file to the
 collection URI. An MD5-digest will be calculated automatically from the
-file and sent to the server with the request.</p>
+file and sent to the server with the request. The method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
 <dl class="rdoc-list note-list"><dt>filepath
 <dd>
 <p>a filepath string indicating the file to be posted. The file must be
@@ -355,7 +362,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post_media-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 97</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 96</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
   
@@ -398,7 +405,11 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
           
           <p>This method creates a new entry in the collection by posting a file and
 atom-entry to the collection URI. An MD5-digest will be calculated
-automatically from the file and sent to the server with the request.</p>
+automatically from the file and sent to the server with the request. The
+method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
 <dl class="rdoc-list note-list"><dt>entry
 <dd>
 <p>an <a href="Entry.html">Atom::Entry</a> to be added to the collection</p>
@@ -509,7 +520,7 @@ tags, or an empty array [ ] if none are defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_accept_packagings-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 41</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_accept_packagings</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:acceptPackaging&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -541,7 +552,7 @@ or nil if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_collection_policy-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 23</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_collection_policy</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:collectionPolicy&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -573,7 +584,7 @@ tag, or false if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_mediation-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 29</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_mediation</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_boolean</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:mediation&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -605,7 +616,7 @@ tags, or an empty array [ ] if none are defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_services-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 47</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_services</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:service&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -637,7 +648,7 @@ tag, or nil if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_treatment-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 35</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_treatment</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:treatment&quot;</span>)
 <span class="ruby-keyword">end</span></pre>

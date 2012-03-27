@@ -2,10 +2,29 @@
 
 
 module Sword2Ruby
+  #The DepositReceipt object is returned following Post, Put and Delete operations on the Sword server.
+  #In some cases (e.g. Post), an Atom::Entry will usually be returned describing the newly created entry. Operations such as Delete do not return an Atom::Entry.
+  #If the Sword server does not automatically return the Atom::Entry but instead provides a link to it, the DepositReceipt object will automatically fetch it.
+  #
+  #For more information, see the Sword2 specification: {section 10 "Deposit Receipt"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#depositreceipt].
   class DepositReceipt
     
-    attr_reader :has_entry, :entry, :location, :status_code, :status_message
+    #Boolean value indicating whether there is an Atom::Entry associated with this receipt.
+    attr_reader :has_entry
+
+    #The Atom::Entry associated with this receipt, or nil if not supplied. The Atom::Entry will be automatically fetched from the server when necessary.
+    attr_reader :entry
     
+    #The location header returned by the Sword server, usually after Posting or Putting. 
+    attr_reader :location
+
+    #The http status code returned by the Sword server.
+    attr_reader :status_code
+    
+    #The http status message returned by the Sword server.
+    attr_reader :status_message
+    
+    #Create a new DepositReceipt using the Response object returned by the server.
     def initialize(response, http)
       @location = response.header["location"]
       @status_code = response.code

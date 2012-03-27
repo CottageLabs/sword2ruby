@@ -1,10 +1,15 @@
 module Sword2Ruby
   
-  NS = "http://www.w3.org/2005/Atom"
-  PP_NS = "http://www.w3.org/2007/app"
+  #The Atom Syndication Format namespace: http://www.w3.org/2005/Atom
+  ATOM_SYNDICATION_FORMAT_NAMESPACE = "http://www.w3.org/2005/Atom"
   
+  #Atom Publishing Protocol namespace: http://www.w3.org/2007/app
+  ATOM_PUBLISHING_PROTOCOL_NAMESPACE = "http://www.w3.org/2007/app"
+  
+  #An array of valid URL schemes: http://, https:// and file://
   VALID_URI_SCHEMES = [:http, :https, :file]
   
+  #A special lambda object representing the nil object, used by find() when parsing XML which may or may not contain specific elements and attributes
   NIL_LAMBDA = lambda {
     result = nil;
 
