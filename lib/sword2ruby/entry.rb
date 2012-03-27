@@ -3,16 +3,28 @@
 require 'atom/entry'
 
 module Sword2Ruby
+  #Extensions to the atom-tools[https://github.com/bct/atom-tools/wiki] Atom::Entry class to support Sword2 operations.
+  #These methods are additive to those supplied by the atom-tools gem.
+  #
+  #Please see the atom-tools documentation for a complete list of attributes and methods.
   class Atom::Entry < Atom::Element
+
+#Deposit Receipt tags
     
+    #This method returns the URI string of the <link rel="alternate"> tag (usually contained in the DepositReceipt Entry),
+    #or nil if it is not defined.
     def alternate_uri
       Utility.find_link_uri(links, "alternate")
     end
-    
+
+    #This method returns the URI string of the Media Entry <link rel="edit"> tag (usually contained in the DepositReceipt Entry),
+    #or nil if it is not defined.    
     def media_entry_uri
       Utility.find_link_uri(links, "edit")
     end
 
+    #This method returns an array of URI strings for the Media Resource <link rel="edit-media"> tags (usually contained in the DepositReceipt Entry),
+    #or an empty array [ ] if none are defined defined.
     def media_resource_links
       Utility.find_links_all_types(links, "edit-media")
     end
