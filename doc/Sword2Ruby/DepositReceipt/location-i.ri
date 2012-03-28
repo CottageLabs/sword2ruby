@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"location:EFI"(Sword2Ruby::DepositReceipt#location;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"YThe location header returned by the Sword server, usually after Posting or Putting. ;T:
+@fileI"&lib/sword2ruby/deposit_receipt.rb;TF@

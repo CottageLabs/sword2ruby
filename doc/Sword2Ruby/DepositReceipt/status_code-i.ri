@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"status_code:EFI"+Sword2Ruby::DepositReceipt#status_code;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"7The http status code returned by the Sword server.;T:
+@fileI"&lib/sword2ruby/deposit_receipt.rb;TF@
