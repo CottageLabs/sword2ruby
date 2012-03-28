@@ -9,7 +9,7 @@ module Sword2Ruby
   #Extensions to the atom-tools[https://github.com/bct/atom-tools/wiki] Atom::Collection class to support Sword2 operations.
   #These methods are additive to those supplied by the atom-tools gem.
   #
-  #Please see the atom-tools documentation for a complete list of attributes and methods.
+  #Please see the {atom-tools documentation}[http://rdoc.info/github/bct/atom-tools/master/frames] for a complete list of attributes and methods.
   class Atom::Collection < Atom::Element
     
     #Special sword_accepts to override usual accept

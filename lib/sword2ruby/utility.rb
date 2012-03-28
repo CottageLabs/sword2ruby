@@ -33,6 +33,8 @@ module Sword2Ruby
       end
     end
     
+    
+    
     def self.find_link_uri(links, rel, type = nil)
       links.find(NIL_LAMBDA) {|link| link.rel == rel && link.type == type}.href
     end

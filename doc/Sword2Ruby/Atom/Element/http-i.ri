@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"	http:EFI"#Sword2Ruby::Atom::Element#http;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"ŸSword2Ruby::Connection (Atom::HTTP) object to facilitate connections in derived classes, such as Atom::Entry, Atom::Feed, Atom::Workspace and Atom::Collection.;T:
-@fileI"lib/sword2ruby/element.rb;TF@

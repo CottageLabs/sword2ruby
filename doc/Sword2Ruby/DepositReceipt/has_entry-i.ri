@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"has_entry:EFI")Sword2Ruby::DepositReceipt#has_entry;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"[Boolean value indicating whether there is an Atom::Entry associated with this receipt.;T:
-@fileI"&lib/sword2ruby/deposit_receipt.rb;TF@

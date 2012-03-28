@@ -123,6 +123,8 @@
   
     <li class="file"><a href="../Rakefile.html">Rakefile</a>
   
+    <li class="file"><a href="../spec/fixtures/example_txt.html">example</a>
+  
   </ul>
 </nav>
 
@@ -275,7 +277,7 @@
 
           
           <div class="method-source-code" id="find_element_attribute_value-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 73</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_attribute_value</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attribute_name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}.<span class="ruby-identifier">attribute</span>(<span class="ruby-identifier">attribute_name</span>).<span class="ruby-identifier">value</span>
 <span class="ruby-keyword">end</span></pre>
@@ -305,7 +307,7 @@
 
           
           <div class="method-source-code" id="find_element_boolean-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 64</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_boolean</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_boolean</span>(<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>), <span class="ruby-keyword">nil</span>)
  <span class="ruby-keyword">end</span></pre>
@@ -335,7 +337,7 @@
 
           
           <div class="method-source-code" id="find_element_by_name-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 52</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_by_name</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -365,7 +367,7 @@
 
           
           <div class="method-source-code" id="find_element_by_scheme_and_term-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 77</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_by_scheme_and_term</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">scheme</span>, <span class="ruby-identifier">term</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">scheme</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">term</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">term</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -395,7 +397,7 @@
 
           
           <div class="method-source-code" id="find_element_integer-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 60</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_integer</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">to_i</span>
 <span class="ruby-keyword">end</span></pre>
@@ -425,7 +427,7 @@
 
           
           <div class="method-source-code" id="find_element_text-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 56</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">find_element_by_name</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">text</span>
 <span class="ruby-keyword">end</span></pre>
@@ -455,7 +457,7 @@
 
           
           <div class="method-source-code" id="find_element_time-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 68</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_time</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">value</span> = <span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>))
@@ -486,7 +488,7 @@
 
           
           <div class="method-source-code" id="find_elements_attribute_value-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 88</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_attribute_value</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attribute_name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span><span class="ruby-operator">==</span><span class="ruby-identifier">name</span>}.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-identifier">attribute_name</span>).<span class="ruby-identifier">value</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -516,7 +518,7 @@
 
           
           <div class="method-source-code" id="find_elements_by_namespace-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 92</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_by_namespace</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">namespace</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">namespace</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">namespace</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -546,7 +548,7 @@
 
           
           <div class="method-source-code" id="find_elements_by_scheme-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 98</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_by_scheme</span>(<span class="ruby-identifier">categories</span>, <span class="ruby-identifier">scheme</span>)
   <span class="ruby-identifier">categories</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">scheme</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -576,7 +578,7 @@
 
           
           <div class="method-source-code" id="find_elements_text-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 84</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span><span class="ruby-operator">==</span><span class="ruby-identifier">name</span>}.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">text</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -606,7 +608,7 @@
 
           
           <div class="method-source-code" id="find_link_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 36</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_link_uri</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>}.<span class="ruby-identifier">href</span>
 <span class="ruby-keyword">end</span></pre>
@@ -636,7 +638,7 @@
 
           
           <div class="method-source-code" id="find_links-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 40</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_links</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -666,7 +668,7 @@
 
           
           <div class="method-source-code" id="find_links_all_types-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 44</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 46</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_links_all_types</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -696,7 +698,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 112</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 114</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>()
   <span class="ruby-keyword">super</span>
 <span class="ruby-keyword">end</span></pre>
@@ -726,7 +728,7 @@
 
           
           <div class="method-source-code" id="read_file-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 103</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>) 
   <span class="ruby-identifier">data</span> = <span class="ruby-keyword">nil</span>
   <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filepath</span>,<span class="ruby-string">'r'</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>

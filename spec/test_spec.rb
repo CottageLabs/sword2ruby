@@ -70,12 +70,20 @@ describe Atom::Service do
     puts "deposit_receipt.entry.sword_verbose_description:\t #{deposit_receipt.entry.sword_verbose_description}"
     puts "deposit_receipt.entry.dublin_core_extensions:\t #{deposit_receipt.entry.dublin_core_extensions}"
     puts "deposit_receipt.entry.dublin_core_extensions.first:\t #{deposit_receipt.entry.dublin_core_extensions.first}"    
+    
+    puts "\n\n\n------------------\n\n"
+    puts "deposit_receipt.entry.links.first.class: #{deposit_receipt.entry.links.first.class}"
+    puts "deposit_receipt.entry.links.first: #{deposit_receipt.entry.links.first}"
+    puts "deposit_receipt.entry.media_resource_links: #{deposit_receipt.entry.media_resource_links}"
+    puts "deposit_receipt.entry.media_resource_links.first.class: #{deposit_receipt.entry.media_resource_links.first.class}"
+    puts "\n\n------------------\n\n\n"
+    
     puts "\n"
 
 
     puts "\n"
     puts "creating a new entry (post binary file)"
-    deposit_receipt = collection.post_media!("snowflake.png", "image/png", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    deposit_receipt = collection.post_media!("spec/fixtures/snowflake.png", "image/png", "http://purl.org/net/sword/package/METSDSpaceSIP")
     puts "deposit_receipt.entry.alternate_uri:\t #{deposit_receipt.entry.alternate_uri}"    
     puts "deposit_receipt.entry.media_entry_uri:\t #{deposit_receipt.entry.media_entry_uri}"
     puts "deposit_receipt.entry.media_resource_links:\t #{deposit_receipt.entry.media_resource_links}"
@@ -92,7 +100,7 @@ describe Atom::Service do
 
     puts "\n"
     puts "replacing an entry on a new deposit (put binary file)"
-    success = deposit_receipt.entry.put_media!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    success = deposit_receipt.entry.put_media!("spec/fixtures/example.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
     puts "success: #{success}"
     puts "\n"    
   
@@ -109,7 +117,7 @@ describe Atom::Service do
 
     puts "\n"
     puts "creating a new entry (multipart post)"
-    deposit_receipt = collection.post_multipart!(entry, "zip-test.zip", "application/zip", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    deposit_receipt = collection.post_multipart!(entry, "spec/fixtures/zip-test.zip", "application/zip", "http://purl.org/net/sword/package/METSDSpaceSIP")
     puts "deposit_receipt.entry.alternate_uri:\t #{deposit_receipt.entry.alternate_uri}"    
     puts "deposit_receipt.entry.media_entry_uri:\t #{deposit_receipt.entry.media_entry_uri}"
     puts "deposit_receipt.entry.media_resource_links:\t #{deposit_receipt.entry.media_resource_links}"
@@ -127,7 +135,7 @@ describe Atom::Service do
     puts "\n"
     puts "replacing meta data and binary data"
     deposit_receipt.entry.title="My New Title123456"
-    success = deposit_receipt.entry.put_multipart!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    success = deposit_receipt.entry.put_multipart!("spec/fixtures/example.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
     puts "success: #{success}"
     puts "\n"
 
@@ -142,7 +150,7 @@ describe Atom::Service do
     
     puts "\n"
     puts "adding binary data"
-    deposit_receipt2 = deposit_receipt.entry.post_media!("questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+    deposit_receipt2 = deposit_receipt.entry.post_media!("spec/fixtures/example.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
     puts "deposit_receipt2: #{deposit_receipt2}"
     puts "\n"
     
@@ -154,7 +162,7 @@ describe Atom::Service do
     
       puts "\n"
       puts "adding more metadata and binary data to SE-URI data"
-      deposit_receipt2 = deposit_receipt.entry.post_multipart!(entry, "questions_for_richard.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
+      deposit_receipt2 = deposit_receipt.entry.post_multipart!(entry, "spec/fixtures/example.txt", "text/plain", "http://purl.org/net/sword/package/METSDSpaceSIP")
       puts "deposit_receipt2: #{deposit_receipt2}"
       puts "\n"
     
