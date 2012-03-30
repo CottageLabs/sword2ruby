@@ -67,7 +67,11 @@ module Sword2Ruby
     #
     #For more information, see the Sword2 specification: {section 6.3.3. "Creating a Resource with an Atom Entry"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_entry].
     def post!(entry, slug = nil, in_progress = nil, on_behalf_of = nil)
+      #Validate parameters
       Utility.check_argument_class('entry', entry, Atom::Entry)
+      Utility.check_argument_class('slug', slug, String) if slug
+      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
+   
       headers = {"Content-Type" => "application/atom+xml;type=entry" }
       headers["Slug"] = slug if slug
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
@@ -77,7 +81,7 @@ module Sword2Ruby
       if response.is_a? Net::HTTPSuccess
         return DepositReceipt.new(response, @http)
       else
-        raise Sword2Ruby::Exception.new("Failed to do post!(): server returned code #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post!(#{@href}): server returned code #{response.code} #{response.message}")
       end
     end
     
@@ -87,19 +91,26 @@ module Sword2Ruby
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
     #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
     #
     #For more information, see the Sword2 specification: {section 6.3.1. "Creating a Resource with a Binary File Deposit"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_binary].
-    def post_media!(filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+    def post_media!(filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)
+      #Validate parameters
+      Utility.check_argument_class('filepath', filepath, String)
+      Utility.check_argument_class('content_type', content_type, String)
+      Utility.check_argument_class('packaging', packaging, String) if packaging
+      Utility.check_argument_class('slug', slug, String) if slug
+      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
+      
       filename, md5, data = Utility.read_file(filepath)
       
       headers = {"Content-Type" => content_type}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"
       headers["Content-MD5"] = md5
-      headers["Packaging"] = packaging
+      headers["Packaging"] = packaging if packaging
       headers["Slug"] = slug if slug
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
@@ -109,7 +120,7 @@ module Sword2Ruby
       if response.is_a? Net::HTTPSuccess
         return DepositReceipt.new(response, @http)
       else
-        raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post_media!(#{@href}): server returned #{response.code} #{response.message}")
       end
     end
     
@@ -120,13 +131,21 @@ module Sword2Ruby
     #entry:: an Atom::Entry to be added to the collection
     #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
     #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
     #
     #For more information, see the Sword2 specification: {section 6.3.2. "Creating a Resource with a Multipart Deposit"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_multipart].
-    def post_multipart!(entry, filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)
+    def post_multipart!(entry, filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)
+      #Validate parameters
+      Utility.check_argument_class('entry', entry, Atom::Entry)     
+      Utility.check_argument_class('filepath', filepath, String)
+      Utility.check_argument_class('content_type', content_type, String)
+      Utility.check_argument_class('packaging', packaging, String) if packaging
+      Utility.check_argument_class('slug', slug, String) if slug
+      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
+      
       tmp = ""
       boundary = "========" + Time.now.to_i.to_s + "=="
       filename, md5, data = Utility.read_file(filepath)
@@ -170,7 +189,7 @@ module Sword2Ruby
       if response.is_a? Net::HTTPSuccess
         return DepositReceipt.new(response, @http)
       else
-        raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post_multipart!(#{@href}): server returned #{response.code} #{response.message}")
       end
     end
         

@@ -73,6 +73,9 @@
     <a href="Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   </li>
     <li class="class">
+    <a href="Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+  </li>
+    <li class="class">
     <a href="Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   </li>
     <li class="class">
@@ -127,8 +130,6 @@
   
     <li class="method"><a href="Sword2Ruby/Connection.html#method-c-new">::new &mdash; Sword2Ruby::Connection</a>
   
-    <li class="method"><a href="Sword2Ruby/Atom/Service.html#method-c-new">::new &mdash; Sword2Ruby::Atom::Service</a>
-  
     <li class="method"><a href="Sword2Ruby/DepositReceipt.html#method-c-new">::new &mdash; Sword2Ruby::DepositReceipt</a>
   
     <li class="method"><a href="Sword2Ruby/AutoDiscover.html#method-c-new">::new &mdash; Sword2Ruby::AutoDiscover</a>
@@ -136,6 +137,10 @@
     <li class="method"><a href="Sword2Ruby/User.html#method-c-new">::new &mdash; Sword2Ruby::User</a>
   
     <li class="method"><a href="Sword2Ruby/SwordStatement.html#method-c-new">::new &mdash; Sword2Ruby::SwordStatement</a>
+  
+    <li class="method"><a href="Sword2Ruby/Atom/Service.html#method-c-new">::new &mdash; Sword2Ruby::Atom::Service</a>
+  
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-c-new">::new &mdash; Sword2Ruby::RdfDescription</a>
   
     <li class="method"><a href="Sword2Ruby/Utility.html#method-c-new">::new &mdash; Sword2Ruby::Utility</a>
   
@@ -161,11 +166,11 @@
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-edit_media_links">#edit_media_links &mdash; Sword2Ruby::Atom::Entry</a>
   
-    <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-edit_uri">#edit_uri &mdash; Sword2Ruby::Atom::Entry</a>
-  
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-entry_edit_uri">#entry_edit_uri &mdash; Sword2Ruby::Atom::Entry</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-media_entry_uri">#media_entry_uri &mdash; Sword2Ruby::Atom::Entry</a>
+  
+    <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-media_resource_links">#media_resource_links &mdash; Sword2Ruby::Atom::Entry</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-post-21">#post! &mdash; Sword2Ruby::Atom::Entry</a>
   
@@ -175,9 +180,9 @@
   
     <li class="method"><a href="Sword2Ruby/Atom/Collection.html#method-i-post_media-21">#post_media! &mdash; Sword2Ruby::Atom::Collection</a>
   
-    <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-post_multipart-21">#post_multipart! &mdash; Sword2Ruby::Atom::Entry</a>
-  
     <li class="method"><a href="Sword2Ruby/Atom/Collection.html#method-i-post_multipart-21">#post_multipart! &mdash; Sword2Ruby::Atom::Collection</a>
+  
+    <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-post_multipart-21">#post_multipart! &mdash; Sword2Ruby::Atom::Entry</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-put-21">#put! &mdash; Sword2Ruby::Atom::Entry</a>
   
@@ -185,17 +190,25 @@
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-put_multipart-21">#put_multipart! &mdash; Sword2Ruby::Atom::Entry</a>
   
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-rdf_about">#rdf_about &mdash; Sword2Ruby::RdfDescription</a>
+  
     <li class="method"><a href="Sword2Ruby/Atom/Service.html#method-i-service_document_uri">#service_document_uri &mdash; Sword2Ruby::Atom::Service</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Collection.html#method-i-sword_accept_packagings">#sword_accept_packagings &mdash; Sword2Ruby::Atom::Collection</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Collection.html#method-i-sword_collection_policy">#sword_collection_policy &mdash; Sword2Ruby::Atom::Collection</a>
   
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_deposited_by">#sword_deposited_by &mdash; Sword2Ruby::RdfDescription</a>
+  
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_deposited_by">#sword_deposited_by &mdash; Sword2Ruby::Atom::Entry</a>
+  
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_deposited_on">#sword_deposited_on &mdash; Sword2Ruby::RdfDescription</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_deposited_on">#sword_deposited_on &mdash; Sword2Ruby::Atom::Entry</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_deposited_on_behalf_of">#sword_deposited_on_behalf_of &mdash; Sword2Ruby::Atom::Entry</a>
+  
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_deposited_on_behalf_of">#sword_deposited_on_behalf_of &mdash; Sword2Ruby::RdfDescription</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_derived_resource_links">#sword_derived_resource_links &mdash; Sword2Ruby::Atom::Entry</a>
   
@@ -205,9 +218,13 @@
   
     <li class="method"><a href="Sword2Ruby/Atom/Collection.html#method-i-sword_mediation">#sword_mediation &mdash; Sword2Ruby::Atom::Collection</a>
   
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_original_deposit">#sword_original_deposit &mdash; Sword2Ruby::RdfDescription</a>
+  
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_original_deposit_category">#sword_original_deposit_category &mdash; Sword2Ruby::Atom::Entry</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_original_deposit_uri">#sword_original_deposit_uri &mdash; Sword2Ruby::Atom::Entry</a>
+  
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_packagings">#sword_packagings &mdash; Sword2Ruby::RdfDescription</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_packagings">#sword_packagings &mdash; Sword2Ruby::Atom::Entry</a>
   
@@ -215,9 +232,13 @@
   
     <li class="method"><a href="Sword2Ruby/Atom/Feed.html#method-i-sword_state">#sword_state &mdash; Sword2Ruby::Atom::Feed</a>
   
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_state">#sword_state &mdash; Sword2Ruby::RdfDescription</a>
+  
     <li class="method"><a href="Sword2Ruby/Atom/Feed.html#method-i-sword_state_categories">#sword_state_categories &mdash; Sword2Ruby::Atom::Feed</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Feed.html#method-i-sword_state_description">#sword_state_description &mdash; Sword2Ruby::Atom::Feed</a>
+  
+    <li class="method"><a href="Sword2Ruby/RdfDescription.html#method-i-sword_state_description">#sword_state_description &mdash; Sword2Ruby::RdfDescription</a>
   
     <li class="method"><a href="Sword2Ruby/Atom/Entry.html#method-i-sword_statement_links">#sword_statement_links &mdash; Sword2Ruby::Atom::Entry</a>
   

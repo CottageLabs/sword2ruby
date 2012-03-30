@@ -36,7 +36,7 @@ describe Atom::Feed do
     ### Now test RDF reader
     puts "\nNow testing RDF"
     
-    statement = Sword2Ruby::SwordStatement.new("http://localhost:8080/state-uri/14661f1f-e625-4145-b477-2b08b757c6d7/b3354f30-3830-4ad5-bf6e-f005d100638b.rdf", TEST_CONNECTION_VALID)
+    statement = Sword2Ruby::SwordStatementOAIORE.new("http://localhost:8080/state-uri/14661f1f-e625-4145-b477-2b08b757c6d7/b3354f30-3830-4ad5-bf6e-f005d100638b.rdf", TEST_CONNECTION_VALID)
     
     #puts "statement.rdf_descriptions: #{statement.rdf_descriptions}"
    
@@ -44,8 +44,11 @@ describe Atom::Feed do
     
       puts "\n"    
     statement.rdf_descriptions.each do |description|
-      #puts "description: #{description}"
+      puts "description: #{description}"
+      puts "description.class: #{description.class}"
+      puts "description.elements: #{description.elements.count}"
       puts "description: #{description.rdf_about}"
+      
       puts "    description.sword_packagings: #{description.sword_packagings}"
       puts "    description.sword_deposited_on: #{description.sword_deposited_on}"
       puts "    description.sword_deposited_by: #{description.sword_deposited_by}"

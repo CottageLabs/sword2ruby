@@ -25,6 +25,9 @@ module Sword2Ruby
     attr_reader :status_message
     
     #Create a new DepositReceipt using the Response object returned by the server.
+    #===Parameters
+    #response:: the response object returned by the request
+    #http:: a Sword2Ruby::Connection object
     def initialize(response, http)
       @location = response.header["location"]
       @status_code = response.code

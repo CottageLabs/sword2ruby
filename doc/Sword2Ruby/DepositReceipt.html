@@ -119,6 +119,8 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+  
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
     <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
@@ -263,11 +265,20 @@ Putting.</p>
           
           <p>Create a new <a href="DepositReceipt.html">DepositReceipt</a> using the
 Response object returned by the server.</p>
+
+<h3 id="method-c-new-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>response
+<dd>
+<p>the response object returned by the request</p>
+</dd><dt>http
+<dd>
+<p>a <a href="Connection.html">Sword2Ruby::Connection</a> object</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/deposit_receipt.rb, line 28</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/deposit_receipt.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
   <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">header</span>[<span class="ruby-string">&quot;location&quot;</span>]
   <span class="ruby-ivar">@status_code</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">code</span>

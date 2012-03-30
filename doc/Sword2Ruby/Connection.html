@@ -119,6 +119,8 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+  
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
     <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
@@ -215,6 +217,8 @@ connection is using, or nil for anonymous communication</p>
         <div class="method-description">
           
           <p>Creates a new <a href="Connection.html">Connection</a> object</p>
+
+<h3 id="method-c-new-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt><a href="Connection.html#attribute-i-user_credentials">#user_credentials</a>
 <dd>
 <p>(optional) a <a href="User.html">Sword2Ruby::User</a> object with the
@@ -224,7 +228,7 @@ username and password</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/connection.rb, line 20</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/connection.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">user_credentials</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">user_credentials</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'user_credentials'</span>, <span class="ruby-identifier">user_credentials</span>, <span class="ruby-constant">User</span>)

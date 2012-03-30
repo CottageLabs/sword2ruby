@@ -16,6 +16,7 @@ module Sword2Ruby
     attr_reader :use_authentication
 
     #Creates a new Connection object
+    #===Parameters
     #user_credentials:: (optional) a Sword2Ruby::User object with the username and password
     def initialize(user_credentials = nil)
       unless user_credentials.nil?

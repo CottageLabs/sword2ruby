@@ -119,6 +119,8 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+  
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
     <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
@@ -166,7 +168,7 @@
 
         <div class="method-description">
         
-        
+        <p>An array of rdf:descriptions</p>
         
         </div>
       </div>
@@ -179,7 +181,7 @@
 
         <div class="method-description">
         
-        
+        <p>The complete statement document, returned as a REXML::Document.</p>
         
         </div>
       </div>
@@ -209,58 +211,58 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/sword_statement.rb, line 11</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sword_statement_uri</span>, <span class="ruby-identifier">connection</span>)
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">sword_statement_uri</span>)
+            <pre><span class="ruby-comment"># File lib/sword2ruby/sword_statement.rb, line 15</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sword_statement_uri</span>, <span class="ruby-identifier">connection</span>)
+      <span class="ruby-identifier">response</span> = <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">sword_statement_uri</span>)
 
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
-     <span class="ruby-ivar">@statement_document</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
-     <span class="ruby-ivar">@rdf_descriptions</span> = []
-     <span class="ruby-ivar">@statement_document</span>.<span class="ruby-identifier">elements</span>.<span class="ruby-identifier">each</span>(<span class="ruby-string">&quot;/rdf:RDF/rdf:Description&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">description</span><span class="ruby-operator">|</span>
-       
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">rdf_about</span>
-         <span class="ruby-keyword">self</span>.<span class="ruby-identifier">attributes</span>[<span class="ruby-string">&quot;rdf:about&quot;</span>]
-       <span class="ruby-keyword">end</span>
-       
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_packagings</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_attribute_value</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:packaging&quot;</span>, <span class="ruby-string">&quot;rdf:resource&quot;</span>)
-       <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+         <span class="ruby-ivar">@statement_document</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
+         <span class="ruby-ivar">@rdf_descriptions</span> = []
+         <span class="ruby-ivar">@statement_document</span>.<span class="ruby-identifier">elements</span>.<span class="ruby-identifier">each</span>(<span class="ruby-string">&quot;/rdf:RDF/rdf:Description&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">description</span><span class="ruby-operator">|</span>
+           
+           
+<span class="ruby-comment">           def description.rdf_about
+             self.attributes[&quot;rdf:about&quot;]
+           end
+           
+           def description.sword_packagings
+             Utility.find_elements_attribute_value(self.elements, &quot;sword:packaging&quot;, &quot;rdf:resource&quot;)
+           end
 
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_original_deposit</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_attribute_value</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:originalDeposit&quot;</span>, <span class="ruby-string">&quot;rdf:resource&quot;</span>)
-       <span class="ruby-keyword">end</span>
+           def description.sword_original_deposit
+             Utility.find_element_attribute_value(self.elements, &quot;sword:originalDeposit&quot;, &quot;rdf:resource&quot;)
+           end
 
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_deposited_on</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_time</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:depositedOn&quot;</span>)
-       <span class="ruby-keyword">end</span>
-       
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_deposited_by</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:depositedBy&quot;</span>)
-       <span class="ruby-keyword">end</span>
+           def description.sword_deposited_on
+             Utility.find_element_time(self.elements, &quot;sword:depositedOn&quot;)
+           end
+           
+           def description.sword_deposited_by
+             Utility.find_element_text(self.elements, &quot;sword:depositedBy&quot;)
+           end
 
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_deposited_on_behalf_of</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:depositedOnBehalfOf&quot;</span>)
-       <span class="ruby-keyword">end</span>
-       
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_state</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_attribute_value</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:state&quot;</span>, <span class="ruby-string">&quot;rdf:resource&quot;</span>)
-       <span class="ruby-keyword">end</span>
+           def description.sword_deposited_on_behalf_of
+             Utility.find_element_text(self.elements, &quot;sword:depositedOnBehalfOf&quot;)
+           end
+           
+           def description.sword_state
+             Utility.find_element_attribute_value(self.elements, &quot;sword:state&quot;, &quot;rdf:resource&quot;)
+           end
 
-       <span class="ruby-keyword">def</span> <span class="ruby-identifier">description</span>.<span class="ruby-identifier">sword_state_description</span>
-         <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:stateDescription&quot;</span>)
-       <span class="ruby-keyword">end</span>
-       
-       
+           def description.sword_state_description
+             Utility.find_element_text(self.elements, &quot;sword:stateDescription&quot;)
+           end
+           
+</span>             
+           <span class="ruby-ivar">@rdf_descriptions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">RdfDescription</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">description</span>)
+         <span class="ruby-keyword">end</span>
+
+         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@statement_document</span>
          
-       <span class="ruby-ivar">@rdf_descriptions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">description</span>
-     <span class="ruby-keyword">end</span>
-
-     <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@statement_document</span>
-     
-   <span class="ruby-keyword">else</span>
-     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do get(): server returned code #{response.code} #{response.message}&quot;</span>)   
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
+       <span class="ruby-keyword">else</span>
+         <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do get(): server returned code #{response.code} #{response.message}&quot;</span>)   
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->
           
         </div>

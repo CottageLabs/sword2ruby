@@ -84,11 +84,11 @@
     
     <li><a href="#method-i-edit_media_links">#edit_media_links</a>
     
-    <li><a href="#method-i-edit_uri">#edit_uri</a>
-    
     <li><a href="#method-i-entry_edit_uri">#entry_edit_uri</a>
     
     <li><a href="#method-i-media_entry_uri">#media_entry_uri</a>
+    
+    <li><a href="#method-i-media_resource_links">#media_resource_links</a>
     
     <li><a href="#method-i-post-21">#post!</a>
     
@@ -171,6 +171,8 @@
   
     <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
+    <li><a href="../../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+  
     <li><a href="../../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
     <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
@@ -233,6 +235,8 @@ documentation</a> for a complete list of attributes and methods.</p>
         <div class="method-description">
           
           <p>This method adds a new Dublin Core element to the entry,</p>
+
+<h3 id="method-i-add_dublin_core_extension-21-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt>name
 <dd>
 <p>a valid Dublin Core Term Name, e.g. “abstract”, “title” or “publisher” etc</p>
@@ -249,7 +253,7 @@ Terms specification</a>.</p>
 
           
           <div class="method-source-code" id="add_dublin_core_extension-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 88</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_dublin_core_extension!</span> (<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
   <span class="ruby-identifier">extension</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Element</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">extension</span>.<span class="ruby-identifier">add_namespace</span>(<span class="ruby-string">&quot;http://purl.org/dc/terms/&quot;</span>)
@@ -303,26 +307,49 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
         
         <div class="method-heading">
           <span class="method-name">delete!</span><span
-            class="method-args">(alternative_media_entry_uri = media_entry_uri, on_behalf_of = nil, http = @http)</span>
+            class="method-args">(alternative_entry_edit_uri = entry_edit_uri, on_behalf_of = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>This method removes the container by performing a Delete on the entry-edit
+URI. The method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
+
+<h3 id="method-i-delete-21-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>alternative_entry_edit_uri
+<dd>
+<p>(optional) an override to the existing entry’s entry-edit URI. If not
+supplied, this will default to the existing entry’s entry-edit URI.</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the operation is being performed.</p>
+</dd><dt>http
+<dd>
+<p>(optional) <a href="../Connection.html">Sword2Ruby::Connection</a> object
+used to perform the operation. If not supplied, the existing entry’s
+connection will be used.</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deleteconteiner">section
+6.8. “Deleting the Container”</a>.</p>
           
 
           
           <div class="method-source-code" id="delete-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 371</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete!</span>(<span class="ruby-identifier">alternative_media_entry_uri</span> = <span class="ruby-identifier">media_entry_uri</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-  <span class="ruby-identifier">alternative_media_entry_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_entry_uri</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 416</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete!</span>(<span class="ruby-identifier">alternative_entry_edit_uri</span> = <span class="ruby-identifier">entry_edit_uri</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-identifier">alternative_entry_edit_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">entry_edit_uri</span>
 
   <span class="ruby-identifier">headers</span> = {}
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
 
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">alternative_media_entry_uri</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">alternative_entry_edit_uri</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">headers</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
@@ -353,16 +380,22 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
           
           <p>This method searches for the specified Dublin Core term in the entry and
 removes it where found.</p>
+
+<h3 id="method-i-delete_dublin_core_extension-21-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt>name
 <dd>
 <p>a valid Dublin Core Term Name, e.g. “isReferencedBy”, “title” or
 “accrualPolicy” etc</p>
 </dd></dl>
+
+<p>For more information, see the <a
+href="http://dublincore.org/documents/dcmi-terms/">Dublin Core Metadata
+Terms specification</a>.</p>
           
 
           
           <div class="method-source-code" id="delete_dublin_core_extension-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 97</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_dublin_core_extension!</span> (<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">extensions</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">namespace</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;http://purl.org/dc/terms/&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -380,27 +413,51 @@ removes it where found.</p>
         
         <div class="method-heading">
           <span class="method-name">delete_media!</span><span
-            class="method-args">(alternative_media_resource_uri = media_resource_links.first.href, on_behalf_of = nil, http = @http)</span>
+            class="method-args">(alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>This method removes all the content of a resource (without removing the
+resource itself) by performing a Delete on the edit-media URI. The method
+will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
+
+<h3 id="method-i-delete_media-21-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>alternative_edit_media_uri
+<dd>
+<p>(optional) an override to the existing entry’s edit-media URI. If not
+supplied, this will default to the existing entry’s first edit-media URI.</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed.</p>
+</dd><dt>http
+<dd>
+<p>(optional) <a href="../Connection.html">Sword2Ruby::Connection</a> object
+used to perform the operation. If not supplied, the existing entry’s
+connection will be used.</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deletingcontent">section
+6.6. “Deleting the content of a Resource”</a>.</p>
           
 
           
           <div class="method-source-code" id="delete_media-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 387</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_media!</span>(<span class="ruby-identifier">alternative_media_resource_uri</span> = <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-  <span class="ruby-comment">#if a media_resource_uri has not been supplied, use the first one available for this entry</span>
-  <span class="ruby-identifier">alternative_media_resource_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>
-    
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 441</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_media!</span>(<span class="ruby-identifier">alternative_edit_media_uri</span> = <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-comment">#if an edit_media_uri has not been supplied, use the first one available for this entry</span>
+  <span class="ruby-identifier">alternative_edit_media_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>
+  
   <span class="ruby-identifier">headers</span> = {}
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
 
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">alternative_media_resource_uri</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">alternative_edit_media_uri</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">headers</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
@@ -432,11 +489,15 @@ removes it where found.</p>
           <p>This method returns an array of the Dublin Core elements (usually contained
 in the <a href="../DepositReceipt.html">DepositReceipt</a> <a
 href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.</p>
+
+<p>For more information, see the <a
+href="http://dublincore.org/documents/dcmi-terms/">Dublin Core Metadata
+Terms specification</a>.</p>
           
 
           
           <div class="method-source-code" id="dublin_core_extensions-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 79</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 80</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">dublin_core_extensions</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_by_namespace</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;http://purl.org/dc/terms/&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -461,17 +522,17 @@ href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.</p>
 
         <div class="method-description">
           
-          <p>This method returns an array of Atom::Links for the <strong>Edit
+          <p>This method returns an array of Atom::Links for the <strong>Atom Edit
 Media</strong> &lt;link rel=“edit-media”&gt; tags (usually contained in the
 <a href="../DepositReceipt.html">DepositReceipt</a> <a
-href="Entry.html">Entry</a>), or an empty array [ ] if none are defined. It
-is also known as the Media Resource URI or EM-URI.</p>
+href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.
+They are also known as the Media Resource URIs or EM-URIs.</p>
           
 
           
           <div class="method-source-code" id="edit_media_links-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 30</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_media_links</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_media_links</span> <span class="ruby-comment">#media_resource_links</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_links_all_types</span>(<span class="ruby-identifier">links</span>, <span class="ruby-string">&quot;edit-media&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit_media_links-source -->
@@ -479,36 +540,13 @@ is also known as the Media Resource URI or EM-URI.</p>
         </div>
 
         
+        <div class="aliases">
+          Also aliased as: <a href="Entry.html#method-i-media_resource_links">media_resource_links</a>
+        </div>
+        
 
         
       </div><!-- edit_media_links-method -->
-
-    
-      <div id="method-i-edit_uri" class="method-detail method-alias">
-        
-        <div class="method-heading">
-          <span class="method-name">edit_uri</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-        </div>
-
-        
-
-        
-        <div class="aliases">
-          Alias for: <a href="Entry.html#method-i-entry_edit_uri">entry_edit_uri</a>
-        </div>
-        
-      </div><!-- edit_uri-method -->
 
     
       <div id="method-i-entry_edit_uri" class="method-detail ">
@@ -526,7 +564,7 @@ is also known as the Media Resource URI or EM-URI.</p>
 &lt;link rel=“edit”&gt; tag  (usually contained in the <a
 href="../DepositReceipt.html">DepositReceipt</a> <a
 href="Entry.html">Entry</a>), or nil if it is not defined. It is also known
-as the Media <a href="Entry.html">Entry</a> URI or Edit-URI.</p>
+as the Media Entry URI or Edit-URI.</p>
           
 
           
@@ -541,7 +579,7 @@ as the Media <a href="Entry.html">Entry</a> URI or Edit-URI.</p>
 
         
         <div class="aliases">
-          Also aliased as: <a href="Entry.html#method-i-media_entry_uri">media_entry_uri</a>, <a href="Entry.html#method-i-edit_uri">edit_uri</a>
+          Also aliased as: <a href="Entry.html#method-i-media_entry_uri">media_entry_uri</a>
         </div>
         
 
@@ -576,6 +614,33 @@ as the Media <a href="Entry.html">Entry</a> URI or Edit-URI.</p>
       </div><!-- media_entry_uri-method -->
 
     
+      <div id="method-i-media_resource_links" class="method-detail method-alias">
+        
+        <div class="method-heading">
+          <span class="method-name">media_resource_links</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+        </div>
+
+        
+
+        
+        <div class="aliases">
+          Alias for: <a href="Entry.html#method-i-edit_media_links">edit_media_links</a>
+        </div>
+        
+      </div><!-- media_resource_links-method -->
+
+    
       <div id="method-i-post-21" class="method-detail ">
         
         <div class="method-heading">
@@ -594,7 +659,7 @@ return a <a href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a>
 object, or raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in
 the case of an error.</p>
 
-<p>For example:</p>
+<h3 id="method-i-post-21-label-Example">Example</h3>
 
 <pre>feed = collection.feed    # assuming that you have retrieved a collection from the service document
 feed.update!              # get all the entry data
@@ -603,7 +668,9 @@ additional_entry = Atom::Entry.new()
 additional_entry.title = &quot;The Improved Burrito&quot;
 additional_entry.summary = &quot;Adding some extra metadata to the existing entry&quot;
 additional_entry.add_dublin_core_extension!(&quot;publisher&quot;, &quot;Burrito King&quot;)
-existing_entry.post!(additional_entry)</pre>
+deposit_receipt = existing_entry.post!(additional_entry)</pre>
+
+<h3 id="method-i-post-21-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt>entry
 <dd>
 <p>a new <a href="Entry.html">Atom::Entry</a> with metadata to be added to an
@@ -633,7 +700,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 152</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">alternative_sword_edit_uri</span> = <span class="ruby-identifier">sword_edit_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
   <span class="ruby-identifier">alternative_sword_edit_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">sword_edit_uri</span>
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atom+xml;type=entry&quot;</span> }
@@ -660,7 +727,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">post_media!</span><span
-            class="method-args">(filepath, content_type, packaging = nil, alternative_media_resource_uri = media_resource_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)</span>
+            class="method-args">(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -675,6 +742,8 @@ server with the request. The method will return a <a
 href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
 raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
 of an error.</p>
+
+<h3 id="method-i-post_media-21-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt>filepath
 <dd>
 <p>a filepath string indicating the file to be posted. The file must be
@@ -687,11 +756,12 @@ readable by the process.</p>
 <dd>
 <p>(optional) the Sword packaging string of the file, e.g. “<a
 href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
-</dd><dt>alternative_media_resource_uri
+</dd><dt>alternative_edit_media_uri
 <dd>
-<p>(optional) an override to the existing entry’s media resource URI. If not
-supplied, this will default to the existing entry’s <strong>first</strong>
-media resource URI (as there can be multiple media resource URIs).</p>
+<p>(optional) an override to the existing entry’s edit media URI (media
+resource URI). If not supplied, this will default to the existing entry’s
+<strong>first</strong> edit media URI (as there can be multiple edit media
+URIs).</p>
 </dd><dt>on_behalf_of
 <dd>
 <p>(optional) username on whos behalf the submission is being performed</p>
@@ -713,10 +783,10 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post_media-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 178</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">alternative_media_resource_uri</span> = <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">metadata_relevant</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-  <span class="ruby-comment">#if a media_resource_uri has not been supplied, use the first one available for this entry</span>
-  <span class="ruby-identifier">alternative_media_resource_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>      
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 185</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">alternative_edit_media_uri</span> = <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">metadata_relevant</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-comment">#if an edit_media_uri has not been supplied, use the first one available for this entry</span>
+  <span class="ruby-identifier">alternative_edit_media_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>      
   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
 
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content_type</span>}
@@ -726,7 +796,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Metadata-Relevant&quot;</span>] = <span class="ruby-identifier">metadata_relevant</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">metadata_relevant</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">metadata_relevant</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
 
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">alternative_media_resource_uri</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-identifier">alternative_edit_media_uri</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">headers</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
@@ -764,6 +834,8 @@ method will return a <a
 href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
 raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
 of an error.</p>
+
+<h3 id="method-i-post_multipart-21-label-Parameters">Parameters</h3>
 <dl class="rdoc-list note-list"><dt>entry
 <dd>
 <p>a new <a href="Entry.html">Atom::Entry</a> with metadata to be added to an
@@ -809,7 +881,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post_multipart-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 216</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 224</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_multipart!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">alternative_sword_edit_uri</span> = <span class="ruby-identifier">sword_edit_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">metadata_relevant</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
     <span class="ruby-identifier">tmp</span> = <span class="ruby-string">&quot;&quot;</span>
     <span class="ruby-identifier">boundary</span> = <span class="ruby-string">&quot;========&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;==&quot;</span>
@@ -872,38 +944,35 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">put!</span><span
-            class="method-args">(alternative_media_entry_uri = media_entry_uri, in_progress = nil, on_behalf_of = nil, http = @http)</span>
+            class="method-args">(alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          <p>This method puts an update an existing entry’s sword-edit URI, adding to
-the existing entry’s metadata (i.e. not overwriting existing metadata). It
-<em>does not</em> create a new entry in the collection. The method will
-return a <a href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a>
-object, or raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in
-the case of an error.</p>
+          <p>This method replaces an existing entry’s metadata by performing a Put on
+the entry-edit URI. It <em>does not</em> create a new entry in the
+collection. The method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
 
-<p>For example:</p>
+<h3 id="method-i-put-21-label-Example">Example</h3>
 
 <pre>feed = collection.feed    # assuming that you have retrieved a collection from the service document
 feed.update!              # get all the entry data
 existing_entry = feed.entries.first
-additional_entry = Atom::Entry.new()
-additional_entry.title = &quot;The Improved Burrito&quot;
-additional_entry.summary = &quot;Adding some extra metadata to the existing entry&quot;
-additional_entry.add_dublin_core_extension!(&quot;publisher&quot;, &quot;Burrito King&quot;)
-existing_entry.post!(additional_entry)</pre>
-<dl class="rdoc-list note-list"><dt>entry
+existing_entry.title = &quot;The Improved Burrito&quot;
+existing_entry.summary = &quot;Replacing the metadata of an existing entry&quot;
+existing_entry.add_dublin_core_extension!(&quot;publisher&quot;, &quot;Burrito King&quot;)
+existing_entry.put!</pre>
+
+<h3 id="method-i-put-21-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>alternative_entry_edit_uri
 <dd>
-<p>a new <a href="Entry.html">Atom::Entry</a> with metadata to be added to an
-existing <a href="Entry.html">Atom::Entry</a>.</p>
-</dd><dt>alternative_sword_edit_uri
-<dd>
-<p>(optional) an override to the existing entry’s sword-edit URI. If not
-supplied, this will default to the existing entry’s sword-edit URI.</p>
+<p>(optional) an override to the existing entry’s entry-edit URI. If not
+supplied, this will default to the existing entry’s entry-edit URI.</p>
 </dd><dt>in_progress
 <dd>
 <p>(optional) boolean value indicating whether the existing entry will be
@@ -919,19 +988,19 @@ connection will be used.</p>
 </dd></dl>
 
 <p>For more information, see the Sword2 specification: <a
-href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_metadata">section
-6.7.2. “Adding New Metadata to a Container”</a>.</p>
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_metadata">section
+6.5.2. “Replacing the Metadata of a Resource”</a>.</p>
           
 
           
           <div class="method-source-code" id="put-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 288</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">put!</span>(<span class="ruby-identifier">alternative_media_entry_uri</span> = <span class="ruby-identifier">media_entry_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-  <span class="ruby-identifier">alternative_media_entry_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_entry_uri</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 294</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">put!</span>(<span class="ruby-identifier">alternative_entry_edit_uri</span> = <span class="ruby-identifier">entry_edit_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-identifier">alternative_entry_edit_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">entry_edit_uri</span>
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atom+xml;type=entry&quot;</span> }
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-identifier">alternative_media_entry_uri</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">alternative_entry_edit_uri</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">headers</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
   <span class="ruby-keyword">else</span>
@@ -952,32 +1021,72 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">put_media!</span><span
-            class="method-args">(filepath, content_type, packaging, alternative_media_resource_uri = media_resource_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)</span>
+            class="method-args">(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>This method replaces an existing entry’s file content of a resource by
+performing a Put on the edit-media URI. It <em>does not</em> create a new
+entry in the collection. The method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
+
+<h3 id="method-i-put_media-21-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>filepath
+<dd>
+<p>a filepath string indicating the file to be sent. The file must be readable
+by the process.</p>
+</dd><dt>content_type
+<dd>
+<p>the mime content-type string of the file, e.g. “application/zip” or
+“text/plain”</p>
+</dd><dt>packaging
+<dd>
+<p>(optional) the Sword packaging string of the file, e.g. “<a
+href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
+</dd><dt>alternative_edit_media_uri
+<dd>
+<p>(optional) an override to the existing entry’s edit-media URI. If not
+supplied, this will default to the existing entry’s first edit-media URI.</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed.</p>
+</dd><dt>metadata_relevant
+<dd>
+<p>(optional) boolean value indicating whether the server should consider the
+file or package a potential source of metadata.</p>
+</dd><dt>http
+<dd>
+<p>(optional) <a href="../Connection.html">Sword2Ruby::Connection</a> object
+used to perform the operation. If not supplied, the existing entry’s
+connection will be used.</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_binary">section
+6.5.1. “Replacing the File Content of a Resource”</a>.</p>
           
 
           
           <div class="method-source-code" id="put_media-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 301</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">put_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">alternative_media_resource_uri</span> = <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">metadata_relevant</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-  <span class="ruby-comment">#if a media_resource_uri has not been supplied, use the first one available for this entry</span>
-  <span class="ruby-identifier">alternative_media_resource_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_resource_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>      
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 322</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">put_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">alternative_edit_media_uri</span> = <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">metadata_relevant</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-comment">#if an edit_media_uri has not been supplied, use the first one available for this entry</span>
+  <span class="ruby-identifier">alternative_edit_media_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">edit_media_links</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">href</span>      
   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
 
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content_type</span>}
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-Disposition&quot;</span>] = <span class="ruby-node">&quot;attachment; filename=#{filename}&quot;</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-MD5&quot;</span>] = <span class="ruby-identifier">md5</span>
-  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Packaging&quot;</span>] = <span class="ruby-identifier">packaging</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Packaging&quot;</span>] = <span class="ruby-identifier">packaging</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Metadata-Relevant&quot;</span>] = <span class="ruby-identifier">metadata_relevant</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">metadata_relevant</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">metadata_relevant</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
 
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">alternative_media_resource_uri</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">alternative_edit_media_uri</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">headers</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
@@ -999,65 +1108,105 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">put_multipart!</span><span
-            class="method-args">(filepath, content_type, packaging, alternative_media_entry_uri = media_entry_uri, in_progress = nil, on_behalf_of = nil, http = @http)</span>
+            class="method-args">(filepath, content_type, packaging = nil, alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>This method replaces an existing entry’s metadata and file content of a
+resource by performing a Put on the entry-edit URI. It <em>does not</em>
+create a new entry in the collection. The method will return a <a
+href="../DepositReceipt.html">Sword2Ruby::DepositReceipt</a> object, or
+raise a <a href="../Exception.html">Sword2Ruby::Exception</a> in the case
+of an error.</p>
+
+<h3 id="method-i-put_multipart-21-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>filepath
+<dd>
+<p>a filepath string indicating the file to be sent. The file must be readable
+by the process.</p>
+</dd><dt>content_type
+<dd>
+<p>the mime content-type string of the file, e.g. “application/zip” or
+“text/plain”</p>
+</dd><dt>packaging
+<dd>
+<p>(optional) the Sword packaging string of the file, e.g. “<a
+href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
+</dd><dt>alternative_entry_edit_uri
+<dd>
+<p>(optional) an override to the existing entry’s entry-edit URI. If not
+supplied, this will default to the existing entry’s entry-edit URI.</p>
+</dd><dt>on_behalf_of
+<dd>
+<p>(optional) username on whos behalf the submission is being performed.</p>
+</dd><dt>metadata_relevant
+<dd>
+<p>(optional) boolean value indicating whether the server should consider the
+file or package a potential source of metadata.</p>
+</dd><dt>http
+<dd>
+<p>(optional) <a href="../Connection.html">Sword2Ruby::Connection</a> object
+used to perform the operation. If not supplied, the existing entry’s
+connection will be used.</p>
+</dd></dl>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_multipart">section
+6.5.3. “Replacing the Metadata and File Content of a Resource”</a>.</p>
           
 
           
           <div class="method-source-code" id="put_multipart-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 323</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">put_multipart!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">alternative_media_entry_uri</span> = <span class="ruby-identifier">media_entry_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
-   <span class="ruby-identifier">tmp</span> = <span class="ruby-string">&quot;&quot;</span>
-   <span class="ruby-identifier">boundary</span> = <span class="ruby-string">&quot;========&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;==&quot;</span>
-   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
-   <span class="ruby-identifier">alternative_media_entry_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">media_entry_uri</span>
-   
-   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'multipart/related; boundary=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">boundary</span> <span class="ruby-operator">+</span> <span class="ruby-string">'&quot;; type=&quot;application/atom+xml&quot;'</span>}
-   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
-   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
-   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;MIME-Version&quot;</span>] = <span class="ruby-string">&quot;1.0&quot;</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 359</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">put_multipart!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">alternative_entry_edit_uri</span> = <span class="ruby-identifier">entry_edit_uri</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">http</span> = <span class="ruby-ivar">@http</span>)
+  <span class="ruby-identifier">tmp</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">boundary</span> = <span class="ruby-string">&quot;========&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;==&quot;</span>
+  <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
+  <span class="ruby-identifier">alternative_entry_edit_uri</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">entry_edit_uri</span>
+  
+  <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'multipart/related; boundary=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">boundary</span> <span class="ruby-operator">+</span> <span class="ruby-string">'&quot;; type=&quot;application/atom+xml&quot;'</span>}
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;MIME-Version&quot;</span>] = <span class="ruby-string">&quot;1.0&quot;</span>
 
-   <span class="ruby-comment"># write boundary identifer to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
+  <span class="ruby-comment"># write boundary identifer to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
 
-   <span class="ruby-comment"># write entry relevant headers to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Type: application/atom+xml; charset=\&quot;utf-8\&quot;\r\n&quot;</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Disposition: attachment; name=atom\r\n&quot;</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
+  <span class="ruby-comment"># write entry relevant headers to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Type: application/atom+xml; charset=\&quot;utf-8\&quot;\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Content-Disposition: attachment; name=atom\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
 
-   <span class="ruby-comment"># write entry to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\r\n&quot;</span>
+  <span class="ruby-comment"># write entry to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\r\n&quot;</span>
 
-   <span class="ruby-comment"># write boundary identifier to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
+  <span class="ruby-comment"># write boundary identifier to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}\r\n&quot;</span>
 
-   <span class="ruby-comment"># write media part relevant headers to temp      </span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Type: #{content_type}\r\n&quot;</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Disposition: attachment; name=payload; filename=#{filename}\r\n&quot;</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-MD5: #{md5}\r\n&quot;</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Packaging: #{packaging}\r\n&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
+  <span class="ruby-comment"># write media part relevant headers to temp      </span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Type: #{content_type}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-Disposition: attachment; name=payload; filename=#{filename}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Content-MD5: #{md5}\r\n&quot;</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Packaging: #{packaging}\r\n&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;MIME-Version: 1.0\r\n\r\n&quot;</span>
 
-   <span class="ruby-comment"># write the file base64 encoded to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">data</span>)
+  <span class="ruby-comment"># write the file base64 encoded to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">data</span>)
 
-   <span class="ruby-comment"># write boundary identifier to temp</span>
-   <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}--\r\n&quot;</span> <span class="ruby-comment">#The last two dashes (--) are important!</span>
+  <span class="ruby-comment"># write boundary identifier to temp</span>
+  <span class="ruby-identifier">tmp</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;--#{boundary}--\r\n&quot;</span> <span class="ruby-comment">#The last two dashes (--) are important!</span>
 
-   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">post</span>(<span class="ruby-identifier">alternative_media_entry_uri</span>, <span class="ruby-identifier">tmp</span>, <span class="ruby-identifier">headers</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">alternative_entry_edit_uri</span>, <span class="ruby-identifier">tmp</span>, <span class="ruby-identifier">headers</span>)
 
-   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
-     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
-   <span class="ruby-keyword">else</span>
-     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do put_multipart!(): server returned #{response.code} #{response.message}&quot;</span>)
-   <span class="ruby-keyword">end</span>
- <span class="ruby-keyword">end</span></pre>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do put_multipart!(): server returned #{response.code} #{response.message}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
           </div><!-- put_multipart-21-source -->
           
         </div>
@@ -1086,7 +1235,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="sword_deposited_by-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 114</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_deposited_by</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:depositedBy&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1118,7 +1267,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="sword_deposited_on-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 108</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_deposited_on</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_time</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:depositedOn&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1151,7 +1300,7 @@ nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_deposited_on_behalf_of-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 120</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 125</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_deposited_on_behalf_of</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:depositedOnBehalfOf&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1186,7 +1335,7 @@ href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.</p>
 
           
           <div class="method-source-code" id="sword_derived_resource_links-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 49</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_derived_resource_links</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_links_all_types</span>(<span class="ruby-identifier">links</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/derivedResource&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1221,7 +1370,7 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_edit_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 37</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_edit_uri</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_link_uri</span>(<span class="ruby-identifier">links</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/add&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1253,7 +1402,7 @@ href="Feed.html">Feed</a>), or nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_original_deposit_category-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 126</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_original_deposit_category</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_by_scheme_and_term</span>(<span class="ruby-identifier">categories</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/&quot;</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/originalDeposit&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1288,7 +1437,7 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_original_deposit_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 43</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_original_deposit_uri</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_link_uri</span>(<span class="ruby-identifier">links</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/originalDeposit&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1321,7 +1470,7 @@ href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.</p>
 
           
           <div class="method-source-code" id="sword_packagings-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 61</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_packagings</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:packaging&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1356,7 +1505,7 @@ href="Entry.html">Entry</a>), or an empty array [ ] if none are defined.</p>
 
           
           <div class="method-source-code" id="sword_statement_links-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 55</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_statement_links</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_links_all_types</span>(<span class="ruby-identifier">links</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/statement&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1389,7 +1538,7 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_treatment-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 67</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_treatment</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:treatment&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1422,7 +1571,7 @@ href="Entry.html">Entry</a>), or nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_verbose_description-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 73</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/entry.rb, line 72</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_verbose_description</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:verboseDescription&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
