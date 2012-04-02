@@ -9,7 +9,7 @@ module Sword2Ruby
   #For more information, see the Sword2 specification: {section 6.1. "Retrieving a Service Document"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument].
   class Atom::Service < Atom::Element
     
-    #This method returns the URI string of the service document.
+    #This method returns the URI object of the service document.
     def service_document_uri
       base.to_s
     end
@@ -48,8 +48,6 @@ module Sword2Ruby
         service = self.class.parse(res.body, base, self)
 
         #Update workspaces, collections and their feeds to use the Service's http connection
-        #Unfortunately this is necessary because the atom-tools library does not propagate the
-        #http connection object from Service to Workspace
         set_http(http)
 
         service
@@ -61,6 +59,9 @@ module Sword2Ruby
     
     
     private
+    #Update workspaces, collections and their feeds to use the Service's http connection
+    #Unfortunately this is necessary because the atom-tools library does not propagate the
+    #http connection object from Service to Workspace
     def set_http(http)
       workspaces.each do |w|
         w.http = http

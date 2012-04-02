@@ -14,7 +14,13 @@ module Sword2Ruby
     
     #An array of rdf:descriptions
     attr_reader :rdf_descriptions
-    
+
+    #Creates a new SwordStatementOAIORE object, using the supplied URI and connection object.
+    #===Parameters
+    #sword_statement_uri:: The URI to the OAI-ORE Sword Statement.
+    #connection:: Sword2Ruby::Connection object used to perform the operation.
+    #
+    #For more information, see the Sword2 specification: <MISSING>.
     def initialize(sword_statement_uri, connection)
       #Validate parameters
       Utility.check_argument_class('sword_statement_uri', sword_statement_uri, String)

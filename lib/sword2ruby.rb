@@ -7,7 +7,7 @@ require "sword2ruby/user"
 require "sword2ruby/connection"
 require "sword2ruby/auto_discover"
 
-require "sword2ruby/rdf_description"
+require "sword2ruby/rexml_element"
 require "sword2ruby/element"
 require "sword2ruby/entry"
 require "sword2ruby/sword_accept"

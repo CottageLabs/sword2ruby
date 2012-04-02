@@ -6,6 +6,10 @@ require 'digest/md5'
 module Sword2Ruby
   class Utility
 
+    #Method to cast a (typically) string value into a boolean value
+    #===Parameters
+    #value:: the string value to be cast, e.g. "true" or "no"
+    #nil_value:: (optional) value to return if value=nil. If not supplied, this will default to false. Typically used in circumstances when returning nil would be more preferable to returning false if value=nil.
     def self.to_boolean(value, nil_value = false)
       value.downcase! if value.class == String
       case value
@@ -19,7 +23,9 @@ module Sword2Ruby
         !!value
       end
     end 
-    
+
+    #Method to check the supplied argument is the expected class.
+    #===Parameters
     def self.check_argument_class(name, argument, expected_class)
       unless argument.is_a? expected_class
         raise ArgumentError.new("Argument '#{name}=#{argument}' must be of type '#{expected_class}' (and not of type '#{argument.class}')")
