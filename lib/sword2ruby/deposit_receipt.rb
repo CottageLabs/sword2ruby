@@ -1,6 +1,3 @@
-#deposit_receipt.rb
-
-
 module Sword2Ruby
   #The DepositReceipt object is returned following Post, Put and Delete operations on the Sword server.
   #In some cases (e.g. Post), an Atom::Entry will usually be returned describing the newly created entry. Operations such as Delete do not return an Atom::Entry.

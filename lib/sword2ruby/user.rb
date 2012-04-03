@@ -1,5 +1,3 @@
-#user.rb
-
 module Sword2Ruby
   class User
   

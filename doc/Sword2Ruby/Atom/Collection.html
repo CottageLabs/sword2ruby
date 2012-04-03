@@ -137,11 +137,13 @@
   
     <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -208,7 +210,7 @@ tag, or nil if it not defined in the service document.</p>
 
           
           <div class="method-source-code" id="app_accept-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 50</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept</span>
   <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span>.<span class="ruby-identifier">nil?</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -240,7 +242,7 @@ tag, or nil if it not defined in the service document.</p>
 
           
           <div class="method-source-code" id="app_accept_alternate_multipart_related-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 56</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">app_accept_alternate_multipart_related</span>
   <span class="ruby-identifier">sword_accepts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">alternate</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;multipart-related&quot;</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -292,9 +294,13 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 69</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment">#Validate parameters</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'entry'</span>, <span class="ruby-identifier">entry</span>, <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'slug'</span>, <span class="ruby-identifier">slug</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'on_behalf_of'</span>, <span class="ruby-identifier">on_behalf_of</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+   
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atom+xml;type=entry&quot;</span> }
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Slug&quot;</span>] = <span class="ruby-identifier">slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
@@ -304,7 +310,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post!(): server returned code #{response.code} #{response.message}&quot;</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post!(#{@href}): server returned code #{response.code} #{response.message}&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- post-21-source -->
@@ -321,7 +327,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">post_media!</span><span
-            class="method-args">(filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
+            class="method-args">(filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -344,7 +350,7 @@ readable by the process.</p>
 “text/plain”</p>
 </dd><dt>packaging
 <dd>
-<p>the Sword packaging string of the file, e.g. “<a
+<p>(optional) the Sword packaging string of the file, e.g. “<a
 href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
 </dd><dt>slug
 <dd>
@@ -365,14 +371,21 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post_media-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 96</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_media!</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment">#Validate parameters</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'filepath'</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'content_type'</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'packaging'</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'slug'</span>, <span class="ruby-identifier">slug</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'on_behalf_of'</span>, <span class="ruby-identifier">on_behalf_of</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+  
   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
   
   <span class="ruby-identifier">headers</span> = {<span class="ruby-string">&quot;Content-Type&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content_type</span>}
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-Disposition&quot;</span>] = <span class="ruby-node">&quot;attachment; filename=#{filename}&quot;</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Content-MD5&quot;</span>] = <span class="ruby-identifier">md5</span>
-  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Packaging&quot;</span>] = <span class="ruby-identifier">packaging</span>
+  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Packaging&quot;</span>] = <span class="ruby-identifier">packaging</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;Slug&quot;</span>] = <span class="ruby-identifier">slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;In-Progress&quot;</span>] = <span class="ruby-identifier">in_progress</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">in_progress</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">headers</span>[<span class="ruby-string">&quot;On-Behalf-Of&quot;</span>] = <span class="ruby-identifier">on_behalf_of</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
@@ -382,7 +395,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_media!(): server returned #{response.code} #{response.message}&quot;</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_media!(#{@href}): server returned #{response.code} #{response.message}&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- post_media-21-source -->
@@ -399,7 +412,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">post_multipart!</span><span
-            class="method-args">(entry, filepath, content_type, packaging, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
+            class="method-args">(entry, filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -426,7 +439,7 @@ readable by the process.</p>
 “text/plain”</p>
 </dd><dt>packaging
 <dd>
-<p>the Sword packaging string of the file, e.g. “<a
+<p>(optional) the Sword packaging string of the file, e.g. “<a
 href="http://purl.org/net/sword/package/METSDSpaceSIP">purl.org/net/sword/package/METSDSpaceSIP</a>”</p>
 </dd><dt>slug
 <dd>
@@ -447,8 +460,16 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="post_multipart-21-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 129</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_multipart!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 138</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_multipart!</span>(<span class="ruby-identifier">entry</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-identifier">packaging</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">slug</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">in_progress</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment">#Validate parameters</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'entry'</span>, <span class="ruby-identifier">entry</span>, <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>)     
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'filepath'</span>, <span class="ruby-identifier">filepath</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'content_type'</span>, <span class="ruby-identifier">content_type</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'packaging'</span>, <span class="ruby-identifier">packaging</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">packaging</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'slug'</span>, <span class="ruby-identifier">slug</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'on_behalf_of'</span>, <span class="ruby-identifier">on_behalf_of</span>, <span class="ruby-constant">String</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">on_behalf_of</span>
+  
   <span class="ruby-identifier">tmp</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-identifier">boundary</span> = <span class="ruby-string">&quot;========&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;==&quot;</span>
   <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">md5</span>, <span class="ruby-identifier">data</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>)
@@ -492,7 +513,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-keyword">return</span> <span class="ruby-constant">DepositReceipt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">response</span>, <span class="ruby-ivar">@http</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_multipart!(): server returned #{response.code} #{response.message}&quot;</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do post_multipart!(#{@href}): server returned #{response.code} #{response.message}&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- post_multipart-21-source -->
@@ -523,7 +544,7 @@ tags, or an empty array [ ] if none are defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_accept_packagings-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 38</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_accept_packagings</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:acceptPackaging&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -555,7 +576,7 @@ or nil if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_collection_policy-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 20</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_collection_policy</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:collectionPolicy&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -587,7 +608,7 @@ tag, or false if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_mediation-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 26</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_mediation</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_boolean</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:mediation&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -619,7 +640,7 @@ tags, or an empty array [ ] if none are defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_services-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 44</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_services</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:service&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -651,7 +672,7 @@ tag, or nil if it is not defined in the service document.</p>
 
           
           <div class="method-source-code" id="sword_treatment-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 32</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/collection.rb, line 30</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_treatment</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:treatment&quot;</span>)
 <span class="ruby-keyword">end</span></pre>

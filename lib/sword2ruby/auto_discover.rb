@@ -1,5 +1,3 @@
-#auto_discover.rb
-
 require 'open-uri'
 require 'hpricot'
 

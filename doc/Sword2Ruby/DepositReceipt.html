@@ -119,11 +119,13 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -278,7 +280,7 @@ Response object returned by the server.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/deposit_receipt.rb, line 31</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/deposit_receipt.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">http</span>)
   <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">header</span>[<span class="ruby-string">&quot;location&quot;</span>]
   <span class="ruby-ivar">@status_code</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">code</span>

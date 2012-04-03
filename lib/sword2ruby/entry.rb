@@ -1,5 +1,3 @@
-#entry.rb
-
 require 'atom/entry'
 
 module Sword2Ruby
@@ -322,7 +320,7 @@ module Sword2Ruby
     #
     #For more information, see the Sword2 specification: {section 6.5.2. "Replacing the Metadata of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_metadata].
     def put!(alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
-      alternative_entry_edit_uri |== entry_edit_uri
+      alternative_entry_edit_uri ||= entry_edit_uri
       http ||= @http
       
       #Validate parameters

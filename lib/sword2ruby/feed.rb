@@ -1,5 +1,3 @@
-#feed.rb
-
 require 'atom/feed'
 
 module Sword2Ruby

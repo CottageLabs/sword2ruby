@@ -123,11 +123,13 @@
   
     <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -190,7 +192,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="sword_state-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_state</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_attribute_value</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:state&quot;</span>, <span class="ruby-string">&quot;href&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -226,7 +228,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="sword_state_categories-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 14</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_state_categories</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_elements_by_scheme</span>(<span class="ruby-identifier">categories</span>, <span class="ruby-string">&quot;http://purl.org/net/sword/terms/state&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -263,7 +265,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="sword_state_description-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 30</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/feed.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_state_description</span>
   <span class="ruby-identifier">swordstate</span> = <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_by_name</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:state&quot;</span>)
   <span class="ruby-identifier">swordstate</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">swordstate</span>.<span class="ruby-identifier">elements</span>, <span class="ruby-string">&quot;sword:stateDescription&quot;</span>)

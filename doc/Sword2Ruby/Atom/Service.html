@@ -125,11 +125,13 @@
   
     <li><a href="../../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -178,7 +180,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">new</span><span
-            class="method-args">(service_url, http = Sword2Ruby::Connection.new())</span>
+            class="method-args">(service_url, http = Connection.new())</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -190,8 +192,11 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 30</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">service_url</span>, <span class="ruby-identifier">http</span> = <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>())
+            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">service_url</span>, <span class="ruby-identifier">http</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>())
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'service_url'</span>, <span class="ruby-identifier">service_url</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'http'</span>, <span class="ruby-identifier">http</span>, <span class="ruby-constant">Connection</span>)
+  
   <span class="ruby-keyword">super</span>()
 
   <span class="ruby-ivar">@http</span> = <span class="ruby-identifier">http</span>
@@ -209,8 +214,6 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
     <span class="ruby-identifier">service</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>, <span class="ruby-identifier">base</span>, <span class="ruby-keyword">self</span>)
 
     <span class="ruby-comment">#Update workspaces, collections and their feeds to use the Service's http connection</span>
-    <span class="ruby-comment">#Unfortunately this is necessary because the atom-tools library does not propagate the</span>
-    <span class="ruby-comment">#http connection object from Service to Workspace</span>
     <span class="ruby-identifier">set_http</span>(<span class="ruby-identifier">http</span>)
 
     <span class="ruby-identifier">service</span>
@@ -246,12 +249,12 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
         <div class="method-description">
           
-          <p>This method returns the URI string of the service document.</p>
+          <p>This method returns the URI object of the service document.</p>
           
 
           
           <div class="method-source-code" id="service_document_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 13</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">service_document_uri</span>
   <span class="ruby-identifier">base</span>.<span class="ruby-identifier">to_s</span>
 <span class="ruby-keyword">end</span></pre>
@@ -283,7 +286,7 @@ or 0 if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_max_upload_size-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 25</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_max_upload_size</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_integer</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:maxUploadSize&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -315,7 +318,7 @@ nil if it is not defined.</p>
 
           
           <div class="method-source-code" id="sword_version-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 19</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sword_version</span>
   <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">extensions</span>, <span class="ruby-string">&quot;sword:version&quot;</span>)
 <span class="ruby-keyword">end</span></pre>

@@ -119,11 +119,13 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -168,7 +170,7 @@
 
         <div class="method-description">
         
-        
+        <p>On-Behalf-Of username for authenticating with the Sword server</p>
         
         </div>
       </div>
@@ -181,7 +183,7 @@
 
         <div class="method-description">
         
-        
+        <p>Password for authenticating with the Sword server</p>
         
         </div>
       </div>
@@ -194,7 +196,7 @@
 
         <div class="method-description">
         
-        
+        <p>Username for authenticating with the Sword server</p>
         
         </div>
       </div>
@@ -219,12 +221,25 @@
 
         <div class="method-description">
           
-          
+          <p>Creates a new <a href="User.html">User</a> object.</p>
+
+<h3 id="method-c-new-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>username
+<dd>
+<p>(optional) string value of the username.</p>
+</dd><dt>password
+<dd>
+<p>(optional) string value of the password.</p>
+</dd><dt><a href="User.html#attribute-i-on_behalf_of">#on_behalf_of</a>
+<dd>
+<p>(optional) string value indicating the username on whos behalf the actions
+will be performed.</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/user.rb, line 9</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/user.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">username</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">password</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">on_behalf_of</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-ivar">@username</span> = <span class="ruby-identifier">username</span>;
   <span class="ruby-ivar">@password</span> = <span class="ruby-identifier">password</span>;

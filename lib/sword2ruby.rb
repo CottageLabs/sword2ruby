@@ -18,6 +18,15 @@ require "sword2ruby/service"
 
 require "sword2ruby/sword_statement_oai_ore"
 
+#Sword2Ruby module
 module Sword2Ruby
-  # Your code goes here...
+
+
+   #Extensions to the {Atom module}[https://github.com/bct/atom-tools/wiki] to support Sword2 operations.
+   #These methods are additive to those supplied by the atom-tools gem.
+   #
+   #For more information on the {Atom module}[https://github.com/bct/atom-tools/wiki], please see the {atom-tools documentation}[http://rdoc.info/github/bct/atom-tools/master/frames] for a complete list of attributes and methods.
+  module Atom
+    
+  end
 end

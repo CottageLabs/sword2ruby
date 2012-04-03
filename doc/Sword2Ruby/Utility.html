@@ -102,8 +102,6 @@
     
     <li><a href="#method-c-find_links_all_types">::find_links_all_types</a>
     
-    <li><a href="#method-c-new">::new</a>
-    
     <li><a href="#method-c-read_file">::read_file</a>
     
     <li><a href="#method-c-to_boolean">::to_boolean</a>
@@ -155,11 +153,13 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../Sword2Ruby/RdfDescription.html">Sword2Ruby::RdfDescription</a>
+    <li><a href="../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
+  
+    <li><a href="../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
   
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
-    <li><a href="../Sword2Ruby/SwordStatement.html">Sword2Ruby::SwordStatement</a>
+    <li><a href="../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
   
     <li><a href="../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
@@ -209,12 +209,39 @@
 
         <div class="method-description">
           
-          
+          <p>Method to check the supplied argument is the expected class.</p>
+
+<h3 id="method-c-check_argument_class-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>name
+<dd>
+<p>the string name of the <strong>argument</strong> parameter, e.g.
+“update_time” or “username”</p>
+</dd><dt>argument
+<dd>
+<p>the object to be checked against <strong>expected_class</strong>, e.g.
+update_time or username</p>
+</dd><dt>expected_class
+<dd>
+<p>the class used to validate <strong>argument</strong>, e.g. Time or String</p>
+</dd></dl>
+
+<p>It will just return (nothing) if the check passes, or raise an
+ArgumentError if the check fails.</p>
+
+<h3 id="method-c-check_argument_class-label-Example">Example</h3>
+
+<pre># This is fine
+on_behalf_of = &quot;joebloggs&quot;
+Utility.check_argument_class('on_behalf_of', on_behalf_of, String)
+
+# This will raise an ArgumentError, because on_behalf_of is not a String
+on_behalf_of = 12345
+Utility.check_argument_class('on_behalf_of', on_behalf_of, String) #Raises an ArgumentError!</pre>
           
 
           
           <div class="method-source-code" id="check_argument_class-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 23</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">argument</span>, <span class="ruby-identifier">expected_class</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">argument</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-identifier">expected_class</span>
     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Argument '#{name}=#{argument}' must be of type '#{expected_class}' (and not of type '#{argument.class}')&quot;</span>)
@@ -241,12 +268,32 @@
 
         <div class="method-description">
           
-          
+          <p>Method to check the supplied uri uses one of the URI schemes defined in
+Sword2Ruby::VALID_URI_SCHEMES.</p>
+
+<h3 id="method-c-check_uri-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>uri
+<dd>
+<p>the string URI to be checked</p>
+</dd></dl>
+
+<p>It will just return (nothing) if the check passes, or raise an
+InvalidURIError if the check fails. It will raise an ArgumentError if
+<strong>uri</strong> is not a String. It wil raise a URI parse error if
+<strong>uri</strong> could not be parsed.</p>
+
+<h3 id="method-c-check_uri-label-Example">Example</h3>
+
+<pre># This is fine
+Utility.check_uri('http://www.url.com')
+
+# This will raise an InvalidURIError, because fishy:// is not a valid URI scheme
+Utility.check_uri('fishy://www.url.com')</pre>
           
 
           
           <div class="method-source-code" id="check_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 29</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">check_uri</span>(<span class="ruby-identifier">uri</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">&quot;uri&quot;</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-constant">String</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-constant">VALID_URI_SCHEMES</span>.<span class="ruby-identifier">include?</span> <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>).<span class="ruby-identifier">scheme</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
@@ -274,12 +321,30 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the attribute value of first <a
+href="Atom/Element.html">Atom::Element</a> found in an array of
+Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_attribute_value-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd><dt>attribute_name
+<dd>
+<p>the name of the attribute to return the value of, e.g. “href”</p>
+</dd></dl>
+
+<p>It will return the value of the specified attribute of the first element
+found with a matching name, othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_attribute_value-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 75</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 149</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_attribute_value</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attribute_name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}.<span class="ruby-identifier">attribute</span>(<span class="ruby-identifier">attribute_name</span>).<span class="ruby-identifier">value</span>
 <span class="ruby-keyword">end</span></pre>
@@ -304,15 +369,30 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the boolean value of first <a
+href="Atom/Element.html">Atom::Element</a> found in an array of
+Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_boolean-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return the boolean value of first element found with a matching
+name, othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_boolean-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 66</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 129</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_boolean</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_boolean</span>(<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>), <span class="ruby-keyword">nil</span>)
- <span class="ruby-keyword">end</span></pre>
+<span class="ruby-keyword">end</span></pre>
           </div><!-- find_element_boolean-source -->
           
         </div>
@@ -334,12 +414,25 @@
 
         <div class="method-description">
           
-          <p>Find single element</p>
+          <p>Method to return the first <a href="Atom/Element.html">Atom::Element</a>
+found in an array of Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_by_name-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return the first element found with a matching name, othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_by_name-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 54</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_by_name</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -364,12 +457,30 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the first <a href="Atom/Element.html">Atom::Element</a>
+found in an array of Atom::Elements by its scheme and term.</p>
+
+<h3 id="method-c-find_element_by_scheme_and_term-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>scheme
+<dd>
+<p>the scheme of the element to search for, e.g. “<a
+href="http://purl.org/net/sword/terms/">purl.org/net/sword/terms/</a>”</p>
+</dd><dt>term
+<dd>
+<p>the term of the element to search for, e.g. “<a
+href="http://purl.org/net/sword/terms/originalDeposit">purl.org/net/sword/terms/originalDeposit</a>”</p>
+</dd></dl>
+
+<p>It will return the first element found with a matching scheme and term,
+othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_by_scheme_and_term-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 79</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 159</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_by_scheme_and_term</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">scheme</span>, <span class="ruby-identifier">term</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">scheme</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">term</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">term</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -394,12 +505,27 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the integer value of first <a
+href="Atom/Element.html">Atom::Element</a> found in an array of
+Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_integer-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return the integer value of first element found with a matching
+name, othewise 0.</p>
           
 
           
           <div class="method-source-code" id="find_element_integer-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 62</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_integer</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">to_i</span>
 <span class="ruby-keyword">end</span></pre>
@@ -424,12 +550,27 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the text value of first <a
+href="Atom/Element.html">Atom::Element</a> found in an array of
+Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_text-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return the text value of first element found with a matching name,
+othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_text-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 58</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 111</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">find_element_by_name</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">text</span>
 <span class="ruby-keyword">end</span></pre>
@@ -454,12 +595,27 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the time value of first <a
+href="Atom/Element.html">Atom::Element</a> found in an array of
+Atom::Elements by its name.</p>
+
+<h3 id="method-c-find_element_time-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return the time value of first element found with a matching name,
+othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_element_time-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 70</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 138</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_element_time</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">value</span> = <span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">find_element_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>))
@@ -485,12 +641,29 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return an array of attribute values of matching Atom::Elements
+found in an array of Atom::Elements by their name.</p>
+
+<h3 id="method-c-find_elements_attribute_value-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element(s) to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd><dt>attribute_name
+<dd>
+<p>the name of the attributes to return the value of, e.g. “href”</p>
+</dd></dl>
+
+<p>It will return an array of the attribute values of elements found with a
+matching name, othewise an empty array [ ].</p>
           
 
           
           <div class="method-source-code" id="find_elements_attribute_value-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 90</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 182</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_attribute_value</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attribute_name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span><span class="ruby-operator">==</span><span class="ruby-identifier">name</span>}.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-identifier">attribute_name</span>).<span class="ruby-identifier">value</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -515,12 +688,26 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return an array of matching Atom::Elements found in an array of
+Atom::Elements by their namespace.</p>
+
+<h3 id="method-c-find_elements_by_namespace-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>namespace
+<dd>
+<p>the namespace to search for, e.g. “<a
+href="http://purl.org/dc/terms/">purl.org/dc/terms/</a>”</p>
+</dd></dl>
+
+<p>It will return an array of Atom::Elements found with a matching namespace,
+othewise an empty array [ ].</p>
           
 
           
           <div class="method-source-code" id="find_elements_by_namespace-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 94</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 191</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_by_namespace</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">namespace</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">namespace</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">namespace</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -538,21 +725,35 @@
         
         <div class="method-heading">
           <span class="method-name">find_elements_by_scheme</span><span
-            class="method-args">(categories, scheme)</span>
+            class="method-args">(elements, scheme)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>Method to return an array of matching Atom::Elements found in an array of
+Atom::Elements by their namespace.</p>
+
+<h3 id="method-c-find_elements_by_scheme-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>scheme
+<dd>
+<p>the scheme to search for, e.g. “<a
+href="http://purl.org/net/sword/terms/state">purl.org/net/sword/terms/state</a>”</p>
+</dd></dl>
+
+<p>It will return an array of Atom::Elements found with a matching scheme,
+othewise an empty array [ ].</p>
           
 
           
           <div class="method-source-code" id="find_elements_by_scheme-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 100</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_by_scheme</span>(<span class="ruby-identifier">categories</span>, <span class="ruby-identifier">scheme</span>)
-  <span class="ruby-identifier">categories</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">scheme</span>}
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 201</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_by_scheme</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">scheme</span>)
+  <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">scheme</span>}
 <span class="ruby-keyword">end</span></pre>
           </div><!-- find_elements_by_scheme-source -->
           
@@ -575,12 +776,26 @@
 
         <div class="method-description">
           
-          <p>Find multiple elements</p>
+          <p>Method to return an array of text values of matching Atom::Elements found
+in an array of Atom::Elements by their name.</p>
+
+<h3 id="method-c-find_elements_text-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>elements
+<dd>
+<p>an array of Atom::Elements</p>
+</dd><dt>name
+<dd>
+<p>the expanded name of the element(s) to search for, e.g. “sword:state” or
+“sword:verboseDescription”</p>
+</dd></dl>
+
+<p>It will return an array of the text values of elements found with a
+matching name, othewise an empty array [ ].</p>
           
 
           
           <div class="method-source-code" id="find_elements_text-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 86</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 172</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_elements_text</span>(<span class="ruby-identifier">elements</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">find_all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">fully_expanded_name</span><span class="ruby-operator">==</span><span class="ruby-identifier">name</span>}.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">text</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -605,12 +820,28 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return the @href attribute of the Atom::Link found in an array of
+Atom::Links by its @rel and @type attributes.</p>
+
+<h3 id="method-c-find_link_uri-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>links
+<dd>
+<p>an array of Atom::Links</p>
+</dd><dt>rel
+<dd>
+<p>the string @rel value to search the array for</p>
+</dd><dt>type
+<dd>
+<p>(optional) the string @type value to search the array for, defaults to nil</p>
+</dd></dl>
+
+<p>It will return the href value of the first link found with matching @rel
+and @type values, othewise nil.</p>
           
 
           
           <div class="method-source-code" id="find_link_uri-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 38</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 71</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_link_uri</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">NIL_LAMBDA</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>}.<span class="ruby-identifier">href</span>
 <span class="ruby-keyword">end</span></pre>
@@ -635,12 +866,28 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return an array of Atom::Links found in an array of Atom::Links
+by their @rel and @type attributes.</p>
+
+<h3 id="method-c-find_links-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>links
+<dd>
+<p>an array of Atom::Links</p>
+</dd><dt>rel
+<dd>
+<p>the string @rel value to search the array for</p>
+</dd><dt>type
+<dd>
+<p>(optional) the string @type value to search the array for, defaults to nil</p>
+</dd></dl>
+
+<p>It will return an array of all matching Atom:Links (found with @rel and
+@type values), othewise an empty array.</p>
           
 
           
           <div class="method-source-code" id="find_links-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 42</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_links</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -665,12 +912,25 @@
 
         <div class="method-description">
           
-          
+          <p>Method to return an array of Atom::Links found in an array of Atom::Links
+by their @rel attributes.</p>
+
+<h3 id="method-c-find_links_all_types-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>links
+<dd>
+<p>an array of Atom::Links</p>
+</dd><dt>rel
+<dd>
+<p>the string @rel value to search the array for</p>
+</dd></dl>
+
+<p>It will return an array of all matching Atom:Links (found with @rel),
+othewise an empty array.</p>
           
 
           
           <div class="method-source-code" id="find_links_all_types-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 46</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_links_all_types</span>(<span class="ruby-identifier">links</span>, <span class="ruby-identifier">rel</span>)
   <span class="ruby-identifier">links</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">link</span><span class="ruby-operator">|</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">rel</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">rel</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -684,36 +944,6 @@
       </div><!-- find_links_all_types-method -->
 
     
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 114</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>()
-  <span class="ruby-keyword">super</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
       <div id="method-c-read_file" class="method-detail ">
         
         <div class="method-heading">
@@ -725,12 +955,21 @@
 
         <div class="method-description">
           
-          <p>Returns [filename, md5 digest, data]</p>
+          <p>Method to return the filename, MD5 hash and filedata of the supplied
+filepath.</p>
+
+<h3 id="method-c-read_file-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>filepath
+<dd>
+<p>path to an existing file which must be readable to the Ruby process.</p>
+</dd></dl>
+
+<p>Returns an array of the form [filename, md5_digest, data]</p>
           
 
           
           <div class="method-source-code" id="read_file-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 105</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 209</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">read_file</span>(<span class="ruby-identifier">filepath</span>) 
   <span class="ruby-identifier">data</span> = <span class="ruby-keyword">nil</span>
   <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filepath</span>,<span class="ruby-string">'r'</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
@@ -759,12 +998,23 @@
 
         <div class="method-description">
           
-          
+          <p>Method to cast a (typically) string value into a boolean value</p>
+
+<h3 id="method-c-to_boolean-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>value
+<dd>
+<p>the string value to be cast, e.g. “true” or “no”</p>
+</dd><dt>nil_value
+<dd>
+<p>(optional) value to return if value=nil. If not supplied, this will default
+to false. Typically used in circumstances when returning something other
+than false would be preferable if value=nil.</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="to_boolean-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 9</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/utility.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">to_boolean</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">nil_value</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">downcase!</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">String</span>
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">value</span>

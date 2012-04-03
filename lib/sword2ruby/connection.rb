@@ -1,5 +1,3 @@
-#connection.rb
-
 require 'atom/http'
 
 module Sword2Ruby

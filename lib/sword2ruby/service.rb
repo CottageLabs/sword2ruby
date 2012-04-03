@@ -1,5 +1,3 @@
-#service.rb
-
 require 'atom/service'
 
 module Sword2Ruby

@@ -1,5 +1,3 @@
-#collection.rb
-
 require 'atom/collection'
 require "base64"
 
