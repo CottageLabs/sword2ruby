@@ -32,13 +32,13 @@ module Sword2Ruby
             
       if response.body
         #If a receipt was returned, parse it
-        @entry = Atom::Entry.parse(response.body)
+        @entry = ::Atom::Entry.parse(response.body)
         @entry.http = http
         @has_entry = true
       else
         #if the receipt was not returned, try and retrieve it
         if @location
-          @entry = Atom::Entry.parse(http.get(@location).body)
+          @entry = ::Atom::Entry.parse(http.get(@location).body)
           @has_entry = true
         else
           #Otherwise, there is no receipt (e.g. for a delete)

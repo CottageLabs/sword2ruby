@@ -5,7 +5,7 @@ module Sword2Ruby
   #Extend existing Atom::Service with Sword methods
   #
   #For more information, see the Sword2 specification: {section 6.1. "Retrieving a Service Document"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_retreivingservicedocument].
-  class Atom::Service < Atom::Element
+  class ::Atom::Service < ::Atom::Element
     
     #This method returns the URI object of the service document.
     def service_document_uri

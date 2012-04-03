@@ -160,6 +160,14 @@ module Sword2Ruby
       elements.find {|e| e.scheme == scheme && e.term == term}
     end
     
+    #Method to return the first Atom::Element found in an array of Atom::Elements with a matching @href attribute.
+    #===Parameters
+    #elements:: an array of Atom::Elements
+    #href:: the value of the @href attribute of the element to search for, e.g. "http://purl.org/net/sword/terms/originalDeposit"
+    #It will return the first element found with a matching href attribute, othewise nil.
+    def self.find_element_by_href(elements, href)
+      elements.find {|e| e.href == href}
+    end
     
     
 #Find multiple elements

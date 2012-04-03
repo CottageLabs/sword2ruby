@@ -3,7 +3,7 @@ require 'atom/feed'
 module Sword2Ruby
   
   #Extend existing Atom::Service with Sword methods
-  class Atom::Feed < Atom::Element
+  class ::Atom::Feed < ::Atom::Element
     
     #This method returns an array of Atom::Categories of the original deposit (usually contained in the Sword Statement Atom Feed),
     #or an empty array [ ] if none are defined.

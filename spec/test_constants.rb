@@ -1,7 +1,7 @@
-#test_constants.rb
-
 require 'sword2ruby';
 
+#:nodoc:
+#These are constants used by the unit tests
 TEST_USERNAME_VALID = 'sword'
 TEST_PASSWORD_VALID = 'sword'
 TEST_USERNAME_INVALID = 'invalid-username'
@@ -21,4 +21,4 @@ TEST_REPOSITORY_NAME = 'Main Site'
 TEST_COLLECTION_COUNT = 10
 
 
-TEST_COLLECTION = 'http://localhost:8080/col-uri/14661f1f-e625-4145-b477-2b08b757c6d7'
+TEST_COLLECTION_HREF = 'http://localhost:8080/col-uri/067cadb4-fad2-4be6-8f04-a5f5997a7399'

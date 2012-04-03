@@ -5,7 +5,7 @@ module Sword2Ruby
   #These methods are additive to those supplied by the atom-tools gem.
   #
   #Please see the {atom-tools documentation}[http://rdoc.info/github/bct/atom-tools/master/frames] for a complete list of attributes and methods.
-  class Atom::Entry < Atom::Element
+  class ::Atom::Entry < ::Atom::Element
 
 #Deposit Receipt tags
     
@@ -158,7 +158,7 @@ module Sword2Ruby
       http ||= @http
       
       #Validate parameters
-      Utility.check_argument_class('entry', entry, Atom::Entry)
+      Utility.check_argument_class('entry', entry, ::Atom::Entry)
       Utility.check_argument_class('alternative_sword_edit_uri', alternative_sword_edit_uri, String)
       Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
       Utility.check_argument_class('http', http, Sword2Ruby::Connection)
@@ -242,7 +242,7 @@ module Sword2Ruby
       http ||= @http
 
       #Validate parameters
-      Utility.check_argument_class('entry', entry, Atom::Entry)
+      Utility.check_argument_class('entry', entry, ::Atom::Entry)
       Utility.check_argument_class('filepath', filepath, String)
       Utility.check_argument_class('content_type', content_type, String)
       Utility.check_argument_class('packaging', packaging, String) if packaging

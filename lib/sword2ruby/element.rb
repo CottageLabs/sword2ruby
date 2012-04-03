@@ -5,7 +5,7 @@ module Sword2Ruby
   #These methods are additive to those supplied by the atom-tools gem.
   #
   #Please see the {atom-tools documentation}[http://rdoc.info/github/bct/atom-tools/master/frames] for a complete list of attributes and methods.
-  class Atom::Element
+  class ::Atom::Element
     #Sword2Ruby::Connection (Atom::HTTP) object to facilitate connections in derived classes, such as Atom::Entry, Atom::Feed, Atom::Workspace and Atom::Collection.
     attr_accessor :http
   end

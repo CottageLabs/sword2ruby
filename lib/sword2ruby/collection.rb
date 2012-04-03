@@ -1,5 +1,7 @@
-require 'atom/collection'
 require "base64"
+require 'atom/element'
+require 'atom/collection'
+
 
 module Sword2Ruby
 
@@ -8,7 +10,7 @@ module Sword2Ruby
   #These methods are additive to those supplied by the atom-tools gem.
   #
   #Please see the {atom-tools documentation}[http://rdoc.info/github/bct/atom-tools/master/frames] for a complete list of attributes and methods.
-  class Atom::Collection < Atom::Element
+  class ::Atom::Collection < ::Atom::Element
     
     #Special sword_accepts to override usual accept
     elements ['app', ATOM_PUBLISHING_PROTOCOL_NAMESPACE], :accept, :sword_accepts, Sword2Ruby::SwordAccept
@@ -66,7 +68,7 @@ module Sword2Ruby
     #For more information, see the Sword2 specification: {section 6.3.3. "Creating a Resource with an Atom Entry"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_entry].
     def post!(entry, slug = nil, in_progress = nil, on_behalf_of = nil)
       #Validate parameters
-      Utility.check_argument_class('entry', entry, Atom::Entry)
+      Utility.check_argument_class('entry', entry, ::Atom::Entry)
       Utility.check_argument_class('slug', slug, String) if slug
       Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
    
@@ -137,7 +139,7 @@ module Sword2Ruby
     #For more information, see the Sword2 specification: {section 6.3.2. "Creating a Resource with a Multipart Deposit"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_multipart].
     def post_multipart!(entry, filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)
       #Validate parameters
-      Utility.check_argument_class('entry', entry, Atom::Entry)     
+      Utility.check_argument_class('entry', entry, ::Atom::Entry)     
       Utility.check_argument_class('filepath', filepath, String)
       Utility.check_argument_class('content_type', content_type, String)
       Utility.check_argument_class('packaging', packaging, String) if packaging
