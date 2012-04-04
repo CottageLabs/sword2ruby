@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>lib/sword2ruby/utility.rb</string>
+	<string>lib/sword2ruby/entry.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,14 +21,14 @@
 	<integer>381</integer>
 	<key>metaData</key>
 	<dict>
-		<key>lib/sword2ruby/element.rb</key>
+		<key>lib/sword2ruby/deposit_receipt.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>39</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>2</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -40,125 +40,23 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>155</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>130</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
+				<integer>8</integer>
 				<key>line</key>
 				<integer>149</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>155</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>120</integer>
 		</dict>
 		<key>lib/sword2ruby/feed.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>29</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>29</integer>
-			</dict>
-		</dict>
-		<key>lib/sword2ruby/rexml_element.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
+				<integer>14</integer>
 				<key>line</key>
 				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>33</integer>
-		</dict>
-		<key>lib/sword2ruby/service.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>39</integer>
-				<key>line</key>
-				<integer>11</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>lib/sword2ruby/sword_accept.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>lib/sword2ruby/sword_statement_oai_ore.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>42</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>7</integer>
-		</dict>
-		<key>lib/sword2ruby/user.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>25</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -170,31 +68,72 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>27</integer>
+				<integer>66</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>127</integer>
+		</dict>
+		<key>spec/end_to_end_spec.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>104</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>83</integer>
+		</dict>
+		<key>spec/test_constants.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>90</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>lib/sword2ruby/rexml_element.rb</string>
-		<string>lib/sword2ruby/service.rb</string>
-		<string>lib/sword2ruby/sword_accept.rb</string>
-		<string>lib/sword2ruby/sword_statement_oai_ore.rb</string>
-		<string>lib/sword2ruby/user.rb</string>
-		<string>lib/sword2ruby/utility.rb</string>
-		<string>lib/sword2ruby/element.rb</string>
+		<string>spec/end_to_end_spec.rb</string>
 		<string>lib/sword2ruby/entry.rb</string>
+		<string>lib/sword2ruby/utility.rb</string>
+		<string>spec/test_constants.rb</string>
 		<string>lib/sword2ruby/feed.rb</string>
+		<string>lib/sword2ruby/deposit_receipt.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{424, 178}, {754, 698}}</string>
+	<string>{{406, 295}, {951, 1118}}</string>
 </dict>
 </plist>

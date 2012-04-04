@@ -101,16 +101,6 @@
   
     <li><a href="../Sword2Ruby/Atom.html">Sword2Ruby::Atom</a>
   
-    <li><a href="../Sword2Ruby/Atom/Collection.html">Sword2Ruby::Atom::Collection</a>
-  
-    <li><a href="../Sword2Ruby/Atom/Element.html">Sword2Ruby::Atom::Element</a>
-  
-    <li><a href="../Sword2Ruby/Atom/Entry.html">Sword2Ruby::Atom::Entry</a>
-  
-    <li><a href="../Sword2Ruby/Atom/Feed.html">Sword2Ruby::Atom::Feed</a>
-  
-    <li><a href="../Sword2Ruby/Atom/Service.html">Sword2Ruby::Atom::Service</a>
-  
     <li><a href="../Sword2Ruby/AutoDiscover.html">Sword2Ruby::AutoDiscover</a>
   
     <li><a href="../Sword2Ruby/Connection.html">Sword2Ruby::Connection</a>
@@ -119,10 +109,6 @@
   
     <li><a href="../Sword2Ruby/Exception.html">Sword2Ruby::Exception</a>
   
-    <li><a href="../Sword2Ruby/REXML.html">Sword2Ruby::REXML</a>
-  
-    <li><a href="../Sword2Ruby/REXML/Element.html">Sword2Ruby::REXML::Element</a>
-  
     <li><a href="../Sword2Ruby/SwordAccept.html">Sword2Ruby::SwordAccept</a>
   
     <li><a href="../Sword2Ruby/SwordStatementOAIORE.html">Sword2Ruby::SwordStatementOAIORE</a>
@@ -130,6 +116,22 @@
     <li><a href="../Sword2Ruby/User.html">Sword2Ruby::User</a>
   
     <li><a href="../Sword2Ruby/Utility.html">Sword2Ruby::Utility</a>
+  
+    <li><a href="../Atom.html">Atom</a>
+  
+    <li><a href="../Atom/Collection.html">Atom::Collection</a>
+  
+    <li><a href="../Atom/Element.html">Atom::Element</a>
+  
+    <li><a href="../Atom/Entry.html">Atom::Entry</a>
+  
+    <li><a href="../Atom/Feed.html">Atom::Feed</a>
+  
+    <li><a href="../Atom/Service.html">Atom::Service</a>
+  
+    <li><a href="../REXML.html">REXML</a>
+  
+    <li><a href="../REXML/Element.html">REXML::Element</a>
   
     <li><a href="../Object.html">Object</a>
   
@@ -146,12 +148,12 @@
     
 <p>The <a href="DepositReceipt.html">DepositReceipt</a> object is returned
 following Post, Put and Delete operations on the Sword server. In some
-cases (e.g. Post), an <a href="Atom/Entry.html">Atom::Entry</a> will
+cases (e.g. Post), an <a href="../Atom/Entry.html">Atom::Entry</a> will
 usually be returned describing the newly created entry. Operations such as
-Delete do not return an <a href="Atom/Entry.html">Atom::Entry</a>. If the
-Sword server does not automatically return the <a
-href="Atom/Entry.html">Atom::Entry</a> but instead provides a link to it,
-the <a href="DepositReceipt.html">DepositReceipt</a> object will
+Delete do not return an <a href="../Atom/Entry.html">Atom::Entry</a>. If
+the Sword server does not automatically return the <a
+href="../Atom/Entry.html">Atom::Entry</a> but instead provides a link to
+it, the <a href="DepositReceipt.html">DepositReceipt</a> object will
 automatically fetch it.</p>
 
 <p>For more information, see the Sword2 specification: <a
@@ -184,9 +186,10 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
         <div class="method-description">
         
-        <p>The <a href="Atom/Entry.html">Atom::Entry</a> associated with this receipt,
-or nil if not supplied. The <a href="Atom/Entry.html">Atom::Entry</a> will
-be automatically fetched from the server when necessary.</p>
+        <p>The <a href="../Atom/Entry.html">Atom::Entry</a> associated with this
+receipt, or nil if not supplied. The <a
+href="../Atom/Entry.html">Atom::Entry</a> will be automatically fetched
+from the server when necessary.</p>
         
         </div>
       </div>
@@ -200,7 +203,7 @@ be automatically fetched from the server when necessary.</p>
         <div class="method-description">
         
         <p>Boolean value indicating whether there is an <a
-href="Atom/Entry.html">Atom::Entry</a> associated with this receipt.</p>
+href="../Atom/Entry.html">Atom::Entry</a> associated with this receipt.</p>
         
         </div>
       </div>
@@ -288,13 +291,13 @@ Response object returned by the server.</p>
         
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>
     <span class="ruby-comment">#If a receipt was returned, parse it</span>
-    <span class="ruby-ivar">@entry</span> = <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
+    <span class="ruby-ivar">@entry</span> = <span class="ruby-operator">::</span><span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
     <span class="ruby-ivar">@entry</span>.<span class="ruby-identifier">http</span> = <span class="ruby-identifier">http</span>
     <span class="ruby-ivar">@has_entry</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment">#if the receipt was not returned, try and retrieve it</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@location</span>
-      <span class="ruby-ivar">@entry</span> = <span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">body</span>)
+      <span class="ruby-ivar">@entry</span> = <span class="ruby-operator">::</span><span class="ruby-constant">Atom</span><span class="ruby-operator">::</span><span class="ruby-constant">Entry</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">body</span>)
       <span class="ruby-ivar">@has_entry</span> = <span class="ruby-keyword">true</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-comment">#Otherwise, there is no receipt (e.g. for a delete)</span>

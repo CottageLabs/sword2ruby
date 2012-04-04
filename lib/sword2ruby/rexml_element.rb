@@ -5,7 +5,7 @@ module Sword2Ruby
   #Overloads for the rdf:Description tag (REXML::Element), used for describing OAI-ORE Sword Statements.
   #
   #For more information, see the Sword2 specification: {section 11.3. "OAI-ORE Serialisation"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#statement_oaiore].
-  class  REXML::Element
+  class  ::REXML::Element
 
      #This method returns the string value of the @rdf:about attribute for the <rdf:Description> element (i.e. for each element in the Sword2Ruby::SwordStatementOAIORE#rdf_descriptions array, usually contained in the OAI-ORE Sword Statement),
      #or nil if it is not defined.

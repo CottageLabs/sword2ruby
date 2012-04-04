@@ -64,6 +64,7 @@ module Sword2Ruby
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.3.3. "Creating a Resource with an Atom Entry"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_entry].
     def post!(entry, slug = nil, in_progress = nil, on_behalf_of = nil)
@@ -95,6 +96,7 @@ module Sword2Ruby
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.3.1. "Creating a Resource with a Binary File Deposit"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_binary].
     def post_media!(filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)
@@ -135,6 +137,7 @@ module Sword2Ruby
     #slug:: (optional) the suggested identifier of the new entry
     #in_progress:: (optional) boolean value indicating whether the new entry will be completed at a later date
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.3.2. "Creating a Resource with a Multipart Deposit"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_creatingresource_multipart].
     def post_multipart!(entry, filepath, content_type, packaging = nil, slug = nil, in_progress = nil, on_behalf_of = nil)

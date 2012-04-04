@@ -136,41 +136,50 @@ module Sword2Ruby
     #This method posts a new entry to an existing entry's sword-edit URI, adding to the existing entry's metadata (i.e. not overwriting existing metadata).
     #It <i>does not</i> create a new entry in the collection.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
-    #===Example
-    # feed = collection.feed    # assuming that you have retrieved a collection from the service document
-    # feed.update!              # get all the entry data
-    # existing_entry = feed.entries.first
+    #===Parameters (supplied as a hash)
+    #:entry:: (optional) a new Atom::Entry with metadata to be added to an existing Atom::Entry. If not supplied, this will default to itself.
+    #:\sword_edit_uri:: (optional) an override to the existing entry's sword-edit URI. If not supplied, this will default to the existing entry's sword-edit URI.
+    #:in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
+    #
+    #===Example BROKEN
+    # # feed = collection.feed    # assuming that you have retrieved a collection from the service document
+    # # feed.update!              # get all the entry data
+    # # existing_entry = feed.entries.first
     # additional_entry = Atom::Entry.new()
     # additional_entry.title = "The Improved Burrito"
     # additional_entry.summary = "Adding some extra metadata to the existing entry"
     # additional_entry.add_dublin_core_extension!("publisher", "Burrito King")
-    # deposit_receipt = existing_entry.post!(additional_entry)
-    #===Parameters
-    #entry:: a new Atom::Entry with metadata to be added to an existing Atom::Entry.
-    #alternative_sword_edit_uri:: (optional) an override to the existing entry's sword-edit URI. If not supplied, this will default to the existing entry's sword-edit URI.
-    #in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
-    #
+    # deposit_receipt = existing_entry.post!(:entry => additional_entry, :in_progress => true)
+    # feed.updated! #flag that the feed has been updated
+    # feed.update! #get the updates  
     #For more information, see the Sword2 specification: {section 6.7.2. "Adding New Metadata to a Container"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_metadata].
-    def post!(entry, alternative_sword_edit_uri = sword_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
-      alternative_sword_edit_uri ||= sword_edit_uri
-      http ||= @http
+    def post!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      
+      #Get parameters and use default values when not supplied
+      entry = params[:entry] || self
+      current_sword_edit_uri = params[:sword_edit_uri] || sword_edit_uri
+      in_progress = params[:in_progress]
+      on_behalf_of = params[:on_behalf_of]
+      connection = params[:connection] || @http
       
       #Validate parameters
       Utility.check_argument_class('entry', entry, ::Atom::Entry)
-      Utility.check_argument_class('alternative_sword_edit_uri', alternative_sword_edit_uri, String)
+      Utility.check_argument_class('sword_edit_uri', current_sword_edit_uri, String)
       Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
-      Utility.check_argument_class('http', http, Sword2Ruby::Connection)
+      Utility.check_argument_class('connection', connection, Sword2Ruby::Connection)
       
       headers = {"Content-Type" => "application/atom+xml;type=entry" }
       headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
       headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
-      response = http.post(alternative_sword_edit_uri, entry.to_s, headers)
+      response = connection.post(current_sword_edit_uri, entry.to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, connection)
       else
-        raise Sword2Ruby::Exception.new("Failed to do post!(#{alternative_sword_edit_uri}): server returned code #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post!(#{current_sword_edit_uri}): server returned code #{response.code} #{response.message}")
       end
     end
 
@@ -186,6 +195,7 @@ module Sword2Ruby
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
     #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.7.1. "Adding Content to the Media Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_mediaresource].
     def post_media!(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)
@@ -235,6 +245,7 @@ module Sword2Ruby
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed
     #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.7.3. "Adding Content to the Media Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_multipart].
     def post_multipart!(entry, filepath, content_type, packaging = nil, alternative_sword_edit_uri = sword_edit_uri, in_progress = nil, on_behalf_of = nil, metadata_relevant = nil, http = @http)
@@ -317,6 +328,7 @@ module Sword2Ruby
     #in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.2. "Replacing the Metadata of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_metadata].
     def put!(alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
@@ -352,6 +364,7 @@ module Sword2Ruby
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
     #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.1. "Replacing the File Content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_binary].
     def put_media!(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)
@@ -389,6 +402,7 @@ module Sword2Ruby
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
     #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.3. "Replacing the Metadata and File Content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_multipart].
     def put_multipart!(filepath, content_type, packaging = nil, alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
@@ -446,6 +460,7 @@ module Sword2Ruby
     #alternative_entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
     #on_behalf_of:: (optional) username on whos behalf the operation is being performed.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.8. "Deleting the Container"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deleteconteiner].
     def delete!(alternative_entry_edit_uri = entry_edit_uri, on_behalf_of = nil, http = @http)
@@ -471,6 +486,7 @@ module Sword2Ruby
     #alternative_edit_media_uri:: (optional) an override to the existing entry's edit-media URI. If not supplied, this will default to the existing entry's first edit-media URI.
     #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
     #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.6. "Deleting the content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deletingcontent].      
     def delete_media!(alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, http = @http)
