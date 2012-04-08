@@ -85,7 +85,7 @@ module Sword2Ruby
     #value:: the string value of the new Dublin Core element, e.g. "A report on Burritos", "History of Burritos" or "Burrito King" etc
     #
     #For more information, see the {Dublin Core Metadata Terms specification}[http://dublincore.org/documents/dcmi-terms/].
-    def add_dublin_core_extension! (name, value)
+    def add_dublin_core_extension!(name, value)
       extension = REXML::Element.new(name)
       extension.add_namespace("http://purl.org/dc/terms/")
       extension.text = value
@@ -97,7 +97,7 @@ module Sword2Ruby
     #name:: a valid Dublin Core Term Name, e.g. "isReferencedBy", "title" or "accrualPolicy" etc
     #
     #For more information, see the {Dublin Core Metadata Terms specification}[http://dublincore.org/documents/dcmi-terms/].
-    def delete_dublin_core_extension! (name)
+    def delete_dublin_core_extension!(name)
       extensions.delete_if {|e| e.namespace == "http://purl.org/dc/terms/" && e.name == name}
     end
     
@@ -136,7 +136,7 @@ module Sword2Ruby
     #This method posts a new entry to an existing entry's sword-edit URI, adding to the existing entry's metadata (i.e. not overwriting existing metadata).
     #It <i>does not</i> create a new entry in the collection.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
-    #===Parameters (supplied as a hash)
+    #===Parameters (passed as a hash collection)
     #:entry:: (optional) a new Atom::Entry with metadata to be added to an existing Atom::Entry. If not supplied, this will default to itself.
     #:\sword_edit_uri:: (optional) an override to the existing entry's sword-edit URI. If not supplied, this will default to the existing entry's sword-edit URI.
     #:in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
@@ -158,28 +158,29 @@ module Sword2Ruby
     #For more information, see the Sword2 specification: {section 6.7.2. "Adding New Metadata to a Container"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_metadata].
     def post!(params = {})
       Utility.check_argument_class('params', params, Hash)
-      
-      #Get parameters and use default values when not supplied
-      entry = params[:entry] || self
-      current_sword_edit_uri = params[:sword_edit_uri] || sword_edit_uri
-      in_progress = params[:in_progress]
-      on_behalf_of = params[:on_behalf_of]
-      connection = params[:connection] || @http
-      
+      defaults = {
+        :entry => self,
+        :sword_edit_uri => sword_edit_uri,
+        :in_progress => nil,
+        :on_behalf_of => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
+ 
       #Validate parameters
-      Utility.check_argument_class('entry', entry, ::Atom::Entry)
-      Utility.check_argument_class('sword_edit_uri', current_sword_edit_uri, String)
-      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
-      Utility.check_argument_class('connection', connection, Sword2Ruby::Connection)
-      
+      Utility.check_argument_class(':entry', options[:entry], ::Atom::Entry)
+      Utility.check_argument_class(':sword_edit_uri', options[:sword_edit_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+            
       headers = {"Content-Type" => "application/atom+xml;type=entry" }
-      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
-      response = connection.post(current_sword_edit_uri, entry.to_s, headers)
+      headers["In-Progress"] = options[:in_progress].to_s.downcase if (options[:in_progress] == true || options[:in_progress] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
+      response = options[:connection].post(options[:sword_edit_uri], options[:entry].to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, connection)
+        return DepositReceipt.new(response, options[:connection])
       else
-        raise Sword2Ruby::Exception.new("Failed to do post!(#{current_sword_edit_uri}): server returned code #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post!(#{options[:sword_edit_uri]}): server returned code #{response.code} #{response.message}")
       end
     end
 
@@ -187,45 +188,53 @@ module Sword2Ruby
     #It <i>does not</i> create a new entry in the collection.
     #An MD5-digest will be calculated automatically from the file and sent to the server with the request.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
-    #===Parameters
-    #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
-    #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
-    #alternative_edit_media_uri:: (optional) an override to the existing entry's edit media URI (media resource URI). If not supplied, this will default to the existing entry's <b>first</b> edit media URI (as there can be multiple edit media URIs).
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed
-    #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
+    #:content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
+    #:packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #:\edit_media_uri:: (optional) an override to the existing entry's edit media URI (media resource URI). If not supplied, this will default to the existing entry's <b>first</b> edit media URI (as there can be multiple edit media URIs).
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed
+    #:metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.7.1. "Adding Content to the Media Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_mediaresource].
-    def post_media!(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)
-      #if an edit_media_uri has not been supplied, use the first one available for this entry
-      alternative_edit_media_uri ||= edit_media_links.first.href
-      http ||= @http
+    def post_media!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :filepath => nil,
+        :content_type => nil,
+        :packaging => nil,
+        :edit_media_uri => edit_media_links.first.href,
+        :on_behalf_of => nil,
+        :metadata_relevant => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
       
       #Validate parameters
-      Utility.check_argument_class('filepath', filepath, String)
-      Utility.check_argument_class('content_type', content_type, String)
-      Utility.check_argument_class('packaging', packaging, String) if packaging
-      Utility.check_argument_class('alternative_edit_media_uri', alternative_edit_media_uri, String)
-      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
-      Utility.check_argument_class('http', http, Sword2Ruby::Connection)
-          
-      filename, md5, data = Utility.read_file(filepath)
+      Utility.check_argument_class(':filepath', options[:filepath], String)
+      Utility.check_argument_class(':content_type', options[:content_type], String)
+      Utility.check_argument_class(':packaging', options[:packaging], String) if options[:packaging]
+      Utility.check_argument_class(':edit_media_uri', options[:edit_media_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+         
+      filename, md5, data = Utility.read_file(options[:filepath])
 
-      headers = {"Content-Type" => content_type}
+      headers = {"Content-Type" => options[:content_type]}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"
       headers["Content-MD5"] = md5
-      headers["Packaging"] = packaging if packaging
-      headers["Metadata-Relevant"] = metadata_relevant.to_s.downcase if (metadata_relevant == true || metadata_relevant == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["Packaging"] = options[:packaging] if options[:packaging]
+      headers["Metadata-Relevant"] = options[:metadata_relevant].to_s.downcase if (options[:metadata_relevant] == true || options[:metadata_relevant] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
 
-      response = http.post(alternative_edit_media_uri, data, headers)
+      response = options[:connection].post(options[:edit_media_uri], data, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-       raise Sword2Ruby::Exception.new("Failed to do post_media!(): server returned #{response.code} #{response.message}")
+       raise Sword2Ruby::Exception.new("Failed to do post_media!(#{options[:edit_media_uri]}): server returned #{response.code} #{response.message}")
       end
     end
 
@@ -235,40 +244,51 @@ module Sword2Ruby
     #It <i>does not</i> create a new entry in the collection.
     #An MD5-digest will be calculated automatically from the file and sent to the server with the request.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
-    #===Parameters
-    #entry:: a new Atom::Entry with metadata to be added to an existing Atom::Entry.
-    #filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
-    #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
-    #alternative_sword_edit_uri:: (optional) an override to the existing entry's sword edit URI. If not supplied, this will default to the existing entry's sword edit URI.
-    #in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed
-    #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:entry:: (optional) a new Atom::Entry with metadata to be added to an existing Atom::Entry. If not supplied, this will default to itself.
+    #:filepath:: a filepath string indicating the file to be posted. The file must be readable by the process.
+    #:content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
+    #:packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #:\sword_edit_uri:: (optional) an override to the existing entry's sword edit URI. If not supplied, this will default to the existing entry's sword edit URI.
+    #:in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed
+    #:metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.7.3. "Adding Content to the Media Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_addingcontent_multipart].
-    def post_multipart!(entry, filepath, content_type, packaging = nil, alternative_sword_edit_uri = sword_edit_uri, in_progress = nil, on_behalf_of = nil, metadata_relevant = nil, http = @http)
-      alternative_sword_edit_uri ||= sword_edit_uri
-      http ||= @http
+    def post_multipart!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :entry => self,
+        :filepath => nil,
+        :content_type => nil,
+        :packaging => nil,
+        :sword_edit_uri => sword_edit_uri,
+        :in_progress => nil,
+        :on_behalf_of => nil,
+        :metadata_relevant => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
 
       #Validate parameters
-      Utility.check_argument_class('entry', entry, ::Atom::Entry)
-      Utility.check_argument_class('filepath', filepath, String)
-      Utility.check_argument_class('content_type', content_type, String)
-      Utility.check_argument_class('packaging', packaging, String) if packaging
-      Utility.check_argument_class('alternative_edit_media_uri', alternative_edit_media_uri, String)
-      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
-      Utility.check_argument_class('http', http, Sword2Ruby::Connection)
+      Utility.check_argument_class(':entry', options[:entry], ::Atom::Entry)
+      Utility.check_argument_class(':filepath', options[:filepath], String)
+      Utility.check_argument_class(':content_type', options[:content_type], String)
+      Utility.check_argument_class(':packaging', options[:packaging], String) if options[:packaging]
+      Utility.check_argument_class(':sword_edit_uri', options[:sword_edit_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
     
       tmp = ""
       boundary = "========" + Time.now.to_i.to_s + "=="
-      filename, md5, data = Utility.read_file(filepath)
+      filename, md5, data = Utility.read_file(options[:filepath])
       
 
       headers = {"Content-Type" => 'multipart/related; boundary="' + boundary + '"; type="application/atom+xml"'}
-      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["In-Progress"] = options[:in_progress].to_s.downcase if (options[:in_progress] == true || options[:in_progress] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
       headers["MIME-Version"] = "1.0"
 
 
@@ -281,17 +301,17 @@ module Sword2Ruby
       tmp << "MIME-Version: 1.0\r\n\r\n"
 
       # write entry to temp
-      tmp << entry.to_s + "\r\n"
+      tmp << options[:entry].to_s + "\r\n"
 
       # write boundary identifier to temp
       tmp << "--#{boundary}\r\n"
 
       # write media part relevant headers to temp      
-      tmp << "Content-Type: #{content_type}\r\n"
+      tmp << "Content-Type: #{options[:content_type]}\r\n"
       tmp << "Content-Disposition: attachment; name=payload; filename=#{filename}\r\n"
       tmp << "Content-MD5: #{md5}\r\n"
-      tmp << "Packaging: #{packaging}\r\n" if packaging
-      tmp << "Metadata-Relevant: #{metadata_relevant.to_s.downcase}\r\n" if (metadata_relevant == true || metadata_relevant == false)
+      tmp << "Packaging: #{options[:packaging]}\r\n" if options[:packaging]
+      tmp << "Metadata-Relevant: #{options[:metadata_relevant].to_s.downcase}\r\n" if (options[:metadata_relevant] == true || options[:metadata_relevant] == false)
       tmp << "MIME-Version: 1.0\r\n\r\n"
 
       # write the file base64 encoded to temp
@@ -300,12 +320,12 @@ module Sword2Ruby
       # write boundary identifier to temp
       tmp << "--#{boundary}--\r\n" #The last two dashes (--) are important!
 
-      response = http.post(alternative_sword_edit_uri, tmp, headers)
+      response = options[:connection].post(options[:sword_edit_uri], tmp, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-        raise Sword2Ruby::Exception.new("Failed to do post_multipart!(): server returned #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do post_multipart!(#{options[:sword_edit_uri]}): server returned #{response.code} #{response.message}")
       end
     end
     
@@ -323,31 +343,40 @@ module Sword2Ruby
     # existing_entry.add_dublin_core_extension!("publisher", "Burrito King")
     # existing_entry.put!
     #
-    #===Parameters
-    #alternative_entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
-    #in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:entry:: (optional) a new Atom::Entry with metadata to replace an existing Atom::Entry. If not supplied, this will default to itself.
+    #:entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
+    #:in_progress:: (optional) boolean value indicating whether the existing entry will be completed at a later date.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.2. "Replacing the Metadata of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_metadata].
-    def put!(alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
-      alternative_entry_edit_uri ||= entry_edit_uri
-      http ||= @http
-      
+    def put!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :entry => self,
+        :entry_edit_uri => entry_edit_uri,
+        :in_progress => nil,
+        :on_behalf_of => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
+ 
       #Validate parameters
-      Utility.check_argument_class('alternative_entry_edit_uri', alternative_entry_edit_uri, String)
-      Utility.check_argument_class('on_behalf_of', on_behalf_of, String) if on_behalf_of
-      Utility.check_argument_class('http', http, Sword2Ruby::Connection)
-      
+      Utility.check_argument_class(':entry', options[:entry], ::Atom::Entry)
+      Utility.check_argument_class(':entry_edit_uri', options[:entry_edit_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+            
       headers = {"Content-Type" => "application/atom+xml;type=entry" }
-      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
-      response = http.put(alternative_entry_edit_uri, self.to_s, headers)
+      headers["In-Progress"] = options[:in_progress].to_s.downcase if (options[:in_progress] == true || options[:in_progress] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
+      response = options[:connection].put(options[:entry_edit_uri], options[:entry].to_s, headers)
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-        raise Sword2Ruby::Exception.new("Failed to do put!(): server returned code #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do put!(#{options[:entry_edit_uri]}): server returned code #{response.code} #{response.message}")
       end
     end
     
@@ -356,35 +385,53 @@ module Sword2Ruby
     #It <i>does not</i> create a new entry in the collection.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #
-    #===Parameters
-    #filepath:: a filepath string indicating the file to be sent. The file must be readable by the process.
-    #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
-    #alternative_edit_media_uri:: (optional) an override to the existing entry's edit-media URI. If not supplied, this will default to the existing entry's first edit-media URI.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
-    #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:filepath:: a filepath string indicating the file to be sent. The file must be readable by the process.
+    #:content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
+    #:packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #:edit_media_uri:: (optional) an override to the existing entry's edit-media URI. If not supplied, this will default to the existing entry's first edit-media URI.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed.
+    #:metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.1. "Replacing the File Content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_binary].
-    def put_media!(filepath, content_type, packaging = nil, alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, metadata_relevant = nil, http = @http)
-      #if an edit_media_uri has not been supplied, use the first one available for this entry
-      alternative_edit_media_uri ||= edit_media_links.first.href      
+    def put_media!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :filepath => nil,
+        :content_type => nil,
+        :packaging => nil,
+        :edit_media_uri => edit_media_links.first.href,
+        :on_behalf_of => nil,
+        :metadata_relevant => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
+      
+      #Validate parameters
+      Utility.check_argument_class(':filepath', options[:filepath], String)
+      Utility.check_argument_class(':content_type', options[:content_type], String)
+      Utility.check_argument_class(':packaging', options[:packaging], String) if options[:packaging]
+      Utility.check_argument_class(':edit_media_uri', options[:edit_media_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+      
       filename, md5, data = Utility.read_file(filepath)
 
-      headers = {"Content-Type" => content_type}
+      headers = {"Content-Type" => options[:content_type]}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"
       headers["Content-MD5"] = md5
-      headers["Packaging"] = packaging if packaging
-      headers["Metadata-Relevant"] = metadata_relevant.to_s.downcase if (metadata_relevant == true || metadata_relevant == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["Packaging"] = options[:packaging] if options[:packaging]
+      headers["Metadata-Relevant"] = options[:metadata_relevant].to_s.downcase if (options[:metadata_relevant] == true || options[:metadata_relevant] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
 
-      response = http.put(alternative_edit_media_uri, data, headers)
+      response = options[:connection].put(options[:edit_media_uri], data, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-       raise Sword2Ruby::Exception.new("Failed to do put_media!(): server returned #{response.code} #{response.message}")
+       raise Sword2Ruby::Exception.new("Failed to do put_media!(#{options[:edit_media_uri]}): server returned #{response.code} #{response.message}")
       end
     end
     
@@ -394,26 +441,50 @@ module Sword2Ruby
     #It <i>does not</i> create a new entry in the collection.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #
-    #===Parameters
-    #filepath:: a filepath string indicating the file to be sent. The file must be readable by the process.
-    #content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
-    #packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
-    #alternative_entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
-    #metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:entry:: (optional) a new Atom::Entry with metadata to replace an existing Atom::Entry. If not supplied, this will default to itself.
+    #:filepath:: a filepath string indicating the file to be sent. The file must be readable by the process.
+    #:content_type:: the mime content-type string of the file, e.g. "application/zip" or "text/plain"
+    #:packaging:: (optional) the Sword packaging string of the file, e.g. "http://purl.org/net/sword/package/METSDSpaceSIP"
+    #:entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed.
+    #:metadata_relevant:: (optional) boolean value indicating whether the server should consider the file or package a potential source of metadata.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.5.3. "Replacing the Metadata and File Content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_editingcontent_multipart].
-    def put_multipart!(filepath, content_type, packaging = nil, alternative_entry_edit_uri = entry_edit_uri, in_progress = nil, on_behalf_of = nil, http = @http)
+    def put_multipart!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :entry => self,
+        :filepath => nil,
+        :content_type => nil,
+        :packaging => nil,
+        :entry_edit_uri => entry_edit_uri,
+        :in_progress => nil,
+        :on_behalf_of => nil,
+        :metadata_relevant => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
+
+      #Validate parameters
+      Utility.check_argument_class(':entry', options[:entry], ::Atom::Entry)
+      Utility.check_argument_class(':filepath', options[:filepath], String)
+      Utility.check_argument_class(':content_type', options[:content_type], String)
+      Utility.check_argument_class(':packaging', options[:packaging], String) if options[:packaging]
+      Utility.check_argument_class(':entry_edit_uri', options[:entry_edit_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+
       tmp = ""
       boundary = "========" + Time.now.to_i.to_s + "=="
-      filename, md5, data = Utility.read_file(filepath)
-      alternative_entry_edit_uri ||= entry_edit_uri
+      filename, md5, data = Utility.read_file(options[:filepath])
+
       
       headers = {"Content-Type" => 'multipart/related; boundary="' + boundary + '"; type="application/atom+xml"'}
-      headers["In-Progress"] = in_progress.to_s.downcase if (in_progress == true || in_progress == false)
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["In-Progress"] = options[:in_progress].to_s.downcase if (options[:in_progress] == true || options[:in_progress] == false)
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
       headers["MIME-Version"] = "1.0"
 
       # write boundary identifer to temp
@@ -425,16 +496,16 @@ module Sword2Ruby
       tmp << "MIME-Version: 1.0\r\n\r\n"
 
       # write entry to temp
-      tmp << self.to_s + "\r\n"
+      tmp << options[:entry].to_s + "\r\n"
 
       # write boundary identifier to temp
       tmp << "--#{boundary}\r\n"
 
       # write media part relevant headers to temp      
-      tmp << "Content-Type: #{content_type}\r\n"
+      tmp << "Content-Type: #{options[:content_type]}\r\n"
       tmp << "Content-Disposition: attachment; name=payload; filename=#{filename}\r\n"
       tmp << "Content-MD5: #{md5}\r\n"
-      tmp << "Packaging: #{packaging}\r\n" if packaging
+      tmp << "Packaging: #{options[:packaging]}\r\n" if options[:packaging]
       tmp << "MIME-Version: 1.0\r\n\r\n"
 
       # write the file base64 encoded to temp
@@ -443,12 +514,12 @@ module Sword2Ruby
       # write boundary identifier to temp
       tmp << "--#{boundary}--\r\n" #The last two dashes (--) are important!
 
-      response = http.put(alternative_entry_edit_uri, tmp, headers)
+      response = options[:connection].put(options[:entry_edit_uri], tmp, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-        raise Sword2Ruby::Exception.new("Failed to do put_multipart!(): server returned #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do put_multipart!(#{options[:entry_edit_uri]}): server returned #{response.code} #{response.message}")
       end
     end
       
@@ -456,25 +527,36 @@ module Sword2Ruby
     #This method removes the container by performing a Delete on the entry-edit URI.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #
-    #===Parameters
-    #alternative_entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
-    #on_behalf_of:: (optional) username on whos behalf the operation is being performed.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:entry_edit_uri:: (optional) an override to the existing entry's entry-edit URI. If not supplied, this will default to the existing entry's entry-edit URI.
+    #:on_behalf_of:: (optional) username on whos behalf the operation is being performed.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.8. "Deleting the Container"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deleteconteiner].
-    def delete!(alternative_entry_edit_uri = entry_edit_uri, on_behalf_of = nil, http = @http)
-      alternative_entry_edit_uri ||= entry_edit_uri
+    def delete!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :entry_edit_uri => entry_edit_uri,
+        :on_behalf_of => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
+
+      #Validate parameters
+      Utility.check_argument_class(':entry_edit_uri', options[:entry_edit_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
 
       headers = {}
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
 
-      response = http.delete(alternative_entry_edit_uri, nil, headers)
+      response = options[:connection].delete(options[:entry_edit_uri], nil, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-       raise Sword2Ruby::Exception.new("Failed to do delete!(): server returned #{response.code} #{response.message}")
+       raise Sword2Ruby::Exception.new("Failed to do delete!(#{options[:entry_edit_uri]}): server returned #{response.code} #{response.message}")
       end
     end
       
@@ -482,26 +564,36 @@ module Sword2Ruby
     #This method removes all the content of a resource (without removing the resource itself) by performing a Delete on the edit-media URI.
     #The method will return a Sword2Ruby::DepositReceipt object, or raise a Sword2Ruby::Exception in the case of an error.
     #
-    #===Parameters
-    #alternative_edit_media_uri:: (optional) an override to the existing entry's edit-media URI. If not supplied, this will default to the existing entry's first edit-media URI.
-    #on_behalf_of:: (optional) username on whos behalf the submission is being performed.
-    #http:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
+    #===Parameters (passed as a hash collection)
+    #:edit_media_uri:: (optional) an override to the existing entry's edit-media URI. If not supplied, this will default to the existing entry's first edit-media URI.
+    #:on_behalf_of:: (optional) username on whos behalf the submission is being performed.
+    #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, the existing entry's connection will be used.
     #Note that you should call <b><collection>.feed.updated!</b> followed by <b><collection>.feed.update!</b> after making updates to a collection.
     #
     #For more information, see the Sword2 specification: {section 6.6. "Deleting the content of a Resource"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#protocoloperations_deletingcontent].      
-    def delete_media!(alternative_edit_media_uri = edit_media_links.first.href, on_behalf_of = nil, http = @http)
-      #if an edit_media_uri has not been supplied, use the first one available for this entry
-      alternative_edit_media_uri ||= edit_media_links.first.href
-  
-      headers = {}
-      headers["On-Behalf-Of"] = on_behalf_of if on_behalf_of
+    def delete_media!(params = {})
+      Utility.check_argument_class('params', params, Hash)
+      defaults = {
+        :edit_media_uri => edit_media_links.first.href,
+        :on_behalf_of => nil,
+        :connection => @http
+      }
+      options = defaults.merge(params)
 
-      response = http.delete(alternative_edit_media_uri, nil, headers)
+      #Validate parameters
+      Utility.check_argument_class(':edit_media_uri', options[:edit_media_uri], String)
+      Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
+      Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
+
+      headers = {}
+      headers["On-Behalf-Of"] = options[:on_behalf_of] if options[:on_behalf_of]
+
+      response = options[:connection].delete(options[:edit_media_uri], nil, headers)
 
       if response.is_a? Net::HTTPSuccess
-        return DepositReceipt.new(response, http)
+        return DepositReceipt.new(response, options[:connection])
       else
-        raise Sword2Ruby::Exception.new("Failed to do delete_media!(): server returned #{response.code} #{response.message}")
+        raise Sword2Ruby::Exception.new("Failed to do delete_media!(#{options[:edit_media_uri]}): server returned #{response.code} #{response.message}")
       end
     end
     

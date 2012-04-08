@@ -24,8 +24,8 @@ module Sword2Ruby
     #Create a new DepositReceipt using the Response object returned by the server.
     #===Parameters
     #response:: the response object returned by the request
-    #http:: a Sword2Ruby::Connection object
-    def initialize(response, http)
+    #connection:: a Sword2Ruby::Connection object
+    def initialize(response, connection)
       @location = response.header["location"]
       @status_code = response.code
       @status_message = response.message
@@ -33,12 +33,12 @@ module Sword2Ruby
       if response.body
         #If a receipt was returned, parse it
         @entry = ::Atom::Entry.parse(response.body)
-        @entry.http = http
+        @entry.http = connection
         @has_entry = true
       else
         #if the receipt was not returned, try and retrieve it
         if @location
-          @entry = ::Atom::Entry.parse(http.get(@location).body)
+          @entry = ::Atom::Entry.parse(connection.get(@location).body)
           @has_entry = true
         else
           #Otherwise, there is no receipt (e.g. for a delete)

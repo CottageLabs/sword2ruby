@@ -55,7 +55,7 @@ require 'test_constants'
       #Generate a slug based on the date and time
       current_slug = "sword2ruby_test_#{Time.now.strftime("%FT%H-%M-%S")}"
 
-      deposit_receipt = current_collection.post!(entry, current_slug, true)
+      deposit_receipt = current_collection.post!(:entry=>entry, :slug=>current_slug, :in_progress=>true)
       current_feed.updated! #Flag feed that it has been updated
       
       #There SHOULD be a deposit receipt entry received from the Sword server
