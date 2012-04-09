@@ -417,7 +417,7 @@ module Sword2Ruby
       Utility.check_argument_class(':on_behalf_of', options[:on_behalf_of], String) if options[:on_behalf_of]
       Utility.check_argument_class(':connection', options[:connection], Sword2Ruby::Connection)
       
-      filename, md5, data = Utility.read_file(filepath)
+      filename, md5, data = Utility.read_file(options[:filepath])
 
       headers = {"Content-Type" => options[:content_type]}
       headers["Content-Disposition"] = "attachment; filename=#{filename}"

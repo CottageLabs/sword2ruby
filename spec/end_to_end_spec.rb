@@ -10,6 +10,8 @@ require 'test_constants'
     current_feed = nil
     current_slug = nil
     current_sword_edit_uri = nil
+    current_entry_edit_uri = nil
+    current_edit_media_uri = nil
   
 
     it "Retrieve Service Document" do
@@ -40,16 +42,14 @@ require 'test_constants'
       current_feed = current_collection.feed
       current_feed.update!
       current_feed.entries.count.should >= 0
-      
-      puts "before current_feed.entries.count: #{current_feed.entries.count}"
     end
     
     it "Create a new entry with an Atom post (no file)" do
       entry = Atom::Entry.new()
       entry.title = "Test Entry created by Sword2Ruby end-to-end test"
       entry.summary = "This entry was created during a test on #{Time.now}"
-      entry.add_dublin_core_extension!("publisher", "Sword2Ruby Test")
-      entry.add_dublin_core_extension!("audience", "Sword2Ruby Tester")
+      entry.add_dublin_core_extension!("publisher", "Publisher Test 01")
+      entry.add_dublin_core_extension!("audience", "Audience Test 01")
       entry.updated = Time.now
       
       #Generate a slug based on the date and time
@@ -66,12 +66,13 @@ require 'test_constants'
       alternate_uri = deposit_receipt.entry.alternate_uri
       
       #There MUST be an Atom Entry Edit / Media Entry / Edit-URI value
-      entry_edit_uri = deposit_receipt.entry.entry_edit_uri
-      entry_edit_uri.should_not be_nil
+      current_entry_edit_uri = deposit_receipt.entry.entry_edit_uri
+      current_entry_edit_uri.should_not be_nil
       
       #There MUST be at least one Edit Media Link / Media Resource URI / EM-URI
       edit_media_links = deposit_receipt.entry.edit_media_links
       edit_media_links.count.should >= 1
+      current_edit_media_uri = edit_media_links.first.href
 
       #There MUST be a Sword Edit URI / SE-URI
       current_sword_edit_uri = deposit_receipt.entry.sword_edit_uri
@@ -105,43 +106,95 @@ require 'test_constants'
     end
 
 
-    it "Add more meta data to existing entry" do
+    it "Test Entry.post" do
       #Now post a metadata update to the working entry
       update_entry = Atom::Entry.new()
       update_entry.title = "Extra title added to existing entry"
-      update_entry.add_dublin_core_extension!("provenance", "Extra Sword2Ruby Provenance")
-#      update_entry.post!(update_entry, current_sword_edit_uri, true, nil, TEST_CONNECTION_VALID)
-      update_entry.post!(:sword_edit_uri => current_sword_edit_uri, :connection => TEST_CONNECTION_VALID) 
-      
-      #, current_sword_edit_uri, true, nil, TEST_CONNECTION_VALID)
+      update_entry.add_dublin_core_extension!("provenance", "Provenance Test 01")
+      deposit_receipt = update_entry.post!(:sword_edit_uri => current_sword_edit_uri, :connection => TEST_CONNECTION_VALID)
+            
+      #There SHOULD be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == true
+      deposit_receipt.entry.should_not be_nil
 
-
-
-
-#      current_feed.update!
-      #Find the entry created in the previous step using the slug as the identifier
-#      working_entry = current_feed.entries.find{|e| e.id.end_with?(current_slug)}
-#      working_entry.should_not be_nil
+      #The updated entry should include the new Dublin Core provenance value
+      Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:provenance").should == "Provenance Test 01"
+    
+      #"Add a file to the existing entry via deposit receipt" do
+      deposit_receipt.entry.post_media!(:filepath => "spec/fixtures/example.txt", :content_type=>"text/plain")
+      #There SHOULD be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == true
+      deposit_receipt.entry.should_not be_nil
+    end
+    
+    it "Entry.post_media" do
+      deposit_receipt = Atom::Entry.new().post_media!(:filepath => "spec/fixtures/snowflake.png", :content_type=>"image/png", :edit_media_uri => current_edit_media_uri, :connection => TEST_CONNECTION_VALID)
       
-      #tests
-#      puts "working_entry.sword_edit_uri: #{working_entry.sword_edit_uri}"
-#      puts "working_entry: #{working_entry}"
-      
-      
+      #There SHOULD be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == true
+      deposit_receipt.entry.should_not be_nil
+    end
+    
+    
+    it "Entry.post_multipart" do
+        #Now post a metadata update to the working entry
+        update_entry = Atom::Entry.new()
+        update_entry.title = "Another extra title added to existing entry"
+        update_entry.add_dublin_core_extension!("contributor", "Contributor 01")
+        deposit_receipt = update_entry.post_multipart!(:sword_edit_uri => current_sword_edit_uri, :filepath => "spec/fixtures/snowflake.png", :content_type=>"image/png", :connection => TEST_CONNECTION_VALID)
 
- #     current_feed.updated! #Flag feed that it has been updated
+        #There SHOULD be a deposit receipt entry received from the Sword server
+        deposit_receipt.has_entry.should == true
+        deposit_receipt.entry.should_not be_nil
       
-  #    current_feed.update!
+      
+        #The updated entry should include the new Dublin Core Contributor value
+        Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:contributor").should == "Contributor 01"
+        #The updated entry should include the existing Dublin Core provenance value
+        Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:provenance").should == "Provenance Test 01"
+    end
+    
+    it "Entry.put" do
+      #Now PUT a metadata update to the working entry
+      update_entry = Atom::Entry.new()
+      update_entry.title = "Replaced Title"
+      update_entry.add_dublin_core_extension!("contributor", "Contributor 02")
+      deposit_receipt = update_entry.put!(:entry_edit_uri => current_entry_edit_uri, :connection => TEST_CONNECTION_VALID)
 
-      
+      #There SHOULD be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == true
+      deposit_receipt.entry.should_not be_nil
+    
+    
+      #The updated entry should include the updated Dublin Core Contributor value
+      Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:contributor").should == "Contributor 02"
+      #The updated entry should have deleted the old provenance value
+      Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:provenance").should be_nil
+    end
+    
+    it "Entry.put_media" do
+      update_entry = Atom::Entry.new()
+      deposit_receipt = update_entry.put_media!(:filepath => "spec/fixtures/snowflake.png", :content_type=>"image/png", :edit_media_uri => current_edit_media_uri, :connection => TEST_CONNECTION_VALID)
 
-
-      #puts "working_entry: #{working_entry}"
-      
-#      puts "current_feed.entries: #{current_feed.entries}"
-      
-#      puts "after current_feed.entries.count: #{current_feed.entries.count}"
-      #puts current_feed.entries
+      #There ISN'T a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == false
+      deposit_receipt.entry.should be_nil
     end
 
+    it "Entry.put_multipart" do
+      update_entry = Atom::Entry.new()
+      update_entry.title = "Replaced Title"
+      update_entry.add_dublin_core_extension!("contributor", "Contributor 03")
+      deposit_receipt = update_entry.put_multipart!(:entry_edit_uri => current_entry_edit_uri, :filepath => "spec/fixtures/snowflake.png", :content_type=>"image/png", :connection => TEST_CONNECTION_VALID)
+
+      #There SHOULD be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == true
+      deposit_receipt.entry.should_not be_nil
+      
+      #The updated entry should include the updated Dublin Core Contributor value
+      Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:contributor").should == "Contributor 03"
+      #The updated entry should have deleted the old provenance value
+      Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:provenance").should be_nil
+        
+    end
 end
