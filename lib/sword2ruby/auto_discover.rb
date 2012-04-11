@@ -10,15 +10,22 @@ module Sword2Ruby
     #For more information, see the Sword2 specification: {section 13.2. "For Deposit Endpoints"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_deposit].
     attr_reader :deposit_endpoint_uri
 
-    #An array of Atom Entry Edit URI strings discovered in the HTML document, or an empty array [ ] if none found.
+    #An array of Atom Entry Edit URI hashes discovered in the HTML document, or an empty array [ ] if none found.
+    #===Example
+    # [ {:href=>"http://some.url.org/edit/mycollection", type=>nil} ]
     #
     #For more information, see the Sword2 specification: {section 13.3. "For Resources"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources].
-    attr_reader :resource_edit_uris
+    #attr_reader :resource_edit_uris
+    attr_reader :entry_edit_uris
+    #alias :media_entry_uris :entry_edit_uris
 
-    #An array of Sword Statement URI strings discovered in the HTML document, or an empty array [ ] if none found.
+    #An array of Sword Statement URI hashes discovered in the HTML document, or an empty array [ ] if none found.
+    #===Example
+    # [ {:href=>"http://some.url.org/myfeed.atom", type=>"application/atom+xml;type=feed"},
+    # {:href=>"http://some.url.org/myfeed.rdf", type=>"application/rdf+xml"} ]
     #
     #For more information, see the Sword2 specification: {section 13.3. "For Resources"}[http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources].    
-    attr_reader :resource_statement_uris
+    attr_reader :sword_statement_links
 
     #The Service Document URI string discovered in the HTML document, or nil if it could not be discovered.
     #
@@ -38,15 +45,15 @@ module Sword2Ruby
       
       @deposit_endpoint_uri = get_attribute(doc.at("//link[@rel='http://purl.org/net/sword/terms/deposit']"), "href")
       
-      @resource_edit_uris = []
-      @resource_statement_uris = []
+      @entry_edit_uris = []
+      @sword_statement_links = []
       
       doc.search("//link[@rel='http://purl.org/net/sword/terms/edit']").each do |e|
-        @resource_edit_uris << {:href => get_attribute(e, "href"), :type=> get_attribute(e, "type")}
+        @entry_edit_uris << {:href => get_attribute(e, "href"), :type=> get_attribute(e, "type")}
       end
       
       doc.search("//link[@rel='http://purl.org/net/sword/terms/statement']").each do |e|
-        @resource_statement_uris << {:href => get_attribute(e, "href"), :type=> get_attribute(e, "type")}
+        @sword_statement_links << {:href => get_attribute(e, "href"), :type=> get_attribute(e, "type")}
       end
     end
     

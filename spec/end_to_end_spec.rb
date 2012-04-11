@@ -12,7 +12,8 @@ require 'test_constants'
     current_sword_edit_uri = nil
     current_entry_edit_uri = nil
     current_edit_media_uri = nil
-  
+    current_alternate_uri = nil
+    current_sword_statement_links = nil
 
     it "Retrieve Service Document" do
       current_service = Atom::Service.new(TEST_SERVICE_DOCUMENT_URI_VALID, TEST_CONNECTION_VALID);
@@ -63,7 +64,7 @@ require 'test_constants'
       deposit_receipt.entry.should_not be_nil
       
       #There MAY be an alternate entry page
-      alternate_uri = deposit_receipt.entry.alternate_uri
+      current_alternate_uri = deposit_receipt.entry.alternate_uri
       
       #There MUST be an Atom Entry Edit / Media Entry / Edit-URI value
       current_entry_edit_uri = deposit_receipt.entry.entry_edit_uri
@@ -87,8 +88,8 @@ require 'test_constants'
       sword_derived_resource_links.count.should == 0
       
       #There MAY be one or more links to Sword statements
-      sword_statement_links = deposit_receipt.entry.sword_statement_links
-      sword_statement_links.count.should >= 0
+      current_sword_statement_links = deposit_receipt.entry.sword_statement_links
+      current_sword_statement_links.count.should >= 0
       
       #There MAY be some sword packagings
       sword_packagings = deposit_receipt.entry.sword_packagings
@@ -195,6 +196,40 @@ require 'test_constants'
       Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:contributor").should == "Contributor 03"
       #The updated entry should have deleted the old provenance value
       Sword2Ruby::Utility.find_element_text(deposit_receipt.entry.dublin_core_extensions, "dcterms:provenance").should be_nil
-        
     end
+    
+    it "AutoDiscover" do
+      autodiscover = Sword2Ruby::AutoDiscover.new(current_alternate_uri)
+      #Check the discovered entry edit uri matches the known entry edit uri
+      autodiscover.entry_edit_uris.first[:href].should == current_entry_edit_uri
+      
+      #Check the discovered statement links count matches the known statement links count
+      current_sword_statement_links.count.should == autodiscover.sword_statement_links.count
+      
+      #For each known statement link, check the href matches the discovered statement link
+      current_sword_statement_links.each do |current|
+        autodiscover.sword_statement_links.find{|discovered| discovered[:type] == current.type}[:href].should == current.href
+      end      
+    end
+    
+
+    it "Entry.delete_media" do
+      update_entry = Atom::Entry.new()
+      deposit_receipt = update_entry.delete_media!(:edit_media_uri => current_edit_media_uri, :connection => TEST_CONNECTION_VALID)
+      
+      #There SHOULD NOT be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == false
+      deposit_receipt.entry.should be_nil
+    end
+    
+    it "Entry.delete" do
+      update_entry = Atom::Entry.new()
+      deposit_receipt = update_entry.delete!(:entry_edit_uri => current_entry_edit_uri, :connection => TEST_CONNECTION_VALID)
+      
+      #There SHOULD NOT be a deposit receipt entry received from the Sword server
+      deposit_receipt.has_entry.should == false
+      deposit_receipt.entry.should be_nil
+    end
+    
+ 
 end

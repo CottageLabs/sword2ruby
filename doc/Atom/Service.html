@@ -182,45 +182,59 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         
         <div class="method-heading">
           <span class="method-name">new</span><span
-            class="method-args">(service_url, http = Connection.new())</span>
+            class="method-args">(service_uri, connection = Connection.new())</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          <p>retrieves and parses an <a href="../Atom.html">Atom</a> service document.</p>
+          <p>Retrieves and parses an <a href="../Atom.html">Atom</a> service document.</p>
+
+<h3 id="method-c-new-label-Parameters">Parameters</h3>
+<dl class="rdoc-list note-list"><dt>:service_uri
+<dd>
+<p>The URI to the Sword <a href="Service.html">Service</a> Document.</p>
+</dd><dt>:connection
+<dd>
+<p>(optional) <a
+href="../Sword2Ruby/Connection.html">Sword2Ruby::Connection</a> object used
+to perform the operation. If not supplied, a new Connection object will be
+created.</p>
+</dd></dl>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 28</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">service_url</span>, <span class="ruby-identifier">http</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>())
-  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'service_url'</span>, <span class="ruby-identifier">service_url</span>, <span class="ruby-constant">String</span>)
-  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'http'</span>, <span class="ruby-identifier">http</span>, <span class="ruby-constant">Connection</span>)
+            <pre><span class="ruby-comment"># File lib/sword2ruby/service.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">service_uri</span>, <span class="ruby-identifier">connection</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>())
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'service_uri'</span>, <span class="ruby-identifier">service_uri</span>, <span class="ruby-constant">String</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_uri</span>(<span class="ruby-identifier">service_uri</span>)
+  <span class="ruby-constant">Utility</span>.<span class="ruby-identifier">check_argument_class</span>(<span class="ruby-string">'connection'</span>, <span class="ruby-identifier">connection</span>, <span class="ruby-constant">Connection</span>)
+  
   
   <span class="ruby-keyword">super</span>()
 
-  <span class="ruby-ivar">@http</span> = <span class="ruby-identifier">http</span>
+  <span class="ruby-ivar">@http</span> = <span class="ruby-identifier">connection</span>
 
-  <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">service_url</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">service_uri</span>.<span class="ruby-identifier">empty?</span>
 
-  <span class="ruby-identifier">base</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">service_url</span>)
+  <span class="ruby-identifier">base</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">service_uri</span>)
 
   <span class="ruby-identifier">rxml</span> = <span class="ruby-keyword">nil</span>
 
-  <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">base</span>, <span class="ruby-string">&quot;Accept&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atomsvc+xml&quot;</span>)
+  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">base</span>, <span class="ruby-string">&quot;Accept&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/atomsvc+xml&quot;</span>)
   <span class="ruby-identifier">res</span>.<span class="ruby-identifier">validate_content_type</span>([<span class="ruby-string">&quot;application/atomsvc+xml&quot;</span>])
   
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>
     <span class="ruby-identifier">service</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>, <span class="ruby-identifier">base</span>, <span class="ruby-keyword">self</span>)
 
     <span class="ruby-comment">#Update workspaces, collections and their feeds to use the Service's http connection</span>
-    <span class="ruby-identifier">set_http</span>(<span class="ruby-identifier">http</span>)
+    <span class="ruby-identifier">set_http</span>(<span class="ruby-identifier">connection</span>)
 
     <span class="ruby-identifier">service</span>
   <span class="ruby-keyword">else</span>
-   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do get(): server returned #{res.code} #{res.message}&quot;</span>)
+   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Sword2Ruby</span><span class="ruby-operator">::</span><span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Failed to do get(#{service_uri}): server returned #{res.code} #{res.message}&quot;</span>)
   <span class="ruby-keyword">end</span>
 
 <span class="ruby-keyword">end</span></pre>

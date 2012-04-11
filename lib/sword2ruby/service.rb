@@ -30,7 +30,9 @@ module Sword2Ruby
     #:connection:: (optional) Sword2Ruby::Connection object used to perform the operation. If not supplied, a new Connection object will be created.
     def initialize(service_uri, connection = Connection.new())
       Utility.check_argument_class('service_uri', service_uri, String)
+      Utility.check_uri(service_uri)
       Utility.check_argument_class('connection', connection, Connection)
+      
       
       super()
 

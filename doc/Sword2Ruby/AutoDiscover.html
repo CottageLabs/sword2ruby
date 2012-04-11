@@ -185,38 +185,25 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
         </div>
       </div>
       
-      <div id="attribute-i-resource_edit_uris" class="method-detail">
+      <div id="attribute-i-entry_edit_uris" class="method-detail">
         <div class="method-heading attribute-method-heading">
-          <span class="method-name">resource_edit_uris</span><span
+          <span class="method-name">entry_edit_uris</span><span
             class="attribute-access-type">[R]</span>
         </div>
 
         <div class="method-description">
         
-        <p>An array of <a href="Atom.html">Atom</a> Entry Edit URI strings discovered
+        <p>An array of <a href="Atom.html">Atom</a> Entry Edit URI hashes discovered
 in the HTML document, or an empty array [ ] if none found.</p>
 
-<p>For more information, see the Sword2 specification: <a
-href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources">section
-13.3. “For Resources”</a>.</p>
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-resource_statement_uris" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">resource_statement_uris</span><span
-            class="attribute-access-type">[R]</span>
-        </div>
+<h3 id="attribute-i-entry_edit_uris-label-Example">Example</h3>
 
-        <div class="method-description">
-        
-        <p>An array of Sword Statement URI strings discovered in the HTML document, or
-an empty array [ ] if none found.</p>
+<pre class="ruby">[ {:<span class="ruby-identifier">href=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;http://some.url.org/edit/mycollection&quot;</span>, <span class="ruby-identifier">type</span>=<span class="ruby-operator">&gt;</span><span class="ruby-keyword">nil</span>} ]
+</pre>
 
 <p>For more information, see the Sword2 specification: <a
 href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources">section
-13.3. “For Resources”</a>.</p>
+13.3. “For Resources”</a>. attr_reader :resource_edit_uris</p>
         
         </div>
       </div>
@@ -235,6 +222,30 @@ it could not be discovered.</p>
 <p>For more information, see the Sword2 specification: <a
 href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_servicedocuments">section
 13.1. “For Service Documents”</a>.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-sword_statement_links" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">sword_statement_links</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>An array of Sword Statement URI hashes discovered in the HTML document, or
+an empty array [ ] if none found.</p>
+
+<h3 id="attribute-i-sword_statement_links-label-Example">Example</h3>
+
+<pre class="ruby">[ {:<span class="ruby-identifier">href=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;http://some.url.org/myfeed.atom&quot;</span>, <span class="ruby-identifier">type</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;application/atom+xml;type=feed&quot;</span>},
+{:<span class="ruby-identifier">href=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;http://some.url.org/myfeed.rdf&quot;</span>, <span class="ruby-identifier">type</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;application/rdf+xml&quot;</span>} ]
+</pre>
+
+<p>For more information, see the Sword2 specification: <a
+href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/SWORDProfile.html?revision=377#autodiscovery_resources">section
+13.3. “For Resources”</a>.</p>
         
         </div>
       </div>
@@ -271,7 +282,7 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/sword2ruby/auto_discover.rb, line 33</span>
+            <pre><span class="ruby-comment"># File lib/sword2ruby/auto_discover.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">discover_uri</span>)
   <span class="ruby-identifier">doc</span> = <span class="ruby-constant">Hpricot</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">discover_uri</span>))
   
@@ -280,15 +291,15 @@ href="http://sword-app.svn.sourceforge.net/viewvc/sword-app/spec/tags/sword-2.0/
   
   <span class="ruby-ivar">@deposit_endpoint_uri</span> = <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">doc</span>.<span class="ruby-identifier">at</span>(<span class="ruby-string">&quot;//link[@rel='http://purl.org/net/sword/terms/deposit']&quot;</span>), <span class="ruby-string">&quot;href&quot;</span>)
   
-  <span class="ruby-ivar">@resource_edit_uris</span> = []
-  <span class="ruby-ivar">@resource_statement_uris</span> = []
+  <span class="ruby-ivar">@entry_edit_uris</span> = []
+  <span class="ruby-ivar">@sword_statement_links</span> = []
   
   <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">search</span>(<span class="ruby-string">&quot;//link[@rel='http://purl.org/net/sword/terms/edit']&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
-    <span class="ruby-ivar">@resource_edit_uris</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;href&quot;</span>), <span class="ruby-value">:type=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;type&quot;</span>)}
+    <span class="ruby-ivar">@entry_edit_uris</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;href&quot;</span>), <span class="ruby-value">:type=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;type&quot;</span>)}
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">search</span>(<span class="ruby-string">&quot;//link[@rel='http://purl.org/net/sword/terms/statement']&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
-    <span class="ruby-ivar">@resource_statement_uris</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;href&quot;</span>), <span class="ruby-value">:type=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;type&quot;</span>)}
+    <span class="ruby-ivar">@sword_statement_links</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;href&quot;</span>), <span class="ruby-value">:type=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">e</span>, <span class="ruby-string">&quot;type&quot;</span>)}
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Mark MacGillivray, Martyn Whitwell"]
   s.email       = ["martyn@cottagelabs.com"]
   s.homepage    = "https://github.com/CottageLabs/sword2ruby"
-  s.summary     = %q{TODO: Write a gem summary}
+  s.summary     = %q{This library provides an interface between Sword2 servers and client applications}
   s.description = %q{TODO: Write a gem description}
 
   s.rubyforge_project = "sword2ruby"
