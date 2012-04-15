@@ -3,7 +3,6 @@ SWORD2RUBY LIBRARY
 
 Introduction
 ------------
-
 The Sword2Ruby library provides SWORD client functionality when run against a SWORD 2.0 compliant server.
 It eases integration of Ruby applications with Sword servers, taking care of things like authentication,
 deposit-receipts and the parsing of Sword extensions to Atom.
@@ -14,9 +13,9 @@ http://www.swordapp.org/
 This code lives at https://github.com/CottageLabs/sword2ruby.
 
 Requirements
------------- 
-
+------------
 In order to use the Sword2Ruby gem, you will require:-
+
 *	A Sword 2.0 compliant server, such as Simple Sword Server 2 by Richard Jones:
 	https://sword-app.svn.sourceforge.net/svnroot/sword-app/sss/branches/sss-2/
 *	The atom-tools gem (version 2.0.5): https://github.com/bct/atom-tools/
@@ -26,13 +25,15 @@ In order to use the Sword2Ruby gem, you will require:-
 
 Installation
 ------------
-
 To install Sword2Ruby and its associated dependencies, make sure you have Bundler installed, then from
 the command line, run:
+
 	bundle install sword2ruby
 
 Now you can use the Sword2Ruby library with:
+
 	require 'sword2ruby'
+	
 at the top of your Ruby code.
 
 Usage
