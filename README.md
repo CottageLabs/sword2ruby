@@ -27,16 +27,19 @@ In order to use the Sword2Ruby gem, you will require:-
 
 Installation
 ------------
-To install Sword2Ruby and its associated dependencies, make sure you have Bundler installed, then from
-the command line, run:
+To install Sword2Ruby and its associated dependencies, make sure you have Bundler installed (gem install bundler).
+Then update your project's Gemfile to include a reference to Sword2Ruby:
 
-	bundle install sword2ruby
+	gem 'sword2ruby'
+	
+Then, on the command line inside your project folder, run to install all necessary gems:
 
-Now you can use the Sword2Ruby library with:
+	bundle install
+
+Finally, ensure you require a reference to the gem in your code:
 
 	require 'sword2ruby'
-	
-at the top of your Ruby code.
+
 
 Usage
 -----
