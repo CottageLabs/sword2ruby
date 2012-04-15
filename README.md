@@ -43,4 +43,6 @@ Finally, ensure you require a reference to the gem in your code:
 
 Usage
 -----
-Refer to the Rdoc for full details of all the classes and their methods.
+Refer to the Rdoc for full details of all the classes and their methods:
+http://www.rubydoc.info/github/CottageLabs/sword2ruby/master/frames
+
