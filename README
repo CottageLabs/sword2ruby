@@ -1,15 +1,3 @@
-# Sword2Ruby
-
-## Installation
-	
-	gem install sword2ruby
-	
-## Usage
-	
-	require 'sword2ruby'
-	
-	
-
 ====================================================
 
 SWORD2RUBY LIBRARY
