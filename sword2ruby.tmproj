@@ -33,7 +33,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>6</integer>
+			<integer>5</integer>
 		</dict>
 		<key>lib/sword2ruby/collection.rb</key>
 		<dict>
@@ -241,6 +241,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{386, 61}, {1046, 814}}</string>
+	<string>{{796, 230}, {1046, 814}}</string>
 </dict>
 </plist>
